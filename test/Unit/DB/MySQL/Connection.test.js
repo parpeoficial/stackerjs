@@ -1,0 +1,85 @@
+const { expect } = require("chai");
+const { DB } = require("./../../../../lib");
+
+
+describe('ConnectionTest', function () 
+{
+
+    this.timeout(6000);
+    before(function (done) 
+    {
+        DB.Factory.getConnection().query([
+            "CREATE TABLE IF NOT EXISTS contacts ( \
+                id         INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
+                first_name VARCHAR(100)                       NOT NULL, \
+                last_name  VARCHAR(100)                       NOT NULL \
+            );",
+            "CREATE TABLE IF NOT EXISTS contact_phones ( \
+                id           INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
+                contact_id   INTEGER                            NOT NULL, \
+                phone_number VARCHAR(20)                        NOT NULL, \
+                active       BOOLEAN DEFAULT TRUE \
+            );",
+            "CREATE TABLE IF NOT EXISTS contacts_schedules ( \
+            id          INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
+            contact_id  INTEGER                            NOT NULL, \
+            schedule_id INTEGER                            NOT NULL \
+            );",
+            "CREATE TABLE IF NOT EXISTS schedules ( \
+                id         INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
+                start_time DATETIME                           NOT NULL, \
+                end_time   DATETIME                           NOT NULL, \
+                active     BOOLEAN DEFAULT TRUE \
+            );"
+        ]).then(() => done());
+    });
+
+    it('Should check if database is connected', () => 
+    {
+        expect(DB.Factory.getConnection().isConnected()).to.be.true;
+    });
+
+    describe('Executing queries', () => 
+    {        
+        it('Should execute insert query without trouble', (done) => 
+        {
+            DB.Factory.getConnection()
+                .query(
+                    'INSERT INTO contacts (first_name, last_name) VALUES (?, ?);',
+                    ['V', 'G']
+                )
+                .then((results) => {
+                    expect(results).to.have.property('lastInsertedId');
+                }).then(() => done());
+        });
+
+        it('Should execute select query without trouble', (done) => 
+        {
+            DB.Factory.getConnection().query('SELECT * FROM contacts;')
+                .then((results) => {
+                    expect(results).to.be.instanceOf(Array);
+                }).then(() => done());
+        });
+
+        it('Should present error executing query', (done) => 
+        {
+            DB.Factory.getConnection().query('SELECT * FROM xxx')
+                .catch((err) => {
+                    expect(err).to.be.instanceOf(Error);
+                }).then(() => done());
+        });
+    });
+
+    after(function (done) 
+    {
+        let connection = DB.Factory.getConnection();
+        Promise.all([
+            connection.query('DROP TABLE contacts_schedules;'),
+            connection.query('DROP TABLE contact_phones;'),
+            connection.query('DROP TABLE contacts;'),
+            connection.query('DROP TABLE schedules;')
+        ])
+            .then(() => connection.close())
+            .then(() => done());
+    });
+});

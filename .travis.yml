@@ -1,0 +1,28 @@
+language: node_js
+node_js:
+  - "7"
+
+services:
+  - mysql
+
+before_install:
+  - npm install -g codecov istanbul typescript
+
+install:
+  - npm install
+
+before_script:
+  - mysql -e 'CREATE SCHEMA pipelines;'
+  - echo "# DB AUTH" >> .env
+  - echo DB_DRIVER=mysql >> .env
+  - echo DB_HOST=127.0.0.1 >> .env
+  - echo DB_USER=root >> .env
+  - echo DB_PASS= >> .env
+  - echo DB_NAME=pipelines >> .env
+  - npm run build
+
+script:
+  - npm run test
+
+after_success:
+  - codecov

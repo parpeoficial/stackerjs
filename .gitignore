@@ -1,0 +1,12 @@
+# App files and folders
+/.env
+/coverage
+/lib
+/node_modules
+/storage
+/test/pandora/**/*.js
+
+# OS and IDE files and folders
+/.idea
+/.vscode
+/nbproject
