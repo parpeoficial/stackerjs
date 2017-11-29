@@ -1,7 +1,7 @@
 import { Server } from 'http';
 
 
-declare module "parstack" 
+declare module "stackerjs" 
 {
 
     export namespace Http

@@ -1,7 +1,7 @@
-[![Travis](https://img.shields.io/travis/parpeoficial/stackerjs.svg)](https://travis-ci.org/parpeoficial/parstack)
-[![Codecov](https://img.shields.io/codecov/c/github/parpeoficial/stackerjs.svg)](https://codecov.io/gh/parpeoficial/parstack)
+[![Travis](https://img.shields.io/travis/parpeoficial/stackerjs.svg)](https://travis-ci.org/parpeoficial/stackerjs)
+[![Codecov](https://img.shields.io/codecov/c/github/parpeoficial/stackerjs.svg)](https://codecov.io/gh/parpeoficial/stackerjs)
 
-# ParStack
+# StackerJS
 A Stack built in NodeJS using ExpressJS, for building NodeJS microservices.
 
 ## Table of Contents
@@ -13,11 +13,11 @@ A Stack built in NodeJS using ExpressJS, for building NodeJS microservices.
 ### Installation
 ```bash
     npm install -g typescript istanbul
-    npm install parstack --save
+    npm install stackerjs --save
 ```
 
 ### Configuration
-Most of parstack configuration can be declared on .env file in project root.
+Most of stackerjs configuration can be declared on .env file in project root.
 
 #### Connection
 For DB Connection until now **only MySQL** driver is implemented.
@@ -28,14 +28,14 @@ For DB Connection until now **only MySQL** driver is implemented.
 * DB_PASS=p455w0rd - Defines database access password
 
 ### Http
-Parstack implements Http request and response classes based on ExpressJS.
+StackerJS implements Http request and response classes based on ExpressJS.
 
 #### Http.Request
 Brings information about made request. Always received on callback action executed during request.
 
 For example a request made to /person/:id.
 ```typescript
-    import { Http } from 'parstack';
+    import { Http } from 'stackerjs';
 
     const viewAction = (request:Http.Request):string =>
         `Looking for ${request.get('id')} ?`;
@@ -45,7 +45,7 @@ For example a request made to /person/:id.
 Callbacks can return a string, an object or even Http.Response class defining response information.
 
 ```typescript
-    import { Http } from 'parstack';
+    import { Http } from 'stackerjs';
 
     const viewAction = (request:Http.Request):Http.Response =>
         new Http.Response()
@@ -58,7 +58,7 @@ Callbacks can return a string, an object or even Http.Response class defining re
 ```
 
 ### Contributions
-It's possible to contribute to Parstack.
+It's possible to contribute to StackerJS.
 Fork the project check for enhancements and bugs and make a Pull Request.
 If your PR receive 3 approves from Parpe team it will be accepted and merged.
 

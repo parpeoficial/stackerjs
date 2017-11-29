@@ -2,7 +2,9 @@
     "name": "stackerjs",
     "description": "Stack for building Microservices",
     "keywords": [
-        "framework", "stack", "orm"
+        "framework",
+        "stack",
+        "orm"
     ],
     "version": "1.0.0",
     "main": "lib/index.js",

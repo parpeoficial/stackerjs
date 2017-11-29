@@ -157,7 +157,7 @@ export class App
 
     private app:express;
 
-    public constructor(name:string='ParStack')
+    public constructor(name:string='StackerJS')
     {
         this.app = express();
         Config.set('app.name', name);
@@ -185,7 +185,7 @@ export class MicroService
     private name:string;
     private route:Router;
 
-    public constructor(microServiceName:string='Micro ParStack')
+    public constructor(microServiceName:string='Micro StackerJS')
     {
         this.name = microServiceName;
         this.route = new Router();
