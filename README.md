@@ -1,5 +1,5 @@
-[![Travis](https://img.shields.io/travis/parpeoficial/parstack.svg)](https://travis-ci.org/parpeoficial/parstack)
-[![Codecov](https://img.shields.io/codecov/c/github/parpeoficial/parstack.svg)](https://codecov.io/gh/parpeoficial/parstack)
+[![Travis](https://img.shields.io/travis/parpeoficial/stackerjs.svg)](https://travis-ci.org/parpeoficial/parstack)
+[![Codecov](https://img.shields.io/codecov/c/github/parpeoficial/stackerjs.svg)](https://codecov.io/gh/parpeoficial/parstack)
 
 # ParStack
 A Stack built in NodeJS using ExpressJS, for building NodeJS microservices.
