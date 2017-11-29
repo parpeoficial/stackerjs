@@ -5,6 +5,9 @@ node_js:
 services:
   - mysql
 
+ notifications:
+    slack: parpe:ypxSy7CvUXYAShDK7C3supzV
+
 before_install:
   - npm install -g codecov istanbul typescript
 
