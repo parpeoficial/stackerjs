@@ -1,6 +1,6 @@
 {
-    "name": "parstack",
-    "description": "Stack for building Parpe's Microservices",
+    "name": "stackerjs",
+    "description": "Stack for building Microservices",
     "version": "1.0.0",
     "main": "lib/index.js",
     "types": "index.d.ts",
