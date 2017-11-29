@@ -1,5 +1,5 @@
-[![Travis](https://img.shields.io/travis/vinyguedess/parstack.svg)]()
-[![Codecov](https://img.shields.io/codecov/c/github/vinyguedess/parstack.svg)]()
+[![Travis](https://img.shields.io/travis/parpeoficial/parstack.svg)](https://travis-ci.org/parpeoficial/parstack)
+[![Codecov](https://img.shields.io/codecov/c/github/parpeoficial/parstack.svg)](https://codecov.io/gh/parpeoficial/parstack)
 
 # ParStack
 A Stack built in NodeJS using ExpressJS, for building NodeJS microservices.
@@ -37,7 +37,7 @@ For example a request made to /person/:id.
 ```typescript
     import { Http } from 'parstack';
 
-    const viewAction = (request:Http.Request) =>
+    const viewAction = (request:Http.Request):string =>
         `Looking for ${request.get('id')} ?`;
 ```
 
@@ -47,7 +47,7 @@ Callbacks can return a string, an object or even Http.Response class defining re
 ```typescript
     import { Http } from 'parstack';
 
-    const viewAction = (request:Http.Request) =>
+    const viewAction = (request:Http.Request):Http.Response =>
         new Http.Response()
             .setStatusCode(404)
             .setHeader('Allow-anything', '1230')
