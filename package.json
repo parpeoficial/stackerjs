@@ -15,7 +15,6 @@
         "url": "https://github.com/parpeoficial/stackerjs"
     },
     "bin": {
-        "pandora": "./pandora.js"
     },
     "dependencies": {
         "body-parser": "^1.18.2",
