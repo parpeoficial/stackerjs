@@ -6,7 +6,7 @@
         "stack",
         "orm"
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "lib/index.js",
     "types": "index.d.ts",
     "license": "MIT",
@@ -15,7 +15,6 @@
         "url": "https://github.com/parpeoficial/stackerjs"
     },
     "bin": {
-        "pandora": "./pandora.js"
     },
     "dependencies": {
         "body-parser": "^1.18.2",
