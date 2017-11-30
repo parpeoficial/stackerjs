@@ -5,6 +5,9 @@ node_js:
 services:
   - mysql
 
+notifications:
+  slack: parpe:ypxSy7CvUXYAShDK7C3supzV
+
 before_install:
   - npm install -g codecov istanbul typescript
 
@@ -28,3 +31,10 @@ after_success:
   - ./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/coverage.json
   - istanbul report
   - codecov
+
+deploy:
+  provider: npm
+  email: "admin@parpe.com"
+  api_key: "307317b6-1f2b-4d67-9bf2-a820b6c8ee2d"
+  on:
+    branch: master

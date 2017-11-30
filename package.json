@@ -1,12 +1,20 @@
 {
     "name": "stackerjs",
     "description": "Stack for building Microservices",
+    "keywords": [
+        "framework",
+        "stack",
+        "orm"
+    ],
     "version": "1.0.0",
     "main": "lib/index.js",
     "types": "index.d.ts",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/parpeoficial/stackerjs"
+    },
     "bin": {
-        "pandora": "./pandora.js"
     },
     "dependencies": {
         "body-parser": "^1.18.2",
