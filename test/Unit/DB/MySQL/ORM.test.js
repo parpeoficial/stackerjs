@@ -16,13 +16,15 @@ describe('ORMTest', function ()
             "CREATE TABLE IF NOT EXISTS contacts ( \
                 id         INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
                 first_name VARCHAR(100)                       NOT NULL, \
-                last_name  VARCHAR(100)                       NOT NULL \
+                last_name  VARCHAR(100)                       NOT NULL, \
+                status     TINYINT(1)                         DEFAULT 1, \
+                extra      TEXT                               NOT NULL \
             );",
             "CREATE TABLE IF NOT EXISTS contact_phones ( \
                 id           INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
                 contact_id   INTEGER                            NOT NULL, \
                 phone_number VARCHAR(20)                        NOT NULL, \
-                active       BOOLEAN DEFAULT TRUE \
+                active       BOOLEAN                            DEFAULT TRUE \
             );",
             "INSERT INTO contact_phones (contact_id, phone_number) VALUES (1, '123');",
             "INSERT INTO contact_phones (contact_id, phone_number) VALUES (1, '456');",
@@ -39,14 +41,15 @@ describe('ORMTest', function ()
                 id         INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
                 start_time DATETIME                           NOT NULL, \
                 end_time   DATETIME                           NOT NULL, \
+                extra      TEXT                               NULL,\
                 active     BOOLEAN DEFAULT TRUE \
             );",
-            "INSERT INTO schedules (start_time, end_time) \
-            VALUES ('2017-10-02 17:00:00', '2017-10-02 17:30:00');",
-            "INSERT INTO schedules (start_time, end_time) \
-            VALUES ('2017-10-03 17:00:00', '2017-10-03 17:30:00');",
-            "INSERT INTO schedules (start_time, end_time) \
-            VALUES ('2017-10-04 17:00:00', '2017-10-04 17:30:00');",
+            "INSERT INTO schedules (start_time, end_time, extra) \
+            VALUES ('2017-10-02 17:00:00', '2017-10-02 17:30:00', '_');",
+            "INSERT INTO schedules (start_time, end_time, extra) \
+            VALUES ('2017-10-03 17:00:00', '2017-10-03 17:30:00', '_');",
+            "INSERT INTO schedules (start_time, end_time, extra) \
+            VALUES ('2017-10-04 17:00:00', '2017-10-04 17:30:00', '_');",
         ]).then(() => done());
     });
 
@@ -75,7 +78,7 @@ describe('ORMTest', function ()
                 contactRepository.save(contact)
                     .then((response) => {
                         expect(response).to.be.true;
-                        expect(contact).to.have.property('id');
+                        expect(contact).to.have.property('primary');
                         expect(contact.getId()).to.be.equal(1);
                     })
                         .then(() => done());

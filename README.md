@@ -1,5 +1,5 @@
 [![Travis](https://img.shields.io/travis/parpeoficial/stackerjs.svg)](https://travis-ci.org/parpeoficial/stackerjs)
-[![Codecov](https://img.shields.io/codecov/c/github/parpeoficial/stackerjs.svg)](https://codecov.io/gh/parpeoficial/stackerjs)
+[![Codecov](https://codecov.io/gh/parpeoficial/stackerjs/branch/master/graph/badge.svg)](https://codecov.io/gh/parpeoficial/stackerjs)
 
 # StackerJS
 A Stack built in NodeJS using ExpressJS, for building NodeJS microservices.

@@ -8,7 +8,7 @@ class Contact
         return {
             'table': 'contacts',
             'fields': [
-                { 'type': 'pk', 'name': 'id' },
+                { 'type': 'pk', 'name': 'id', 'alias': 'primary' },
                 { 
                     'type': 'string', 
                     'name': 'first_name', 
@@ -20,7 +20,9 @@ class Contact
                     'name': 'last_name', 
                     'required': true,
                     'min': 2
-                }
+                },
+                { 'type': 'boolean', 'name': 'status', 'alias': 'active', 'default': 1 },
+                { 'type': 'json', 'name': 'extra', 'default': '{}' }
             ],
             'relations': [
                 {
@@ -61,7 +63,7 @@ class Contact
     
     getId() 
     {
-        return this['id'];
+        return this['primary'];
     }
     
     getFirstName() 
@@ -152,7 +154,8 @@ class Schedule
                 {
                     'type': 'date',
                     'name': 'end_time'
-                }
+                },
+                { 'type': 'json', 'name': 'extra', 'default': '_' }
             ],
             'relations': []
         };
