@@ -75,7 +75,7 @@ describe('ORMTest', function ()
                 contactRepository.save(contact)
                     .then((response) => {
                         expect(response).to.be.true;
-                        expect(contact).to.have.property('id');
+                        expect(contact).to.have.property('primary');
                         expect(contact.getId()).to.be.equal(1);
                     })
                         .then(() => done());

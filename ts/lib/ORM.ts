@@ -20,18 +20,19 @@ export namespace ORM
                 .forEach((field:IEntityMetadataField):void => 
                 {
                     if (typeof attributes[field.name] !== 'undefined') {
+                        let name:string = field.alias ? field.alias : field.name;
                         if (field.type === 'boolean')
-                            entity[field.name] = attributes[field.name] === 1;
+                            entity[name] = attributes[field.name] === 1;
                         else if (field.type === 'date')
-                            entity[field.name] = new Date(attributes[field.name]);
+                            entity[name] = new Date(attributes[field.name]);
                         else if (field.type === 'json') {
                             try {
-                                entity[field.name] = JSON.parse(attributes[field.name]);
+                                entity[name] = JSON.parse(attributes[field.name]);
                             } catch (err) { 
-                                entity[field.name] = attributes[field.name] 
+                                entity[name] = attributes[field.name] 
                             }
                         } else
-                            entity[field.name] = attributes[field.name];
+                            entity[name] = attributes[field.name];
                     }
                 });
 
@@ -106,7 +107,7 @@ export namespace ORM
                 .select()
                 .from(relation.referencedEntity.metadata().table)
                 .set('*')
-                .where(expr.eq(relation.referencedField, entity[relation.field]));
+                .where(expr.eq(relation.referencedField, entity['_attributes'][relation.field]));
 
             return ():Promise<Array<IEntity>> => DB.Factory.getConnection()
                 .query(queryBuilder.toSql())
@@ -264,7 +265,7 @@ export namespace ORM
             {
                 if (field.type !== 'pk') {
                     queryBuilder.set(field.name, '?');
-                    parameters.push(queryBuilder.treatValue(entity[field.name], false));
+                    parameters.push(queryBuilder.treatValue(entity[field.alias ? field.alias : field.name], false));
                 }
             });
 
@@ -292,11 +293,11 @@ export namespace ORM
             {
                 if (field.type !== 'pk') {
                     queryBuilder.set(field.name, '?');
-                    parameters.push(queryBuilder.treatValue(entity[field.name], false));
+                    parameters.push(queryBuilder.treatValue(entity[field.alias ? field.alias : field.name], false));
                 } else
-                    queryBuilder.where(expr.eq(field.name, entity[field.name]));
+                    queryBuilder.where(expr.eq(field.name, entity[field.alias ? field.alias : field.name]));
             });
-
+            
             return DB.Factory.getConnection()
                 .query(queryBuilder.toSql(), parameters)
                 .then((response:DB.QueryResults):boolean => true)
@@ -308,7 +309,16 @@ export namespace ORM
 
         protected isNewRecord(entity:IEntity):boolean
         {
-            return typeof entity['id'] === 'undefined' || !entity['id'];
+            if (!entity['_attributes'])
+                return true;
+
+            if (typeof entity['_attributes']['id'] === 'undefined')
+                return true;
+
+            if (!entity['_attributes']['id'])
+                return true;
+
+            return false;
         }
 
         protected setEntityId(entity:IEntity, lastInsertedId:any):void
@@ -317,7 +327,7 @@ export namespace ORM
                 .fields
                 .forEach((field):void => {
                     if (field.type === 'pk')
-                        entity[field.name] = lastInsertedId;
+                        entity[field.alias ? field.alias : field.name] = lastInsertedId;
                 });
         }
 

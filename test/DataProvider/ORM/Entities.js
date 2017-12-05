@@ -8,7 +8,7 @@ class Contact
         return {
             'table': 'contacts',
             'fields': [
-                { 'type': 'pk', 'name': 'id' },
+                { 'type': 'pk', 'name': 'id', 'alias': 'primary' },
                 { 
                     'type': 'string', 
                     'name': 'first_name', 
@@ -61,7 +61,7 @@ class Contact
     
     getId() 
     {
-        return this['id'];
+        return this['primary'];
     }
     
     getFirstName() 
