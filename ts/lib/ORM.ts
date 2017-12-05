@@ -309,16 +309,9 @@ export namespace ORM
 
         protected isNewRecord(entity:IEntity):boolean
         {
-            if (!entity['_attributes'])
-                return true;
-
-            if (typeof entity['_attributes']['id'] === 'undefined')
-                return true;
-
-            if (!entity['_attributes']['id'])
-                return true;
-
-            return false;
+            return !entity['_attributes'] || 
+                typeof entity['_attributes']['id'] === 'undefined' ||
+                !entity['_attributes']['id']
         }
 
         protected setEntityId(entity:IEntity, lastInsertedId:any):void

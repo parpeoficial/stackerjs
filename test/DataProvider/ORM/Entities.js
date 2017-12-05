@@ -20,7 +20,9 @@ class Contact
                     'name': 'last_name', 
                     'required': true,
                     'min': 2
-                }
+                },
+                { 'type': 'boolean', 'name': 'status', 'alias': 'active', 'default': 1 },
+                { 'type': 'json', 'name': 'extra', 'default': '{}' }
             ],
             'relations': [
                 {
@@ -152,7 +154,8 @@ class Schedule
                 {
                     'type': 'date',
                     'name': 'end_time'
-                }
+                },
+                { 'type': 'json', 'name': 'extra', 'default': '_' }
             ],
             'relations': []
         };
