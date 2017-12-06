@@ -510,7 +510,7 @@ declare module "stackerjs"
              * @param limit Defines a limit for Array of Entities
              * @param offset Defines where should Array start
              */
-            public find(filter:string|any, limit?:number, offset?:number):Promise<Array<IEntity>>;
+            public find(filter?:string|any, limit?:number, offset?:number):Promise<Array<IEntity>>;
 
             /**
              * Returns the number of registers in a repository
