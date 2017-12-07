@@ -22,6 +22,14 @@ class Contact
                     'min': 2
                 },
                 { 'type': 'boolean', 'name': 'status', 'alias': 'active', 'default': 1 },
+                { 
+                    'type': 'integer', 
+                    'name': 'life_years', 
+                    'alias': 'age', 
+                    'default': 18, 
+                    'max': 99,
+                    'min': 18 
+                },
                 { 'type': 'json', 'name': 'extra', 'default': '{}' }
             ],
             'relations': [
@@ -84,6 +92,16 @@ class Contact
     setLastName(lastName) 
     {
         this['last_name'] = lastName;
+    }
+
+    getAge()
+    {
+        return this['age'];
+    }
+
+    setAge(age)
+    {
+        this['age'] = age;
     }
 
 }

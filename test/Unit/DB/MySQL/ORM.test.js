@@ -18,6 +18,7 @@ describe('ORMTest', function ()
                 first_name VARCHAR(100)                       NOT NULL, \
                 last_name  VARCHAR(100)                       NOT NULL, \
                 status     TINYINT(1)                         DEFAULT 1, \
+                life_years TINYINT(3)                         DEFAULT 18, \
                 extra      TEXT                               NOT NULL \
             );",
             "CREATE TABLE IF NOT EXISTS contact_phones ( \
@@ -108,6 +109,7 @@ describe('ORMTest', function ()
                     '012345678901234567890123456789012345678901234567891'
                 );
                 contact.setLastName('Guedes');
+                contact.setAge(100);
 
                 let contactRepository = new ContactRepository();
                 contactRepository.save(contact)
@@ -125,6 +127,7 @@ describe('ORMTest', function ()
                 let contact = new Contact();
                 contact.setFirstName('Vinicius');
                 contact.setLastName('G');
+                contact.setAge(17);
 
                 let contactRepository = new ContactRepository();
                 contactRepository.save(contact)

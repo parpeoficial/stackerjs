@@ -155,13 +155,21 @@ export namespace ORM
         public validate(entity:IEntity):boolean
         {
             this.entity.metadata().fields.forEach((field):void => {
-                if (field.required && (!entity[field.name] || entity[field.name].length === ''))
+                if (field.required && 
+                    (!entity[field.alias ? field.alias : field.name] || 
+                        entity[field.alias ? field.alias : field.name].length === ''))
                     this.addError(field.name, "Field is required");
 
-                if (field.max && entity[field.name] && (entity[field.name] > field.max || entity[field.name].length > field.max))
+                if (field.max && 
+                    entity[field.alias ? field.alias : field.name] && 
+                    (entity[field.alias ? field.alias : field.name] > field.max || 
+                        entity[field.alias ? field.alias : field.name].length > field.max))
                     this.addError(field.name, `Field length must be under ${field.max}`);
 
-                if (field.min && entity[field.name] && (entity[field.name] < field.min || entity[field.name].length < field.min))
+                if (field.min && 
+                    entity[field.alias ? field.alias : field.name] && 
+                    (entity[field.alias ? field.alias : field.name] < field.min || 
+                        entity[field.alias ? field.alias : field.name].length < field.min))
                     this.addError(field.name, `Field length must be over ${field.min}`);
             }); 
 
@@ -338,8 +346,8 @@ export namespace ORM
         {
             this.entity.metadata().fields.forEach((field):void => 
             {
-                if (!entity[field.name] && field.default)
-                    entity[field.name] = field.default;
+                if (!entity[field.alias ? field.alias : field.name] && field.default)
+                    entity[field.alias ? field.alias : field.name] = field.default;
             });
         }
 
