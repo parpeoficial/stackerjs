@@ -18,6 +18,7 @@ describe('ORMTest', function ()
                 first_name VARCHAR(100)                       NOT NULL, \
                 last_name  VARCHAR(100)                       NOT NULL, \
                 status     TINYINT(1)                         DEFAULT 1, \
+                life_years TINYINT(3)                         DEFAULT 18, \
                 extra      TEXT                               NOT NULL \
             );",
             "CREATE TABLE IF NOT EXISTS contact_phones ( \
