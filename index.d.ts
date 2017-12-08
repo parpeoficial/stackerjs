@@ -479,15 +479,40 @@ declare module "stackerjs"
             /**
              * Adds an error message
              * 
+             * @param field Or item to where error's message is attached
              * @param message Error's message
              */
-            public addError(message:string|Error):void;
+            public addError(field?:string|Error, message?:string|Error):void;
             
             /**
              * Returns an array of errors
              */
             public getErrors():Array<string>;
             
+            /**
+             * Identifies if there's any error message attached to Repository
+             */
+            public hasErrors():boolean;
+
+            /**
+             * Executes before validating an Entity
+             * 
+             * @param entity 
+             */
+            public beforeValidate(entity:IEntity):Promise<boolean>;
+
+            /**
+             * Checks if selected entity is valid
+             * 
+             * @param entity Entity to be verified
+             */
+            public validate(entity:IEntity):boolean;
+
+            /**
+             * Executes before saving an Entity
+             */
+            public beforeSave(entity:IEntity):Promise<boolean>;
+
             /**
              * Saves an entity, if it's a new record insert it on database
              * but of is an already existent data that it's updated.

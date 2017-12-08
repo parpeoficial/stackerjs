@@ -152,6 +152,11 @@ export namespace ORM
             return Object.keys(this.errors).length > 0;
         }
 
+        public beforeValidate(entity:IEntity):Promise<boolean>
+        {
+            return Promise.resolve(true);
+        }
+
         public validate(entity:IEntity):boolean
         {
             this.entity.metadata().fields.forEach((field):void => {
@@ -176,12 +181,29 @@ export namespace ORM
             return !this.hasErrors();
         }
 
-        public save(entity:IEntity, validate:boolean=true):Promise<boolean>
+        public beforeSave(entity:IEntity):Promise<boolean>
+        {
+            return Promise.resolve(true);
+        }
+
+        public async save(entity:IEntity, validate:boolean=true):Promise<boolean>
         {
             this.prepare(entity);
 
+            if (!await this.beforeValidate(entity)) {
+                if (!this.hasErrors())
+                    this.addError('validation', 'Presented problems before validating');
+                return false;
+            }
+
             if (validate && !this.validate(entity))
-                return Promise.resolve(false);
+                return false;
+
+            if (!await this.beforeSave(entity)) {
+                if (!this.hasErrors())
+                    this.addError('validation', 'Presented problems before saving');
+                return false;
+            }
 
             if (this.isNewRecord(entity))
                 return this.insert(entity);
