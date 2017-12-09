@@ -368,8 +368,9 @@ export namespace ORM
         {
             this.entity.metadata().fields.forEach((field):void => 
             {
-                if (!entity[field.alias ? field.alias : field.name] && field.default)
-                    entity[field.alias ? field.alias : field.name] = field.default;
+                let fieldName:string = field.alias ? field.alias : field.name;
+                if (!entity[fieldName] && (field.default || field.default === 0))
+                    entity[fieldName] = field.default;
             });
         }
 
