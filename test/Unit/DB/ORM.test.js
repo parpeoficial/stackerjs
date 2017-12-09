@@ -1,7 +1,7 @@
 const { expect } = require("chai");
-const { ORM, DB } = require("./../../../../lib");
-const { Contact, Schedule, Phone } = require("./../../../DataProvider/ORM/Entities");
-const { ContactRepository } = require("./../../../DataProvider/ORM/Repositories");
+const { ORM, DB } = require("./../../../lib");
+const { Contact, Schedule, Phone } = require("./../../DataProvider/ORM/Entities");
+const { ContactRepository } = require("./../../DataProvider/ORM/Repositories");
 
 
 describe('ORMTest', function () 
@@ -284,6 +284,63 @@ describe('ORMTest', function ()
                 
                 let response = await contactRepository.delete(contact);
                 expect(response).to.be.true;
+            });
+        });
+
+        describe('Repositories events', () => 
+        {
+            it('Should set default error message when not defined in before validate', done => 
+            {
+                let contactRepository = new ContactRepository();
+
+                contactRepository.save({
+                    'first_name': 'Vinicius',
+                    'last_name': 'Guedes',
+                    'test_before_validate': true
+                })
+                    .then(response => expect(response).to.be.false)
+                    .then(() => done());
+            });
+
+            it('Should set default error message when not defined in before validate', done => 
+            {
+                let contactRepository = new ContactRepository();
+
+                contactRepository.save({
+                    'first_name': 'Vinicius',
+                    'last_name': 'Guedes',
+                    'test_before_validate': true,
+                    'test_before_validate_insert_error': true
+                })
+                    .then(response => expect(response).to.be.false)
+                    .then(() => done());
+            });
+
+            it('Should set default error message when not defined in before validate', done => 
+            {
+                let contactRepository = new ContactRepository();
+
+                contactRepository.save({
+                    'first_name': 'Vinicius',
+                    'last_name': 'Guedes',
+                    'test_before_save': true
+                })
+                    .then(response => expect(response).to.be.false)
+                    .then(() => done());
+            });
+
+            it('Should set default error message when not defined in before validate', done => 
+            {
+                let contactRepository = new ContactRepository();
+
+                contactRepository.save({
+                    'first_name': 'Vinicius',
+                    'last_name': 'Guedes',
+                    'test_before_save': true,
+                    'test_before_save_insert_error': true
+                })
+                    .then(response => expect(response).to.be.false)
+                    .then(() => done());
             });
         });
     });
