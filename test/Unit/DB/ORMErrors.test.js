@@ -8,7 +8,7 @@ describe('ORMErrorsTest', () =>
 
     describe('Testing some database problems', () => 
     {
-        it('Saving problems with database', done => 
+        it('Should present database errors on inserting', done => 
         {
             let contactRepository = new ContactRepository();
 
@@ -18,6 +18,42 @@ describe('ORMErrorsTest', () =>
                 .then(response => {
                     expect(response).to.be.false;
                     expect(contactRepository.getErrors()).to.have.property('Database');
+                })
+                .then(() => done());
+        });
+
+        it('Should present database errors on updating', done => 
+        {
+            let contactRepository = new ContactRepository();
+
+            contactRepository.save({
+                '_attributes': {
+                    'id': 1
+                },
+                'id': 1,
+                'first_name': 'Allucard',
+                'last_name': 'Castlevania'
+            })
+                .then(response => {
+                    expect(response).to.be.false;
+                    expect(contactRepository.hasErrors()).to.be.true;
+                })
+                .then(() => done());
+        });
+
+        it('Should present database errors on deleting', done =>
+        {
+            let contactRepository = new ContactRepository();
+
+            contactRepository.delete({
+                '_attributes': { 'id': 1 },
+                'id': 1,
+                'first_name': 'Allucard',
+                'last_name': 'CastleVania'
+            })
+                .then(response => {
+                    expect(response).to.be.false;
+                    expect(contactRepository.hasErrors()).to.be.true;
                 })
                 .then(() => done());
         });
