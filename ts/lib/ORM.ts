@@ -293,7 +293,7 @@ export namespace ORM
 
             this.entity.metadata().fields.forEach((field):void => 
             {
-                if (field.type !== 'pk') {
+                if (field.type !== 'pk' && entity[field.alias ? field.alias : field.name] !== null) {
                     queryBuilder.set(field.name, '?');
                     parameters.push(queryBuilder.treatValue(entity[field.alias ? field.alias : field.name], false));
                 }
@@ -321,11 +321,14 @@ export namespace ORM
 
             this.entity.metadata().fields.forEach((field):void => 
             {
+                let fieldName:string = field.alias ? field.alias : field.name;
                 if (field.type !== 'pk') {
-                    queryBuilder.set(field.name, '?');
-                    parameters.push(queryBuilder.treatValue(entity[field.alias ? field.alias : field.name], false));
+                    if (entity[fieldName] !== entity['_attributes'][field.name]) {
+                        queryBuilder.set(field.name, '?');
+                        parameters.push(queryBuilder.treatValue(entity[fieldName], false));
+                    }
                 } else
-                    queryBuilder.where(expr.eq(field.name, entity[field.alias ? field.alias : field.name]));
+                    queryBuilder.where(expr.eq(field.name, entity[fieldName]));
             });
             
             return DB.Factory.getConnection()
