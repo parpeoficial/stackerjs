@@ -330,6 +330,9 @@ export namespace ORM
                 } else
                     queryBuilder.where(expr.eq(field.name, entity[fieldName]));
             });
+
+            if (parameters.length <= 0)
+                return Promise.resolve(true);
             
             return DB.Factory.getConnection()
                 .query(queryBuilder.toSql(), parameters)

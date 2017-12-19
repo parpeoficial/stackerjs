@@ -202,6 +202,15 @@ describe('ORMTest', function ()
                 expect(response).to.be.true;
             });
             
+            it('Should return true even if no field is updated', async () => 
+            {
+                let contactRepository = new ContactRepository();
+                let contact = await contactRepository.findById(1);
+
+                let response = await contactRepository.save(contact);
+                expect(response).to.be.true;
+            });
+            
             it('Should present error when searching for non existent entity', async () =>
             {
                 expect(await new ContactRepository().findById(-10))
