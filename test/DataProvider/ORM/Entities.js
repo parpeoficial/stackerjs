@@ -30,7 +30,9 @@ class Contact
                     'max': 99,
                     'min': 18 
                 },
-                { 'type': 'json', 'name': 'extra', 'default': '{}' }
+                { 'type': 'json', 'name': 'extra', 'default': '{}' },
+                { 'type': 'created_at', 'name': 'created_at' },
+                { 'type': 'updated_at', 'name': 'updated_at' }
             ],
             'relations': [
                 {
@@ -116,6 +118,7 @@ class Phone
         return {
             'table': 'contact_phones',
             'fields': [
+                { 'type': 'integer', 'name': 'contact_id' },
                 {
                     'type': 'string',
                     'name': 'phone_number'
@@ -165,6 +168,7 @@ class Schedule
         return {
             'table': 'schedules',
             'fields': [
+                { 'type': 'pk', 'name': 'id' },
                 {
                     'type': 'date',
                     'name': 'start_time',

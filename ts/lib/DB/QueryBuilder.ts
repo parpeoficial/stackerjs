@@ -90,20 +90,18 @@ export namespace QueryBuilder
         public static SQLTreatValue(value:any, treatString:boolean=true):any
         {
             if (value instanceof Date)
-                return this.SQLTreatValue(
+                return this.SQLTreatValue([
                     [
-                        [
-                            value.getFullYear(),
-                            this.PadString((value.getMonth() + 1).toString(), 2),
-                            this.PadString(value.getDate().toString(), 2)
-                        ].join('-'),
-                        [
-                            this.PadString(value.getHours().toString(), 2),
-                            this.PadString(value.getMinutes().toString(), 2),
-                            this.PadString(value.getSeconds().toString(), 2)
-                        ].join(':')
-                    ].join(' ')
-                );
+                        value.getFullYear(),
+                        this.PadString((value.getMonth() + 1).toString(), 2),
+                        this.PadString(value.getDate().toString(), 2)
+                    ].join('-'),
+                    [
+                        this.PadString(value.getHours().toString(), 2),
+                        this.PadString(value.getMinutes().toString(), 2),
+                        this.PadString(value.getSeconds().toString(), 2)
+                    ].join(':')
+                ].join(' '), treatString);
 
             if (typeof value === 'number')
                 return value;
