@@ -1,5 +1,5 @@
 const { ORM } = require("./../../../lib");
-const { Contact } = require("./Entities");
+const { Contact, Schedule } = require("./Entities");
 
 
 class ContactRepository extends ORM.BaseRepository 
@@ -35,3 +35,15 @@ class ContactRepository extends ORM.BaseRepository
 
 }
 exports.ContactRepository = ContactRepository;
+
+class SchedulesRepository extends ORM.BaseRepository
+{
+
+    constructor()
+    {
+        super(...arguments);
+        this.entity = new Schedule();
+    }
+
+}
+exports.SchedulesRepository = SchedulesRepository;

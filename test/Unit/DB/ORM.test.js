@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const { Config, ORM, DB } = require("./../../../lib");
 const { Contact, Schedule, Phone } = require("./../../DataProvider/ORM/Entities");
-const { ContactRepository } = require("./../../DataProvider/ORM/Repositories");
+const { ContactRepository, SchedulesRepository } = require("./../../DataProvider/ORM/Repositories");
 
 
 describe('ORMTest', function () 
@@ -243,7 +243,7 @@ describe('ORMTest', function ()
                 expect(phones[0]).to.be.instanceOf(Phone);
                 expect(phones[0].getPhoneNumber()).to.be.equal('123');
                 expect(phones[0].isActive()).to.be.true;
-                
+
                 let contactAgain = await phones[0].getContact();
                 expect(contactAgain.getId()).to.be.equal(1);
             });
@@ -354,6 +354,37 @@ describe('ORMTest', function ()
                     .then(response => expect(response).to.be.false)
                     .then(() => done());
             });
+        });
+    });
+
+    describe('Saving data without time updates', () => 
+    {
+        it('Should insert a Schedule without created_at', done => 
+        {
+            let schedule = { 
+                'start_time': new Date(), 
+                'end_time': new Date(),
+                'extra': { 'some': 'thing' } 
+            };
+
+            new SchedulesRepository()
+                .save(schedule)
+                .then(response => {
+                    expect(response).to.be.true;
+                    Config.set('schedule.id', schedule['id'])
+                })
+                .then(() => done());
+        });
+
+        it('Should update a Schedule without updated_at', async () => 
+        {
+            let schedulesRepository = new SchedulesRepository();
+
+            let schedule = await schedulesRepository.findById(Config.get('schedule.id'));
+
+            await schedulesRepository
+                .save(schedule)
+                .then(response => expect(response).to.be.true);
         });
     });
 

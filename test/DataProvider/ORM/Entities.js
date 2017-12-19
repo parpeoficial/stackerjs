@@ -118,6 +118,7 @@ class Phone
         return {
             'table': 'contact_phones',
             'fields': [
+                { 'type': 'integer', 'name': 'contact_id' },
                 {
                     'type': 'string',
                     'name': 'phone_number'
@@ -167,6 +168,7 @@ class Schedule
         return {
             'table': 'schedules',
             'fields': [
+                { 'type': 'pk', 'name': 'id' },
                 {
                     'type': 'date',
                     'name': 'start_time',

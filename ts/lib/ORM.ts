@@ -13,31 +13,21 @@ export namespace ORM
             let metadata:ORM.IEntityMetadata = defaultEntity.metadata();
             
             let entity:IEntity = Object.create(defaultEntity);
-            Object.defineProperty(entity, '_attributes', {
-                'get': () => attributes
-            });
+            let _attributes = {};
 
             metadata.fields
                 .forEach((field:IEntityMetadataField):void => 
                 {
                     if (typeof attributes[field.name] !== 'undefined') {
                         let name:string = field.alias ? field.alias : field.name;
-                        if (field.type === 'boolean')
-                            entity[name] = attributes[field.name] === 1;
-                        else if (field.type === 'date')
-                            entity[name] = new Date(attributes[field.name]);
-                        else if (field.type === 'json') {
-                            try {
-                                entity[name] = JSON.parse(attributes[field.name]);
-                            } catch (err) { 
-                                entity[name] = attributes[field.name] 
-                            }
-                        } else if (field.type === 'created_at' || field.type === 'updated_at') {
-                            entity[name] = attributes[field.name] ? attributes[field.name] * 1000 : null;
-                        } else
-                            entity[name] = attributes[field.name];
+                        entity[name] = this.fieldValueParser(field.type, attributes[field.name]);
+                        _attributes[field.name] = this.fieldValueParser(field.type, attributes[field.name])
                     }
                 });
+
+            Object.defineProperty(entity, '_attributes', {
+                'get': () => _attributes
+            });
 
             metadata.relations
                 .forEach((relation:ORM.IEntityMetadataRelation):void => {
@@ -58,6 +48,24 @@ export namespace ORM
                 });
 
             return Promise.resolve(entity);
+        }
+
+        private static fieldValueParser(type:string, value:any)
+        {
+            if (type === 'boolean')
+                return value === 1;
+            else if (type === 'date')
+                return new Date(value);
+            else if (type === 'json') {
+                try {
+                    return JSON.parse(value);
+                } catch (err) { 
+                    return value; 
+                }
+            } else if (type === 'created_at' || type === 'updated_at')
+                return value ? value * 1000 : null;
+            else
+                return value;
         }
 
         private static MANYMANYAssociation(entity:IEntity, relation:ORM.IEntityMetadataRelation)
@@ -334,7 +342,9 @@ export namespace ORM
             {
                 let fieldName:string = field.alias ? field.alias : field.name;
                 if (field.type !== 'pk') {
-                    if (field.type !== 'created_at' && entity[fieldName] !== entity['_attributes'][field.name]) {
+                    if (field.type !== 'created_at' && 
+                    queryBuilder.treatValue(entity[fieldName]) !== 
+                    queryBuilder.treatValue(entity['_attributes'][field.name])) {
                         queryBuilder.set(field.name, '?');
                         parameters.push(queryBuilder.treatValue(entity[fieldName], false));
                     }
@@ -357,8 +367,8 @@ export namespace ORM
         protected isNewRecord(entity:IEntity):boolean
         {
             return !entity['_attributes'] || 
-                typeof entity['_attributes']['id'] === 'undefined' ||
-                !entity['_attributes']['id']
+                typeof entity['_attributes'][this.getFieldByType('pk')] === 'undefined' ||
+                !entity['_attributes'][this.getFieldByType('pk')];
         }
 
         protected setEntityId(entity:IEntity, lastInsertedId:any):void
