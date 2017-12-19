@@ -30,7 +30,9 @@ class Contact
                     'max': 99,
                     'min': 18 
                 },
-                { 'type': 'json', 'name': 'extra', 'default': '{}' }
+                { 'type': 'json', 'name': 'extra', 'default': '{}' },
+                { 'type': 'created_at', 'name': 'created_at' },
+                { 'type': 'updated_at', 'name': 'updated_at' }
             ],
             'relations': [
                 {

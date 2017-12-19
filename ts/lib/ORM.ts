@@ -1,3 +1,4 @@
+import { Config } from './';
 import { DB } from './DB';
 
 
@@ -31,6 +32,8 @@ export namespace ORM
                             } catch (err) { 
                                 entity[name] = attributes[field.name] 
                             }
+                        } else if (field.type === 'created_at' || field.type === 'updated_at') {
+                            entity[name] = attributes[field.name] ? attributes[field.name] * 1000 : null;
                         } else
                             entity[name] = attributes[field.name];
                     }
@@ -157,8 +160,14 @@ export namespace ORM
             return Promise.resolve(true);
         }
 
-        public validate(entity:IEntity):boolean
+        public async validate(entity:IEntity):Promise<boolean>
         {
+            if (!await this.beforeValidate(entity)) {
+                if (!this.hasErrors())
+                    this.addError('validation', 'Presented problems before validating');
+                return false;
+            }
+
             this.entity.metadata().fields.forEach((field):void => {
                 if (field.required && 
                     (!entity[field.alias ? field.alias : field.name] || 
@@ -190,13 +199,7 @@ export namespace ORM
         {
             this.prepare(entity);
 
-            if (!await this.beforeValidate(entity)) {
-                if (!this.hasErrors())
-                    this.addError('validation', 'Presented problems before validating');
-                return false;
-            }
-
-            if (validate && !this.validate(entity))
+            if (validate && !await this.validate(entity))
                 return false;
 
             if (!await this.beforeSave(entity)) {
@@ -218,7 +221,7 @@ export namespace ORM
                 .select()
                 .set('*')
                 .from(this.entity.metadata().table)
-                .where(expr.eq(this.getPkField(), id))
+                .where(expr.eq(this.getFieldByType('pk'), id))
                 .limit(1);
             
             return DB.Factory.getConnection()
@@ -273,7 +276,7 @@ export namespace ORM
             let queryBuilder = DB.Factory.getQueryBuilder()
                 .delete()
                 .from(this.entity.metadata().table)
-                .where(expr.eq(this.getPkField(), entity[this.getPkField()]));
+                .where(expr.eq(this.getFieldByType('pk'), entity[this.getFieldByType('pk')]));
 
             return DB.Factory.getConnection()
                 .query(queryBuilder.toSql())
@@ -290,6 +293,10 @@ export namespace ORM
             let queryBuilder = DB.Factory.getQueryBuilder()
                 .insert()
                 .into(this.entity.metadata().table);
+
+            let createdAt:string = this.getFieldByType('created_at');
+            if (createdAt)
+                entity[createdAt] = new Date().getTime() / 1000;
 
             this.entity.metadata().fields.forEach((field):void => 
             {
@@ -319,11 +326,15 @@ export namespace ORM
                 .update()
                 .into(this.entity.metadata().table);
 
+            let updatedAt:string = this.getFieldByType('updated_at');
+            if (updatedAt)
+                entity[updatedAt] = new Date().getTime() / 1000;
+
             this.entity.metadata().fields.forEach((field):void => 
             {
                 let fieldName:string = field.alias ? field.alias : field.name;
                 if (field.type !== 'pk') {
-                    if (entity[fieldName] !== entity['_attributes'][field.name]) {
+                    if (field.type !== 'created_at' && entity[fieldName] !== entity['_attributes'][field.name]) {
                         queryBuilder.set(field.name, '?');
                         parameters.push(queryBuilder.treatValue(entity[fieldName], false));
                     }
@@ -331,9 +342,9 @@ export namespace ORM
                     queryBuilder.where(expr.eq(field.name, entity[fieldName]));
             });
 
-            if (parameters.length <= 0)
+            if (parameters.length <= 1)
                 return Promise.resolve(true);
-            
+
             return DB.Factory.getConnection()
                 .query(queryBuilder.toSql(), parameters)
                 .then((response:DB.QueryResults):boolean => true)
@@ -360,14 +371,14 @@ export namespace ORM
                 });
         }
 
-        protected getPkField():string
+        protected getFieldByType(type:string):string
         {
             for (let field of this.entity.metadata().fields) {
-                if (field.type === 'pk')
+                if (field.type === type)
                     return field.name;
             }
 
-            return 'id';
+            return null;   
         }
 
         protected prepare(entity:IEntity)

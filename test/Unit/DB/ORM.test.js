@@ -1,5 +1,5 @@
 const { expect } = require("chai");
-const { ORM, DB } = require("./../../../lib");
+const { Config, ORM, DB } = require("./../../../lib");
 const { Contact, Schedule, Phone } = require("./../../DataProvider/ORM/Entities");
 const { ContactRepository } = require("./../../DataProvider/ORM/Repositories");
 
@@ -19,7 +19,9 @@ describe('ORMTest', function ()
                 last_name  VARCHAR(100)                       NOT NULL, \
                 status     TINYINT(1)                         DEFAULT 1, \
                 life_years TINYINT(3)                         DEFAULT 18, \
-                extra      TEXT                               NOT NULL \
+                extra      TEXT                               NOT NULL, \
+                created_at INTEGER                            NULL, \
+                updated_at INTEGER                            NULL \
             );",
             "CREATE TABLE IF NOT EXISTS contact_phones ( \
                 id           INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
@@ -222,6 +224,7 @@ describe('ORMTest', function ()
         {
             it('Should find an Entity and associated HASMANY entities', async () => 
             {
+                Config.set('timezone', 'BRST');
                 let contact = await new ContactRepository().findById(1);
                 
                 let phones = await contact.getPhones();
