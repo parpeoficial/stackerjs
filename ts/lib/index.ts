@@ -162,8 +162,12 @@ export class App
         this.app = express();
         Config.set('app.name', name);
 
+        this.app.use(
+            Config.get('static.url.prefix', '/static'),
+            express.static(Config.get('static.folder', 'public'))
+        );
         this.app.use(json({
-            'limit': '10mb'
+            'limit': Config.get('upload.limit', '10mb')
         }));
     }
 
