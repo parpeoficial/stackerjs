@@ -187,6 +187,16 @@ describe('ORMTest', function ()
                     })
                     .then(() => done());
             });
+
+            it('Should order results', done => 
+            {
+                new ContactRepository()
+                    .find({}, 10, 0, [ 'first_name', 'last_name' ])
+                    .then(entities => {
+                        expect(entities).to.be.instanceOf(Array);
+                    })
+                    .then(() => done());
+            })
         });
 
         describe('Finding and Updating Entity by ID', () => 

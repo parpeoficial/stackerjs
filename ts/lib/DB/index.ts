@@ -154,6 +154,8 @@ export namespace DB
 
         having(having:string):QueryBuilderSelect;
 
+        order(order:string|Array<string>):QueryBuilderSelect;
+
         limit(limit:number):QueryBuilderSelect;
         
         offset(offset:number):QueryBuilderSelect;

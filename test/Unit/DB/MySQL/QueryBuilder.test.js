@@ -137,6 +137,18 @@ describe('QueryBuilderTest', () =>
                     'HAVING active = 0;' 
                 );
             });
+
+            it('Should test queries with ORDER', () => 
+            {
+                expect(
+                    DB.Factory.getQueryBuilder()
+                        .select()
+                        .set('*')
+                        .from('table_name')
+                        .order(['name DESC'])
+                        .toSql()
+                ).to.be.equal('SELECT * FROM table_name ORDER BY name DESC;');
+            });
         });
 
         describe('UpdateQueryBuilderTest', () => 

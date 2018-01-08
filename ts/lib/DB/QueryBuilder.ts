@@ -269,6 +269,7 @@ export namespace QueryBuilder
             protected joins:Array<string> = [];
             protected groups:Array<string> = [];
             protected _having:string = null;
+            protected _order:Array<string> = [];
             protected _limit:number;
             protected _offset:number;
 
@@ -324,6 +325,17 @@ export namespace QueryBuilder
                 return this;
             }
 
+            public order(order:string|Array<string>):MySQLQueryBuilderSelect
+            {
+                if (Array.isArray(order)) {
+                    for (let o of order)
+                        this.order(o);
+                } else
+                    this._order.push(order);
+                    
+                return this;
+            }
+
             public limit(limit:number):MySQLQueryBuilderSelect
             {
                 this._limit = limit;
@@ -344,6 +356,7 @@ export namespace QueryBuilder
                     (this._where ? ` WHERE ${this._where}` : '') +
                     (this.groups.length > 0 ? ` GROUP BY ${this.groups.join(', ')}` : '') +
                     (this._having ? ` HAVING ${this._having}` : '') +
+                    (this._order.length > 0 ? ` ORDER BY ${this._order.join(', ')}` : '') +
                     (this._limit ? ` LIMIT ${this._limit}` : '') + 
                     (this._offset ? ` OFFSET ${this._offset}` : '') + 
                     ';';
