@@ -58,6 +58,42 @@ Callbacks can return a string, an object or even Http.Response class defining re
             });
 ```
 
+### DB
+Possible manipulate database using QueryBuilder and manually creating queries.
+
+#### Connection
+Database connection relies on database driver, so, if you wanna get a connection to database the right way is using Factory.
+
+```typescript
+    import { DB } from 'stackerjs';
+
+    let conn = DB.Factory.getConnection();
+```
+
+#### Query Builder
+QueryBuilder depends on your database driver. So, if you want an instance of it, the right way is getting it by Factory.
+
+```typescript
+    import { DB } from 'stackerjs';
+
+    let conn = DB.Factory.getConnection();
+    let queryBuilder = DB.Factory.getQueryBuilder();
+
+    const getResults = async ():Array<any> =>
+        await conn.query(
+            queryBuilder.select()
+                .set('id', 'name')
+                .from('table_name')
+                .order('name')
+                .toSql()
+        );
+
+    getResults()
+        .then(results => {
+            //Manipulate list of database results
+        });
+```
+
 ### Contributions
 It's possible to contribute to StackerJS.
 Fork the project check for enhancements and bugs and make a Pull Request.
