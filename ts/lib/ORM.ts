@@ -242,7 +242,7 @@ export namespace ORM
                 });
         }
 
-        public find(filter:string|any, limit:number=100, offset:number=0):Promise<Array<IEntity>>
+        public find(filter:string|any, limit:number=100, offset:number=0, order?:string|Array<string>):Promise<Array<IEntity>>
         {
             let queryBuilder = DB.Factory.getQueryBuilder()
                 .select()
@@ -251,6 +251,9 @@ export namespace ORM
                 .where(filter)
                 .limit(limit)
                 .offset(offset);
+
+            if (order)
+                queryBuilder.order(order);
 
             return DB.Factory.getConnection()
                 .query(queryBuilder.toSql())

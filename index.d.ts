@@ -446,6 +446,8 @@ declare module "stackerjs"
             group(...fields):QueryBuilderSelect;
 
             having(having:string):QueryBuilderSelect;
+
+            order(order:string|Array<string>):QueryBuilderSelect;
     
             limit(limit:number):QueryBuilderSelect;
             
@@ -535,7 +537,7 @@ declare module "stackerjs"
              * @param limit Defines a limit for Array of Entities
              * @param offset Defines where should Array start
              */
-            public find(filter?:string|any, limit?:number, offset?:number):Promise<Array<IEntity>>;
+            public find(filter?:string|any, limit?:number, offset?:number, order?:string|Array<string>):Promise<Array<IEntity>>;
 
             /**
              * Returns the number of registers in a repository
