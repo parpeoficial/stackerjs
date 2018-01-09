@@ -62,7 +62,7 @@ export namespace ORM
                 } catch (err) { 
                     return value; 
                 }
-            } else if (type === 'created_at' || type === 'updated_at')
+            } else if (type === 'created_at' || type === 'updated_at') 
                 return value ? value * 1000 : null;
             else
                 return value;
@@ -307,7 +307,7 @@ export namespace ORM
 
             let createdAt:string = this.getFieldByType('created_at');
             if (createdAt)
-                entity[createdAt] = new Date().getTime() / 1000;
+                entity[createdAt] = parseInt(new Date().getTime().toString().slice(0, -3));
 
             this.entity.metadata().fields.forEach((field):void => 
             {
@@ -339,7 +339,7 @@ export namespace ORM
 
             let updatedAt:string = this.getFieldByType('updated_at');
             if (updatedAt)
-                entity[updatedAt] = new Date().getTime() / 1000;
+                entity[updatedAt] = parseInt(new Date().getTime().toString().slice(0, -3));
 
             this.entity.metadata().fields.forEach((field):void => 
             {
