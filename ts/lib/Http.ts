@@ -156,7 +156,7 @@ export namespace Http
         
         public getBody():any
         {
-            return this.request.body || {};
+            return this.request.body;
         }
 
         public getCompleteUrl():string

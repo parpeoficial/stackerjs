@@ -213,10 +213,17 @@ describe('AppTest', function()
             new Http.MakeRequest()
                 .setPort(3000)
                 .get('/auth/route')
-                .then((httpResponse) => {
-                    expect(httpResponse.getContent()).to.be.equal('/auth/route');
-                })
+                .then((httpResponse) => expect(httpResponse.getContent()).to.be.equal('/auth/route'))
                 .then(() => done());
+        });
+
+        it('Should present problem from middleware and make a response', done => 
+        {
+            new Http.MakeRequest()
+                .setPort(3000)
+                .post('/auth/route', {}, { 'crash': true })
+                .then((httpResponse) => expect(httpResponse.getContent()).to.be.equal('Error'))
+                .then(() => done());   
         });
     });
 
