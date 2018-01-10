@@ -109,7 +109,9 @@ export namespace Http
 
         private treatUrl(url, params:any={}):string
         {
-            url = `http://${this.host}:${this.port}${url}`;
+            url = `${this.host}:${this.port}${url}`;
+            if (url.substr(0, 7) !== 'http://' && url.substr(0, 7) !== 'https:/')
+                url = `http://${url}`
             
             params = Object.keys(params)
                 .map((key:string) => {
