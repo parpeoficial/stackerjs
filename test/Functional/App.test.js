@@ -129,7 +129,7 @@ describe('AppTest', function()
         it('Should make a PUT request without trouble', (done) => 
         {
             new Http.MakeRequest()
-                .setHost('localhost').setPort(3000)
+                .setHost('http://localhost').setPort(3000)
                 .setTimeout(4000).setHeader('Auth', 'Basic 123kn21lk3m12')
                 .put('/person/4', {}, {
                 'client': {
