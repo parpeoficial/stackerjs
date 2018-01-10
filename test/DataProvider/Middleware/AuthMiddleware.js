@@ -1,3 +1,4 @@
+const { Http } = require('./../../../lib');
 
 
 class AuthMiddleware
@@ -5,6 +6,9 @@ class AuthMiddleware
 
     do(request)
     {
+        if (request.getBody().crash)
+            throw new Http.Exception.BadRequestError('Error');
+
         if (request.getUrl() === '/auth/route')
             return request.getUrl();
     }
