@@ -107,11 +107,15 @@ export namespace Http
             });
         }
 
-        private treatUrl(url, params:any={}):string
+        private treatUrl(url:string, params:any={}):string
         {
-            url = `${this.host}:${this.port}${url}`;
-            if (url.substr(0, 7) !== 'http://' && url.substr(0, 7) !== 'https:/')
-                url = `http://${url}`
+            let uri:string = `${this.host}`;
+            if (this.port !== 80)
+                uri += `:${this.port}`;
+
+            uri += url;
+            if (uri.substr(0, 7) !== 'http://' && uri.substr(0, 7) !== 'https:/')
+                uri = `http://${uri}`
             
             params = Object.keys(params)
                 .map((key:string) => {
@@ -123,9 +127,9 @@ export namespace Http
                 .join('&');
                 
             if (params.length > 0)
-                url += `?${params}`;
+                uri += `?${params}`;
             
-            return url;
+            return uri;
         }
 
     }
