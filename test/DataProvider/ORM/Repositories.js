@@ -36,6 +36,7 @@ class ContactRepository extends ORM.BaseRepository
 }
 exports.ContactRepository = ContactRepository;
 
+
 class SchedulesRepository extends ORM.BaseRepository
 {
 

@@ -22,6 +22,11 @@ describe('ORMTest', function ()
                 created_at INTEGER                            NULL, \
                 updated_at INTEGER                            NULL \
             );",
+            "CREATE TABLE IF NOT EXISTS contact_addresses ( \
+                id         INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
+                contact_id INTEGER                            NOT NULL, \
+                extra      TEXT                               NOT NULL \
+            );",
             "CREATE TABLE IF NOT EXISTS contact_phones ( \
                 id           INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
                 contact_id   INTEGER                            NOT NULL, \
@@ -267,6 +272,12 @@ describe('ORMTest', function ()
                 expect(schedules[0]).to.be.instanceOf(Schedule);
                 expect(schedules[0].getStartTime()).to.be.instanceOf(Date);
                 expect(schedules[0].getStartTime().getFullYear()).to.be.equal(2017);
+            });
+
+            it('Should return null when BELONGSTO returns nothing', async () => 
+            {
+                let contact = await new ContactRepository().findById(1);
+                expect(await contact.getAddress()).to.be.null;
             });
         });
         
