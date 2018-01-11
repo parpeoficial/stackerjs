@@ -73,11 +73,11 @@ describe('ConnectionTest', function ()
     after(function (done) 
     {
         let connection = DB.Factory.getConnection();
-        Promise.all([
-            connection.query('DROP TABLE contacts_schedules;'),
-            connection.query('DROP TABLE contact_phones;'),
-            connection.query('DROP TABLE contacts;'),
-            connection.query('DROP TABLE schedules;')
+        connection.query([
+            'DROP TABLE contacts_schedules;',
+            'DROP TABLE contact_phones;',
+            'DROP TABLE contacts;',
+            'DROP TABLE schedules;'
         ])
             .then(() => connection.close())
             .then(() => done());
