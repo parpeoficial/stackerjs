@@ -1,4 +1,4 @@
-import { createConnection } from 'mysql';
+import { createPool, createConnection } from 'mysql';
 import { Config } from './../';
 import { DB } from './../';
 
@@ -64,7 +64,7 @@ export namespace Connection
                 if (!this.conn)
                     return false;
 
-                return this.getConn().state === 'authenticated';
+                return !this.conn._closed;
             }
 
             public query(query:Array<string>|string, params:any = {})
@@ -98,8 +98,9 @@ export namespace Connection
                     return Promise.resolve(true);
 
                 return new Promise(resolve => {
-                    this.getConn().end(():void => {
+                    this.conn.end(():void => {
                         this.conn = null;
+                        console.log('0')
                         resolve(true);
                     });
                 });
@@ -107,6 +108,7 @@ export namespace Connection
 
             public makeConnection():any
             {   
+                console.log('1');
                 return createConnection({
                     'host': this.host,
                     'port': this.port || 3306,
