@@ -410,4 +410,5 @@ describe('ORMTest', function ()
             .then(() => connection.close())
             .then(() => done());
     });
+
 });
