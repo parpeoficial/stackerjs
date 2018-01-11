@@ -1,5 +1,5 @@
 const { expect } = require("chai");
-const { Http } = require("./../../../lib");
+const { Http, DB } = require("./../../../lib");
 
 
 describe('ResponseTest', () => 

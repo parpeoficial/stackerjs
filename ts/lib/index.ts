@@ -327,9 +327,7 @@ export class MicroService
 
     private requestStarted()
     {
-        let conn = DB.Factory.getConnection();
-        if (!conn.isConnected())
-            conn.connect();
+        
     }
 
     private requestEnded()

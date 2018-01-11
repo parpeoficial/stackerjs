@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const { ORM } = require('./../../../lib');
+const { DB, ORM } = require('./../../../lib');
 const { ContactRepository } = require('./../../DataProvider/ORM/Repositories');
 
 
@@ -68,6 +68,12 @@ describe('ORMErrorsTest', () =>
 
             expect(contactRepository.hasErrors()).to.be.true;
         });
+    });
+
+    after(() => {
+        let conn = DB.Factory.getConnection();
+        if (conn.isConnected())
+            conn.close();
     });
 
 });
