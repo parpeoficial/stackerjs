@@ -11,7 +11,6 @@ describe('ORMTest', function ()
     before(function (done) 
     {
         let conn = DB.Factory.getConnection();
-        conn.connect();
         conn.query([
             "CREATE TABLE IF NOT EXISTS contacts ( \
                 id         INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \

@@ -61,6 +61,9 @@ export namespace Connection
 
             public isConnected():boolean
             {
+                if (!this.conn)
+                    return false;
+
                 return this.getConn().state === 'authenticated';
             }
 
@@ -89,15 +92,20 @@ export namespace Connection
                     });
             }
 
-            public close():void
+            public close():Promise<boolean>
             {
-                return this.getConn().end(():void => {
-                    this.conn = null;
+                return new Promise(resolve => {
+                    this.getConn().end(():void => {
+                        this.conn = null;
+                        console.log('0');
+                        resolve(true);
+                    });
                 });
             }
 
             public makeConnection():any
-            {
+            {   
+                console.log('1');
                 return createConnection({
                     'host': this.host,
                     'port': this.port || 3306,
