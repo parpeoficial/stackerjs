@@ -15,18 +15,18 @@ export { DB } from './DB';
 export { ORM } from './ORM';
 
 
-export class Config
+class Configuration
 {
 
-    private static config:any = {};
-    private static envFileLoaded:boolean = false;
+    private config:any = {};
+    private envFileLoaded:boolean = false;
 
-    public static set(key:string, value:any):void
+    public set(key:string, value:any):void
     {
         this.config[key.trim()] = typeof value === 'string' ? value.trim() : value;
     }
 
-    public static get(key:string, defaultValue:any=null):any
+    public get(key:string, defaultValue:any=null):any
     {
         if (!this.envFileLoaded)
             this.loadEnvFile();
@@ -37,7 +37,7 @@ export class Config
         return defaultValue;
     }
 
-    private static loadEnvFile()
+    private loadEnvFile()
     {
         let envFilePath = `${process.cwd()}/.env`;
         if (fs.existsSync(envFilePath)) {
@@ -61,6 +61,7 @@ export class Config
     }
 
 }
+export const Config:Configuration = new Configuration();
 
 export class Cache
 {
