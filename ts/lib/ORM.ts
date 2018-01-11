@@ -148,9 +148,9 @@ export namespace ORM
                 this.errors[field] = [];
 
             if (message instanceof Error)
-                this.errors[field].push(message.message);
-            else
-                this.errors[field].push(message);
+                return this.errors[field].push(message.message);
+            
+            this.errors[field].push(message);
         }
 
         public getErrors():Array<string>
