@@ -11,6 +11,7 @@ export { MVC } from './MVC';
 import { MVC } from './MVC';
 
 export { DB } from './DB';
+import { DB } from './DB';
 
 export { ORM } from './ORM';
 
@@ -58,6 +59,12 @@ class Configuration
         }
 
         this.envFileLoaded = true;
+    }
+
+    public clear()
+    {
+        this.config = {};
+        this.envFileLoaded = false;
     }
 
 }
@@ -201,14 +208,14 @@ export class MicroService
         let answered:boolean = false;
         this.route.use((request, response, next):void => 
         {
-            new Promise((resolve:Function, reject:Function):void => 
-            {
-                try {
-                    resolve(middleware.do(new Http.Request(request)));
-                } catch (err) {
-                    reject(err);
-                }
-            })
+            Promise.resolve(this.requestStarted())
+                .then(() => {
+                    try {
+                        return middleware.do(new Http.Request(request));
+                    } catch (err) {
+                        throw err;
+                    }
+                })
                 .then((callbackResponse:string|Http.Response) => {
                     if (typeof callbackResponse !== 'undefined')
                         answered = true;
@@ -219,9 +226,7 @@ export class MicroService
                     answered = true;
                     return this.requestCatch(err, response)
                 })
-                .then(() => {
-                    !answered ? next() : false
-                });
+                .then(() => !answered ? next() : this.requestEnded());
         });
     }
 
@@ -235,13 +240,14 @@ export class MicroService
             route, 
             callbacks.map((callback:Function) => (request, response, next:Function) => 
             {
-                new Promise((resolve:Function, reject:Function):void => {
-                    try {
-                        resolve(callback(new Http.Request(request)));
-                    } catch (err) {
-                        reject(err);
-                    }
-                })
+                Promise.resolve(this.requestStarted())
+                    .then(() => {
+                        try {
+                            return callback(new Http.Request(request));
+                        } catch (err) {
+                            throw err;
+                        }
+                    })
                     .then((callbackResponse:string|Http.Response) => {
                         if (typeof callbackResponse !== 'undefined')
                             answered = true;
@@ -252,7 +258,7 @@ export class MicroService
                         answered = true;
                         return this.requestCatch(err, response);
                     })
-                    .then(() => !answered ? next() : false);
+                    .then(() => !answered ? next() : this.requestEnded());
             })
         );
     }
@@ -317,6 +323,22 @@ export class MicroService
         response
             .status(500)
             .send(`Error 500. <br /><br />Message: ${err.message}.`);
+    }
+
+    private requestStarted()
+    {
+        let conn = DB.Factory.getConnection();
+        if (!conn.isConnected())
+            conn.connect();
+    }
+
+    private requestEnded()
+    {
+        let conn = DB.Factory.getConnection();
+        if (conn.isConnected())
+            conn.close();
+
+        Config.clear();
     }
 
 }
