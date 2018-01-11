@@ -94,6 +94,9 @@ export namespace Connection
 
             public close():Promise<boolean>
             {
+                if (!this.conn)
+                    return Promise.resolve(true);
+
                 return new Promise(resolve => {
                     this.getConn().end(():void => {
                         this.conn = null;
