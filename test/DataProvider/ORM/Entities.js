@@ -56,9 +56,21 @@ class Contact
                     'field': 'contact_id',
                     'table': 'contacts_schedules',
                     'referencedField': 'schedule_id'
+                },
+                {
+                    'name': 'address',
+                    'type': 'HASONE',
+                    'referencedEntity': new Address(),
+                    'field': 'contact_id',
+                    'referencedField': 'id'
                 }
             ]
         };
+    }
+
+    getAddress()
+    {
+        return this['address'];
     }
 
     getPhones() 
@@ -193,3 +205,23 @@ class Schedule
     
 }
 exports.Schedule = Schedule;
+
+
+class Address
+{
+
+    metadata() 
+    {
+        return {
+            'table': 'contact_addresses',
+            'fields': [
+                { 'type': 'pk', 'name': 'id' },
+                { 'type': 'integer', 'name': 'contact_id' },
+                { 'type': 'json', 'name': 'extra', 'default': '_' }
+            ],
+            'relations': []
+        };
+    }
+
+}
+exports.Address = Address;

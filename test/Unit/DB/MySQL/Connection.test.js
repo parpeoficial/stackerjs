@@ -6,7 +6,24 @@ describe('ConnectionTest', function ()
 {
 
     this.timeout(6000);
-    before(function (done) 
+
+    it('Should check if database is connected', done => 
+    {
+        DB.Factory.getConnection().close()
+            .then(() => {
+                expect(DB.Factory.getConnection().isConnected()).to.be.false;
+            })
+            .then(() => done());
+    });
+
+    it('Should check database connection', done => 
+    {
+        DB.Factory.getConnection().close()
+            .then(response => expect(response).to.be.true)
+            .then(() => done());
+    });
+
+    it('Should create tables without trouble', done => 
     {
         DB.Factory.getConnection().query([
             "CREATE TABLE IF NOT EXISTS contacts ( \
