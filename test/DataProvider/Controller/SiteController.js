@@ -1,4 +1,5 @@
 const { MVC, Http } = require("./../../../lib");
+const { ContactRepository } = require('./../ORM/Repositories');
 
 
 class SiteController extends MVC.Controller 
@@ -33,9 +34,11 @@ class SiteController extends MVC.Controller
         return;
     }
 
-    async ple()
+    ple()
     {
-        return Promise.resolve("Executed multiple");
+        return new ContactRepository()
+            .find()
+            .catch(() => "Executed multiple");
     }
 
 }

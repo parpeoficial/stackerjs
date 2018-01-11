@@ -4,6 +4,7 @@ const { Config } = require("./../../lib");
 
 describe('ConfigTest', () => 
 {
+
     it('Should get vars loaded from .env file', () => 
     {
         expect(Config.get('DB_DRIVER')).to.be.equal('mysql');
@@ -20,4 +21,5 @@ describe('ConfigTest', () =>
     {
         expect(Config.get('non.existent.key')).to.be.null;
     });
+
 });
