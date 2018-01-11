@@ -100,7 +100,6 @@ export namespace Connection
                 return new Promise(resolve => {
                     this.conn.end(():void => {
                         this.conn = null;
-                        console.log('0')
                         resolve(true);
                     });
                 });
@@ -108,7 +107,6 @@ export namespace Connection
 
             public makeConnection():any
             {   
-                console.log('1');
                 return createConnection({
                     'host': this.host,
                     'port': this.port || 3306,
