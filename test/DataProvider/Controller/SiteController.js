@@ -26,7 +26,9 @@ class SiteController extends MVC.Controller
     
     appVersionAction() 
     {
-        return 1;
+        return new ContactRepository()
+            .find()
+            .catch(() => 1);
     }
 
     multi()

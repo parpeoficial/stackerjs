@@ -91,8 +91,8 @@ export namespace Connection
 
             public close():void
             {
-                return this.getConn().end(() => {
-                    
+                return this.getConn().end(():void => {
+                    this.conn = null;
                 });
             }
 
