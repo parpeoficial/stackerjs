@@ -226,7 +226,13 @@ export class MicroService
                     answered = true;
                     return this.requestCatch(err, response)
                 })
-                .then(() => !answered ? next() : this.requestEnded());
+                .then(() => {
+                    if (!answered) 
+                        return next();
+                    
+                    answered = false;
+                    return this.requestEnded()
+                });
         });
     }
 
@@ -258,7 +264,13 @@ export class MicroService
                         answered = true;
                         return this.requestCatch(err, response);
                     })
-                    .then(() => !answered ? next() : this.requestEnded());
+                    .then(() => {
+                        if (!answered) 
+                            return next();
+                        
+                        answered = false;
+                        return this.requestEnded()
+                    });
             })
         );
     }

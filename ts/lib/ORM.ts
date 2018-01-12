@@ -351,9 +351,11 @@ export namespace ORM
                         queryBuilder.set(field.name, '?');
                         parameters.push(queryBuilder.treatValue(entity[fieldName], false));
                     }
-                } else
-                    queryBuilder.where(expr.eq(field.name, entity[fieldName]));
+                }
             });
+            
+            queryBuilder.where(expr.eq(this.getFieldByType('pk'), "?"));
+            parameters.push(entity['_attributes'][this.getFieldByType('pk')]);
 
             if (parameters.length <= 1)
                 return Promise.resolve(true);
