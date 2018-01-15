@@ -145,6 +145,20 @@ describe('ORMTest', function ()
                     })
                     .then(() => done());
             });
+
+            it('Should present error after validating', done => {
+                let contact = new Contact();
+                contact.setFirstName('Vinicius');
+                contact.setLastName('Guedes');
+                contact['test_after_validate_error'] = true;
+
+                let contactRepository = new ContactRepository();
+                contactRepository.save(contact)
+                    .then((response) => {
+                        expect(response).to.be.false;
+                    })
+                    .then(() => done());
+            });
         });
 
         describe('Finding entity list', () => {

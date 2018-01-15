@@ -168,6 +168,11 @@ export namespace ORM
             return Promise.resolve(true);
         }
 
+        public afterValidate(entity:IEntity):Promise<boolean>
+        {
+            return Promise.resolve(true);
+        }
+
         public async validate(entity:IEntity):Promise<boolean>
         {
             if (!await this.beforeValidate(entity)) {
@@ -193,12 +198,20 @@ export namespace ORM
                     (entity[field.alias ? field.alias : field.name] < field.min || 
                         entity[field.alias ? field.alias : field.name].length < field.min))
                     this.addError(field.name, `Field length must be over ${field.min}`);
-            }); 
+            });
+
+            if (!await this.afterValidate(entity))
+                return false;
 
             return !this.hasErrors();
         }
 
         public beforeSave(entity:IEntity):Promise<boolean>
+        {
+            return Promise.resolve(true);
+        }
+
+        public afterSave(entity:IEntity):Promise<boolean>
         {
             return Promise.resolve(true);
         }
@@ -217,9 +230,21 @@ export namespace ORM
             }
 
             if (this.isNewRecord(entity))
-                return this.insert(entity);
+                return this.insert(entity)
+                    .then(response => {
+                        if (!response)
+                            return response;
 
-            return this.update(entity);
+                        return this.afterSave(entity);
+                    });
+
+            return this.update(entity)
+                .then(response => {
+                    if (!response)
+                        return response;
+
+                    return this.afterSave(entity);
+                });
         }
 
         public findById(id:string|number):Promise<IEntity>
