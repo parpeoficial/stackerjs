@@ -497,23 +497,11 @@ declare module "stackerjs"
             public hasErrors():boolean;
 
             /**
-             * Executes before validating an Entity
-             * 
-             * @param entity 
-             */
-            public beforeValidate(entity:IEntity):Promise<boolean>;
-
-            /**
              * Checks if selected entity is valid
              * 
              * @param entity Entity to be verified
              */
             public validate(entity:IEntity):boolean;
-
-            /**
-             * Executes before saving an Entity
-             */
-            public beforeSave(entity:IEntity):Promise<boolean>;
 
             /**
              * Saves an entity, if it's a new record insert it on database
@@ -522,7 +510,7 @@ declare module "stackerjs"
              * @param entity Entity to be saved
              */
             public save(entity:IEntity):Promise<boolean>;
-            
+                        
             /**
              * Returns an Entity in case it's found in database
              * 
@@ -540,6 +528,13 @@ declare module "stackerjs"
             public find(filter?:string|any, limit?:number, offset?:number, order?:string|Array<string>):Promise<Array<IEntity>>;
 
             /**
+             * Returns a single Entity that matches results
+             * 
+             * @param filter Filter that will be matched with result
+             */
+            public findOne(filter?:string|any):Promise<IEntity>;
+
+            /**
              * Returns the number of registers in a repository
              * 
              * @param filters Defines a filter for counted entities in repository
@@ -552,6 +547,48 @@ declare module "stackerjs"
              * @param entity Entity to be deleted from database
              */
             public delete(entity:IEntity):Promise<boolean>;
+
+            /**
+             * Executed before Entity validation
+             * 
+             * @param entity 
+             */
+            protected beforeValidate(entity:IEntity):Promise<boolean>;
+
+            /**
+             * Executed after Entity validation
+             * 
+             * @param entity Entity to be used after validation
+             */
+            protected afterValidate(entity:IEntity):Promise<boolean>;
+            
+            /**
+             * Executed before Entity be saved
+             * 
+             * @param entity Entity that will be saved
+             */
+            protected beforeSave(entity:IEntity):Promise<boolean>;
+
+            /**
+             * Executed after Entity being saved
+             * 
+             * @param entity Entity that was saved
+             */
+            protected afterSave(entity:IEntity):Promise<boolean>;
+
+            /**
+             * Updates an Entity
+             * 
+             * @param entity Entity to be updated
+             */
+            protected update(entity:IEntity):Promise<boolean>;
+
+            /**
+             * Inserts an Entity
+             * 
+             * @param entity Entity to be inserted
+             */
+            protected insert(entity:IEntity):Promise<boolean>;
 
         }
 
