@@ -6,7 +6,7 @@
         "stack",
         "orm"
     ],
-    "version": "1.0.19",
+    "version": "1.0.20",
     "main": "lib/index.js",
     "types": "index.d.ts",
     "license": "MIT",
@@ -14,18 +14,17 @@
         "type": "git",
         "url": "https://github.com/parpeoficial/stackerjs"
     },
-    "bin": {
-    },
+    "bin": {},
     "dependencies": {
+        "@types/node": "^8.5.8",
         "body-parser": "^1.18.2",
         "express": "^4.16.2",
         "mysql": "^2.15.0",
-        "request": "^2.83.0",
-        "@types/node": "^8.0.34"
+        "request": "^2.83.0"
     },
     "devDependencies": {
         "chai": "^4.1.2",
-        "mocha": "^4.0.1",
+        "mocha": "^4.1.0",
         "remap-istanbul": "^0.9.5"
     },
     "scripts": {

@@ -22,6 +22,14 @@ class ContactRepository extends ORM.BaseRepository
         return false;
     }
 
+    afterValidate(entity)
+    {
+        if (entity['test_after_validate_error'])
+            return false;
+
+        return true;
+    }
+
     beforeSave(entity)
     {
         if (!entity['test_before_save'])
