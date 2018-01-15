@@ -291,6 +291,25 @@ export namespace ORM
                 });
         }
 
+        public findOne(filter?:string|any):Promise<IEntity>
+        {
+            let queryBuilder = DB.Factory.getQueryBuilder()
+                .select()
+                .from(this.entity.metadata().table)
+                .set('*')
+                .where(filter)
+                .limit(1);
+
+            return DB.Factory.getConnection()
+                .query(queryBuilder.toSql())
+                .then(([ result ]:Array<any>):Promise<IEntity> => {
+                    if (!result)
+                        return null;
+
+                    return Util.makeEntity(this.entity, result);
+                });
+        }
+
         public count(filters:string|any=null):Promise<number>
         {
             let queryBuilder = DB.Factory.getQueryBuilder()

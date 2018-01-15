@@ -248,6 +248,27 @@ describe('ORMTest', function ()
             });
         });
 
+        describe('Finding one entity by filters', () => 
+        {
+            it('Should find an Entity without trouble', done => 
+            {
+                new ContactRepository().findOne()
+                    .then(contact => {
+                        expect(contact).to.be.instanceof(Contact);
+                    })
+                    .then(() => done());
+            });
+
+            it('Should return null when nothing is find', done => 
+            {
+                new ContactRepository().findOne("first_name=2")
+                    .then(contact => {
+                        expect(contact).to.be.null;
+                    })
+                    .then(() => done());
+            });
+        });
+
         describe('Finding Entities and it\'s associated datas', () => 
         {
             it('Should find an Entity and associated HASMANY entities', async () => 
