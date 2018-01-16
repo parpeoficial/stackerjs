@@ -226,7 +226,7 @@ export namespace QueryBuilder
             public toSql():string
             {
                 return `INSERT INTO ${this.tableName} (` +
-                    Object.keys(this.fields).map(field => field).join(', ') +
+                    Object.keys(this.fields).map(field => `\`${field}\``).join(', ') +
                 ') VALUES (' +
                     Object.keys(this.fields)
                         .map(field => this.treatValue(this.fields[field])).join(', ') + 
@@ -242,7 +242,7 @@ export namespace QueryBuilder
             {
                 return `UPDATE ${this.tableName} SET ` +
                     Object.keys(this.fields)
-                        .map(field => `${field} = ${this.treatValue(this.fields[field])}`)
+                        .map(field => `\`${field}\` = ${this.treatValue(this.fields[field])}`)
                         .join(', ') +
                     (this._where ? ` WHERE ${this._where}` : '') +
                     ';';

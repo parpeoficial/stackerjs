@@ -19,7 +19,7 @@ describe('QueryBuilderTest', () =>
                         'status': true
                     })
                     .toSql()).to.be.equal(
-                        'INSERT INTO table_name (name, birth_year, status) ' +
+                        'INSERT INTO table_name (`name`, `birth_year`, `status`) ' +
                         'VALUES ("person name", 1992, 1);'
                     );
             });
@@ -32,7 +32,7 @@ describe('QueryBuilderTest', () =>
                     .set('message', 'Inserted something on database')
                     .set('when', new Date('2017-10-20 16:50:00'))
                     .toSql()).to.be.equal(
-                        'INSERT INTO logs (user_id, message, when) ' +
+                        'INSERT INTO logs (`user_id`, `message`, `when`) ' +
                         'VALUES (1, "Inserted something on database", "2017-10-20 16:50:00");'
                     );
             });
@@ -161,7 +161,7 @@ describe('QueryBuilderTest', () =>
                     .set('name', 'other person')
                     .set('status', false)
                     .toSql()).to.be.equal(
-                        'UPDATE table_name SET name = "other person", status = 0;'
+                        'UPDATE table_name SET `name` = "other person", `status` = 0;'
                     );
             });
 
@@ -174,7 +174,7 @@ describe('QueryBuilderTest', () =>
                     .set('active', false)
                     .where(criteria.orX(criteria.neq('active', false), criteria.lte('birth_date', new Date('1992-12-30 08:25:01'))))
                     .toSql()).to.be.equal(
-                        'UPDATE table_name SET active = 0 ' +
+                        'UPDATE table_name SET `active` = 0 ' +
                         'WHERE (active <> 0 OR birth_date <= "1992-12-30 08:25:01");'
                     );
             });
