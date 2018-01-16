@@ -19,7 +19,7 @@ describe('QueryBuilderTest', () =>
                         'status': true
                     })
                     .toSql()).to.be.equal(
-                        'INSERT INTO table_name (name, birth_year, status) ' +
+                        'INSERT INTO table_name (`name`, `birth_year`, `status`) ' +
                         'VALUES ("person name", 1992, 1);'
                     );
             });
@@ -32,7 +32,7 @@ describe('QueryBuilderTest', () =>
                     .set('message', 'Inserted something on database')
                     .set('when', new Date('2017-10-20 16:50:00'))
                     .toSql()).to.be.equal(
-                        'INSERT INTO logs (user_id, message, when) ' +
+                        'INSERT INTO logs (`user_id`, `message`, `when`) ' +
                         'VALUES (1, "Inserted something on database", "2017-10-20 16:50:00");'
                     );
             });
@@ -45,9 +45,9 @@ describe('QueryBuilderTest', () =>
                 expect(DB.Factory.getQueryBuilder()
                     .select()
                     .from('table_name')
-                    .set('id', 'name', 'active')
+                    .set('id', 'name', 'table_name.active')
                     .toSql()).to.be.equal(
-                        'SELECT table_name.id, table_name.name, table_name.active ' +
+                        'SELECT `table_name`.`id`, `table_name`.`name`, `table_name`.`active` ' +
                         'FROM table_name;'
                     );
             });
@@ -57,10 +57,10 @@ describe('QueryBuilderTest', () =>
                 expect(DB.Factory.getQueryBuilder()
                     .select()
                     .from('table_name')
-                    .set('*')
+                    .set('table_name.*')
                     .join('LEFT', 'other_table', 'table_name.id = other_table.fk_id')
                     .toSql()).to.be.equal(
-                        'SELECT table_name.* FROM table_name ' +
+                        'SELECT `table_name`.* FROM table_name ' +
                         'LEFT JOIN other_table ON table_name.id = other_table.fk_id;'
                     );
             });
@@ -73,7 +73,7 @@ describe('QueryBuilderTest', () =>
                     .set('*')
                     .group('table_name.average')
                     .toSql()).to.be.equal(
-                        'SELECT table_name.* FROM table_name ' +
+                        'SELECT `table_name`.* FROM table_name ' +
                         'GROUP BY table_name.average;'
                     );
             });
@@ -87,7 +87,7 @@ describe('QueryBuilderTest', () =>
                     .limit(10)
                     .offset(20)
                     .toSql()).to.be.equal(
-                        'SELECT table_name.id, table_name.first_name AS name ' +
+                        'SELECT `table_name`.`id`, `table_name`.`first_name` AS name ' +
                         'FROM table_name LIMIT 10 OFFSET 20;'
                     );
             });
@@ -100,7 +100,7 @@ describe('QueryBuilderTest', () =>
                     .set('*')
                     .where('active = 1')
                     .toSql()).to.be.equal(
-                        'SELECT table_name.* FROM table_name WHERE active = 1;'
+                        'SELECT `table_name`.* FROM table_name WHERE active = 1;'
                     );
             });
 
@@ -115,7 +115,7 @@ describe('QueryBuilderTest', () =>
                         criteria.andX(criteria.eq('active', 1), 
                         criteria.gt('value', 100), criteria.lt('value', 1000))
                     ).toSql()).to.be.equal(
-                        'SELECT table_name.* FROM table_name ' +
+                        'SELECT `table_name`.* FROM table_name ' +
                         'WHERE (active = 1 AND value > 100 AND value < 1000);'
                     );
             });
@@ -161,7 +161,7 @@ describe('QueryBuilderTest', () =>
                     .set('name', 'other person')
                     .set('status', false)
                     .toSql()).to.be.equal(
-                        'UPDATE table_name SET name = "other person", status = 0;'
+                        'UPDATE table_name SET `name` = "other person", `status` = 0;'
                     );
             });
 
@@ -174,7 +174,7 @@ describe('QueryBuilderTest', () =>
                     .set('active', false)
                     .where(criteria.orX(criteria.neq('active', false), criteria.lte('birth_date', new Date('1992-12-30 08:25:01'))))
                     .toSql()).to.be.equal(
-                        'UPDATE table_name SET active = 0 ' +
+                        'UPDATE table_name SET `active` = 0 ' +
                         'WHERE (active <> 0 OR birth_date <= "1992-12-30 08:25:01");'
                     );
             });

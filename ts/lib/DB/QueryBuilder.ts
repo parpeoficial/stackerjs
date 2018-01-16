@@ -146,7 +146,7 @@ export namespace QueryBuilder
                     .map((field:string) => this.set(field, fields[field]));
             
             if (typeof fields === 'string')
-                this.fields[fields] = value;
+                this.fields[this.escapeFieldsAndReservedWords(fields)] = value;
 
             return this;
         }
@@ -165,7 +165,7 @@ export namespace QueryBuilder
         protected treatFieldWithTable(fieldName:string):string
         {
             if (this.tableName && fieldName.indexOf('.') < 0)
-                return `${this.tableName}.${fieldName}`;
+                return `${this.escapeFieldsAndReservedWords(this.tableName)}.${fieldName}`;
 
             return fieldName;
         }
@@ -188,6 +188,19 @@ export namespace QueryBuilder
             }
 
             return filter;
+        }
+
+        protected escapeFieldsAndReservedWords(field)
+        {
+            if (field.indexOf('.') >= 0)
+                return field.split('.')
+                    .map(f => this.escapeFieldsAndReservedWords(f))
+                    .join('.');
+
+            if (field.indexOf('*') >= 0)
+                return field;
+
+            return `\`${field}\``;
         }
 
     }
@@ -279,10 +292,10 @@ export namespace QueryBuilder
                     .forEach((key:string):void => {
                         let arg:any = arguments[key], field:string;
                         if (typeof arg === 'string')
-                            field = arg;
+                            field = this.escapeFieldsAndReservedWords(arg);
 
                         if (Array.isArray(arg))
-                            field = `${arg[0]} AS ${arg[1]}`;
+                            field = `${this.escapeFieldsAndReservedWords(arg[0])} AS ${arg[1]}`;
 
                         this.fields.push(this.treatFieldWithTable(field));
 
