@@ -45,7 +45,7 @@ describe('QueryBuilderTest', () =>
                 expect(DB.Factory.getQueryBuilder()
                     .select()
                     .from('table_name')
-                    .set('id', 'name', 'active')
+                    .set('id', 'name', 'table_name.active')
                     .toSql()).to.be.equal(
                         'SELECT `table_name`.`id`, `table_name`.`name`, `table_name`.`active` ' +
                         'FROM table_name;'
@@ -57,7 +57,7 @@ describe('QueryBuilderTest', () =>
                 expect(DB.Factory.getQueryBuilder()
                     .select()
                     .from('table_name')
-                    .set('*')
+                    .set('table_name.*')
                     .join('LEFT', 'other_table', 'table_name.id = other_table.fk_id')
                     .toSql()).to.be.equal(
                         'SELECT `table_name`.* FROM table_name ' +

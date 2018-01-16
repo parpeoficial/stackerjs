@@ -192,13 +192,13 @@ export namespace QueryBuilder
 
         protected escapeFieldsAndReservedWords(field)
         {
-            if (field.indexOf('*') >= 0)
-                return field;
-                
             if (field.indexOf('.') >= 0)
                 return field.split('.')
-                    .map(f => f !== '*' ? `\`${f}\`` : f)
+                    .map(f => this.escapeFieldsAndReservedWords(f))
                     .join('.');
+
+            if (field.indexOf('*') >= 0)
+                return field;
 
             return `\`${field}\``;
         }
