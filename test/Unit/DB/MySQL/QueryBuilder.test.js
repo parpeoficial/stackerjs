@@ -47,7 +47,7 @@ describe('QueryBuilderTest', () =>
                     .from('table_name')
                     .set('id', 'name', 'active')
                     .toSql()).to.be.equal(
-                        'SELECT table_name.id, table_name.name, table_name.active ' +
+                        'SELECT `table_name`.`id`, `table_name`.`name`, `table_name`.`active` ' +
                         'FROM table_name;'
                     );
             });
@@ -60,7 +60,7 @@ describe('QueryBuilderTest', () =>
                     .set('*')
                     .join('LEFT', 'other_table', 'table_name.id = other_table.fk_id')
                     .toSql()).to.be.equal(
-                        'SELECT table_name.* FROM table_name ' +
+                        'SELECT `table_name`.* FROM table_name ' +
                         'LEFT JOIN other_table ON table_name.id = other_table.fk_id;'
                     );
             });
@@ -73,7 +73,7 @@ describe('QueryBuilderTest', () =>
                     .set('*')
                     .group('table_name.average')
                     .toSql()).to.be.equal(
-                        'SELECT table_name.* FROM table_name ' +
+                        'SELECT `table_name`.* FROM table_name ' +
                         'GROUP BY table_name.average;'
                     );
             });
@@ -87,7 +87,7 @@ describe('QueryBuilderTest', () =>
                     .limit(10)
                     .offset(20)
                     .toSql()).to.be.equal(
-                        'SELECT table_name.id, table_name.first_name AS name ' +
+                        'SELECT `table_name`.`id`, `table_name`.`first_name` AS name ' +
                         'FROM table_name LIMIT 10 OFFSET 20;'
                     );
             });
@@ -100,7 +100,7 @@ describe('QueryBuilderTest', () =>
                     .set('*')
                     .where('active = 1')
                     .toSql()).to.be.equal(
-                        'SELECT table_name.* FROM table_name WHERE active = 1;'
+                        'SELECT `table_name`.* FROM table_name WHERE active = 1;'
                     );
             });
 
@@ -115,7 +115,7 @@ describe('QueryBuilderTest', () =>
                         criteria.andX(criteria.eq('active', 1), 
                         criteria.gt('value', 100), criteria.lt('value', 1000))
                     ).toSql()).to.be.equal(
-                        'SELECT table_name.* FROM table_name ' +
+                        'SELECT `table_name`.* FROM table_name ' +
                         'WHERE (active = 1 AND value > 100 AND value < 1000);'
                     );
             });
