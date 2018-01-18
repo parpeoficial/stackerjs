@@ -676,7 +676,7 @@ declare module "stackerjs"
          * Gets a cache if it's exists
          * @param fileName 
          */
-        public get(fileName:string, defaultValue?:any):string;
+        public static get(fileName:string, defaultValue?:any):string;
 
         /**
          * Creates a cache file with defined content
@@ -684,14 +684,14 @@ declare module "stackerjs"
          * @param fileName File name to be defined
          * @param fileContent File content to be cached
          */
-        public set(fileName:string, fileContent:string):void;
+        public static set(fileName:string, fileContent:string):void;
 
         /**
          * Verifies if there's a cache file with that name
          * 
          * @param fileName File to be checked
          */
-        public has(fileName:string):boolean;
+        public static has(fileName:string):boolean;
 
     }
 

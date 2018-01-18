@@ -16,18 +16,18 @@ import { DB } from './DB';
 export { ORM } from './ORM';
 
 
-class Configuration
+export class Config
 {
 
-    private config:any = {};
-    private envFileLoaded:boolean = false;
+    private static config:any = {};
+    private static envFileLoaded:boolean = false;
 
-    public set(key:string, value:any):void
+    public static set(key:string, value:any):void
     {
         this.config[key.trim()] = typeof value === 'string' ? value.trim() : value;
     }
 
-    public get(key:string, defaultValue:any=null):any
+    public static get(key:string, defaultValue:any=null):any
     {
         if (!this.envFileLoaded)
             this.loadEnvFile();
@@ -38,7 +38,7 @@ class Configuration
         return defaultValue;
     }
 
-    private loadEnvFile()
+    private static loadEnvFile()
     {
         let envFilePath = `${process.cwd()}/.env`;
         if (fs.existsSync(envFilePath)) {
@@ -61,14 +61,13 @@ class Configuration
         this.envFileLoaded = true;
     }
 
-    public clear()
+    public static clear()
     {
         this.config = {};
         this.envFileLoaded = false;
     }
 
 }
-export const Config:Configuration = new Configuration();
 
 export class Cache
 {
