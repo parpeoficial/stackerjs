@@ -15,7 +15,7 @@ describe('AppTest', function()
         {
             new Http.MakeRequest()
                 .setPort(3000)
-                .delete('/person/9')
+                .delete('http://localhost:3000/person/9?some=1')
                 .then((httpResponse) => {
                     expect(httpResponse.getStatusCode())
                         .to.be.equal(Http.Response.HTTP_NOT_FOUND);

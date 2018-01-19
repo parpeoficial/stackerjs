@@ -41,32 +41,15 @@ export namespace Integrations
         {
             if (!this.isAbleToDoIt())
                 return false;
-
-            let {
-                host, url, port
-            } = this.parseUrlInformations();
             
             return new Http.MakeRequest()
-                .setHost(`https://${host}`)
-                .post(url, {}, message)
+                .post(Config.get('slack.hook'), {}, message)
                 .then(httpResponse => httpResponse.getContent() === 'ok');
         }
 
         private isAbleToDoIt()
         {
             return Config.get('slack.hook', false);
-        }
-
-        private parseUrlInformations()
-        {
-            let slackHook = url.parse(Config.get('slack.hook'));
-            
-            return {
-                'host': slackHook.host,
-                'url': slackHook.pathname,
-                'port': slackHook.port,
-                'protocol': slackHook.protocol
-            }
         }
 
     }
