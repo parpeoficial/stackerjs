@@ -23,6 +23,7 @@ before_script:
   - echo DB_PASS= >> .env
   - echo DB_NAME=pipelines >> .env
   - echo SLACK_HOOK=$SLACK_HOOK_URL >> .env
+  - cat .env
   - npm run build
 
 script:
