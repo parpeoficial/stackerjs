@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const { Config, Integrations } = require('./../../lib');
 
 
-describe('IntegrationsTest', () => 
+describe.only('IntegrationsTest', () => 
 {
 
     describe('SlackTest', () => 

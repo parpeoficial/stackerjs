@@ -142,6 +142,7 @@ export namespace Http
                 url += urlInfo.query;
                 url += `&${params}`;
 
+                console.log(url);
                 return url;
             }
             
