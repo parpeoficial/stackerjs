@@ -40,6 +40,19 @@ describe('QueryBuilderTest', () =>
 
         describe('SelectQueryBuilderTest', () => 
         {
+            it('Should do a test', () => 
+            {
+                expect(DB.Factory.getQueryBuilder()
+                    .select()
+                    .from('table')
+                    .set(['CONCAT(table.first_name, " ", table.last_name)', 'full_name'])
+                    .toSql())
+                    .to.be.equal(
+                        'SELECT CONCAT(`table`.`first_name`," ",`table`.`last_name`) AS full_name ' +
+                        'FROM table;'
+                    );
+            });
+
             it('Should create a select query without trouble', () => 
             {
                 expect(DB.Factory.getQueryBuilder()

@@ -13,6 +13,9 @@ import { MVC } from './MVC';
 
 export { DB } from './DB';
 import { DB } from './DB';
+import { Integrations } from './Integrations';
+
+export { Integrations } from './Integrations';
 
 export { ORM } from './ORM';
 
@@ -37,6 +40,11 @@ export class Config
             return this.config[key];
 
         return defaultValue;
+    }
+
+    public static delete(key:string)
+    {
+        delete this.config[key];
     }
 
     private static loadEnvFile()
@@ -324,30 +332,50 @@ export class MicroService
 
     private requestCatch(err:Error, request:Http.Request, response:any):void
     {
-        if (err instanceof Http.Exception.HttpError) {
-            if (typeof err.message === 'object')
-                return response
-                    .status(err.getCode())
-                    .json(err.message);
+        StackTrace.fromError(err)
+            .then(stacktrace => {
+                if (err instanceof Http.Exception.HttpError)
+                    return stacktrace;
+                
+                return new Integrations.Slack()
+                    .attach(err.message, [
+                        {
+                            'color': "#D00000",
+                            'fields': stacktrace.map(trace => {
+                                return {
+                                    'title': trace.fileName,
+                                    'value': trace.source,
+                                    'short': false
+                                }
+                            })
+                        }
+                    ])
+                    .then(() => stacktrace);
+            })
+            .then(stacktrace => {
+                if (err instanceof Http.Exception.HttpError) {
+                    if (typeof err.message === 'object')
+                        return response
+                            .status(err.getCode())
+                            .json(err.message);
 
-            return response.status(err.getCode())
-                .send(err.message);
-        }
+                    return response.status(err.getCode())
+                        .send(err.message);
+                }
 
-        if (request.getHeaders()['content-type'] === 'application/json') {
-            return StackTrace.fromError(err)
-                .then(stacktrace => {
-                    response.status(500).json({
+                if (request.getHeaders()['content-type'] === 'application/json')
+                    return response.status(500).json({
                         'status': false,
-                        'errors': [ err.message ],
-                        'detailed': stacktrace
+                        'data': {
+                            'messages': [ err.message ],
+                            'detailed': stacktrace
+                        }
                     });
-                });
-        }
 
-        response
-            .status(500)
-            .send(`Error 500. <br /><br />Message: ${err.message}.`);
+                response
+                    .status(500)
+                    .send(`Error 500. <br /><br />Message: ${err.message}.`);
+            });
     }
 
     private requestStarted()

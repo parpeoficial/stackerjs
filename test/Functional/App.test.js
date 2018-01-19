@@ -65,6 +65,9 @@ describe('AppTest', function()
                 .setPort(3000)
                 .delete('/person/100')
                 .then((httpResponse) => {
+                    let content = httpResponse.getContent();
+                    expect(content.status).to.be.false;
+                    expect(content.data).to.have.property('detailed');
                     expect(httpResponse.getStatusCode())
                         .to.be.equal(Http.Response.HTTP_INTERNAL_SERVER_ERROR);
                 })
