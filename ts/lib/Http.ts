@@ -127,22 +127,21 @@ export namespace Http
 
         private treatUrl(url:string, params:any={}):string
         {
+            let urlInfo = urlparser(url);
             params = Object.keys(params)
                 .map((key:string) => {
                     if (Array.isArray(params[key]) || typeof params[key] === 'object')
                         return `${key}=${JSON.stringify(params[key])}`;
 
                     return `${key}=${params[key]}`;
-                })
-                .join('&');
-
-            let urlInfo = urlparser(url);
+                });
+            if (urlInfo.query)
+                urlInfo.query.toString().split('&').map(query => params.push(query));
+            
             if (urlInfo.host) {
-                url = `${urlInfo.protocol}//${urlInfo.host}${urlInfo.pathname}?`;
-                url += urlInfo.query;
-                url += `&${params}`;
+                url = `${urlInfo.protocol}//${urlInfo.host}${urlInfo.pathname}`;
+                url += params.length > 0 ? `?${params.join('&')}` : "";
 
-                console.log(url);
                 return url;
             }
             
@@ -155,7 +154,7 @@ export namespace Http
                 uri = `http://${uri}`;
                 
             if (params.length > 0)
-                uri += `?${params}`;
+                uri += `?${params.join('&')}`;
             
             return uri;
         }
