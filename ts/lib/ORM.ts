@@ -13,7 +13,7 @@ export namespace ORM
             let metadata:ORM.IEntityMetadata = defaultEntity.metadata();
             
             let entity:IEntity = Object.create(defaultEntity);
-            let _attributes = {};
+            let _attributes = attributes;
 
             metadata.fields
                 .forEach((field:IEntityMetadataField):void => 
