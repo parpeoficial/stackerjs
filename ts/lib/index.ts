@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as express from 'express';
 import { Router } from 'express';
 import { json } from 'body-parser';
+import * as StackTrace from 'stacktrace-js';
 
 
 export { Http } from './Http';
@@ -207,10 +208,11 @@ export class MicroService
         let answered:boolean = false;
         this.route.use((request, response, next):void => 
         {
+            let treatedRequest:Http.Request = new Http.Request(request);
             Promise.resolve(this.requestStarted())
                 .then(() => {
                     try {
-                        return middleware.do(new Http.Request(request));
+                        return middleware.do(treatedRequest);
                     } catch (err) {
                         throw err;
                     }
@@ -223,7 +225,7 @@ export class MicroService
                 })
                 .catch((err:Error) => {
                     answered = true;
-                    return this.requestCatch(err, response)
+                    return this.requestCatch(err, treatedRequest, response)
                 })
                 .then(() => {
                     if (!answered) 
@@ -245,10 +247,11 @@ export class MicroService
             route, 
             callbacks.map((callback:Function) => (request, response, next:Function) => 
             {
+                let treatedRequest:Http.Request = new Http.Request(request);
                 Promise.resolve(this.requestStarted())
                     .then(() => {
                         try {
-                            return callback(new Http.Request(request));
+                            return callback(treatedRequest);
                         } catch (err) {
                             throw err;
                         }
@@ -261,7 +264,7 @@ export class MicroService
                     })
                     .catch((err:Error) => {
                         answered = true;
-                        return this.requestCatch(err, response);
+                        return this.requestCatch(err, treatedRequest, response);
                     })
                     .then(() => {
                         if (!answered) 
@@ -319,7 +322,7 @@ export class MicroService
         response.status(200).send(callbackResponse);
     }
 
-    private requestCatch(err:Error, response:any):void
+    private requestCatch(err:Error, request:Http.Request, response:any):void
     {
         if (err instanceof Http.Exception.HttpError) {
             if (typeof err.message === 'object')
@@ -329,6 +332,17 @@ export class MicroService
 
             return response.status(err.getCode())
                 .send(err.message);
+        }
+
+        if (request.getHeaders()['content-type'] === 'application/json') {
+            return StackTrace.fromError(err)
+                .then(stacktrace => {
+                    response.status(500).json({
+                        'status': false,
+                        'errors': [ err.message ],
+                        'detailed': stacktrace
+                    });
+                });
         }
 
         response

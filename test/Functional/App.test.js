@@ -59,10 +59,23 @@ describe('AppTest', function()
                     .then(() => done());
         });
 
-        it('Should return 500 when throwing AnyException', (done) => 
+        it('Should return 500 when throwing AnyException', done => 
         {
             new Http.MakeRequest()
                 .setPort(3000)
+                .delete('/person/100')
+                .then((httpResponse) => {
+                    expect(httpResponse.getStatusCode())
+                        .to.be.equal(Http.Response.HTTP_INTERNAL_SERVER_ERROR);
+                })
+                    .then(() => done());
+        });
+
+        it('Should return 500 with html explanation', done => 
+        {
+            new Http.MakeRequest()
+                .setPort(3000)
+                .setHeader('Content-Type', 'plain/text')
                 .delete('/person/100')
                 .then((httpResponse) => {
                     expect(httpResponse.getStatusCode())

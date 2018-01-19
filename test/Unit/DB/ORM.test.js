@@ -214,7 +214,7 @@ describe('ORMTest', function ()
                         expect(entities).to.be.instanceOf(Array);
                     })
                     .then(() => done());
-            })
+            });
         });
 
         describe('Finding and Updating Entity by ID', () => 
