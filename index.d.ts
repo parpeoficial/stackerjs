@@ -169,6 +169,14 @@ declare module "stackerjs"
              * @param headers Object with headers key value to be set
              */
             public setHeaders(headers:any):Response;
+
+            /**
+             * Sets a single header value
+             * 
+             * @param key Header key
+             * @param value Header value
+             */
+            public setHeader(key:string, value:any):Response;
             
             /**
              * Returns HTTP response headers

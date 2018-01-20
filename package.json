@@ -4,7 +4,9 @@
     "keywords": [
         "framework",
         "stack",
-        "orm"
+        "orm",
+        "http",
+        "lib"
     ],
     "version": "1.0.25",
     "main": "lib/index.js",
@@ -14,7 +16,7 @@
         "type": "git",
         "url": "https://github.com/parpeoficial/stackerjs"
     },
-    "bin": {},
+    
     "dependencies": {
         "@types/node": "^8.5.8",
         "body-parser": "^1.18.2",
@@ -28,6 +30,7 @@
         "mocha": "^4.1.0",
         "remap-istanbul": "^0.9.5"
     },
+    
     "scripts": {
         "build": "tsc",
         "postinstall": "npm run build",

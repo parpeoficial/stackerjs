@@ -244,7 +244,15 @@ export namespace Http
 
         public setHeaders(headers:any):Response
         {
-            this.headers = headers;
+            Object.keys(headers).forEach(key => this.setHeader(key, headers[key]));
+
+            return this;
+        }
+
+        public setHeader(key:string, value:any):Response
+        {
+            this.headers[key.toLowerCase()] = value;
+
             return this;
         }
 
