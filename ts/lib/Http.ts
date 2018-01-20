@@ -41,78 +41,51 @@ export namespace Http
 
         public get(url:string, params:any={}):Promise<Response>
         {
-            return new Promise((resolve:Function, reject:Function) => {
-                request({
-                    'method': 'GET',
-                    'url': this.treatUrl(url, params),
-                    'timeout': this.timeout,
-                    'headers': this.headers
-                }, (err:Error, response, body):void => {
-                    if (err)
-                        return reject(err);
-
-                    let httpResponse = new Response();
-                    httpResponse.setHeaders(response.headers);
-                    httpResponse.setStatusCode(response.statusCode);
-                    httpResponse.setContent(body);
-                    resolve(httpResponse);
-                });
+            return this.treatRequest({
+                'method': 'GET',
+                'url': this.treatUrl(url, params),
+                'timeout': this.timeout,
+                'headers': this.headers
             });
         }
 
         public post(url:string, params:any={}, body:any={}):Promise<Response>
         {
-            return new Promise((resolve:Function, reject:Function) => {
-                request({
-                    'method': 'POST',
-                    'url': this.treatUrl(url, params),
-                    'timeout': this.timeout,
-                    'headers': this.headers,
-                    'body': JSON.stringify(body)
-                }, (err:Error, response, body):void => {
-                    if (err)
-                        return reject(err);
-
-                    let httpResponse = new Response();
-                    httpResponse.setHeaders(response.headers);
-                    httpResponse.setStatusCode(response.statusCode);
-                    httpResponse.setContent(body);
-                    resolve(httpResponse);
-                });
+            return this.treatRequest({
+                'method': 'POST',
+                'url': this.treatUrl(url, params),
+                'timeout': this.timeout,
+                'headers': this.headers,
+                'body': JSON.stringify(body)
             });
         }
 
         public put(url:string, params:any={}, body:any={}):Promise<Response>
         {
-            return new Promise((resolve:Function, reject:Function) => {
-                request({
-                    'method': 'PUT',
-                    'url': this.treatUrl(url, params),
-                    'timeout': this.timeout,
-                    'headers': this.headers,
-                    'body': JSON.stringify(body)
-                }, (err:Error, response, body):void => {
-                    if (err)
-                        return reject(err);
-
-                    let httpResponse = new Response();
-                    httpResponse.setHeaders(response.headers);
-                    httpResponse.setStatusCode(response.statusCode);
-                    httpResponse.setContent(body);
-                    resolve(httpResponse);
-                });
+            return this.treatRequest({
+                'method': 'PUT',
+                'url': this.treatUrl(url, params),
+                'timeout': this.timeout,
+                'headers': this.headers,
+                'body': JSON.stringify(body)
             });
         }
 
         public delete(url:string, params:any={}):Promise<Response>
         {
-            return new Promise((resolve:Function, reject:Function) => {
-                request({
-                    'method': 'DELETE',
-                    'url': this.treatUrl(url, params),
-                    'timeout': this.timeout,
-                    'headers': this.headers
-                }, (err:Error, response, body):void => {
+            return this.treatRequest({
+                'method': 'DELETE',
+                'url': this.treatUrl(url, params),
+                'timeout': this.timeout,
+                'headers': this.headers
+            });
+        }
+
+        private treatRequest(configurations:any):Promise<Response>
+        {
+            return new Promise((resolve:Function, reject:Function) => 
+            {
+                request(configurations, (err:Error, response, body) => {
                     if (err)
                         return reject(err);
 

@@ -29,6 +29,14 @@ For DB Connection until now **only MySQL** driver is implemented.
 * DB_USER=root - Defines database user
 * DB_PASS=p455w0rd - Defines database access password
 
+#### Slack Integration
+For Slack integration, you must integrate you workspace with [incoming-message]() App and add service hook to .env
+* SLACK_HOOK=https://hoook.slacker.com/service/ADSMDFIADNFSD/ADJIJAO - Defines Webhook url
+* SLACK_ICON=http://image-to-icon/you/want.png - Defines an icon to Slack messages (Default is StackerJS logo).
+* SLACK_CHANNEL=my-channel - Defines the channel where messages should be sent to (Default is "general").
+
+PS.: When Slack configuration is setted, error 500 messages are sent to Slack Channel configured.
+
 ### Http
 StackerJS implements Http request and response classes based on ExpressJS.
 
