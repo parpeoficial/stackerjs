@@ -91,7 +91,7 @@ export namespace Integrations
 
         value:string;
 
-        shot:boolean;
+        short?:boolean;
 
     }
 

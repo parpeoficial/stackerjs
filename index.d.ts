@@ -280,6 +280,79 @@ declare module "stackerjs"
 
     }
 
+    export namespace Integrations
+    {
+
+        export class Slack
+        {
+
+            /**
+             * Sends a message on configured Channel into Slack.
+             * 
+             * @param text Message to be sent
+             */
+            public text(text:string):Promise<boolean>;
+
+            /**
+             * Sends a message with attachment on configured Channel into Slack.
+             * 
+             * @param text Message to be sent
+             * @param attachments Array of attachments
+             */
+            public attach(text:string, attachments:Array<SlackMessageAttachment>):Promise<boolean>;
+
+            /**
+             * Sends message to Slack according to defined configurations on message object.
+             * 
+             * @param message Message to be sent to Slack
+             */
+            public send(message:SlackMessage):Promise<boolean>;
+
+        }
+
+        interface SlackMessage
+        {
+    
+            icon_url:string;
+    
+            username:string;
+    
+            channel:string;
+    
+            text:string;
+    
+            attachments?:Array<SlackMessageAttachment>;
+    
+        }
+    
+        interface SlackMessageAttachment
+        {
+    
+            fallback?:string;
+    
+            pretext?:string;
+    
+            text?:string;
+    
+            color:string;
+    
+            fields:Array<SlackMessageAttachmentField>;
+    
+        }
+    
+        interface SlackMessageAttachmentField
+        {
+    
+            title:string;
+    
+            value:string;
+    
+            short?:boolean;
+    
+        }
+
+    }
+
     export namespace DB
     {
         
