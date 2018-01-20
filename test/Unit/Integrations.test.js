@@ -12,6 +12,7 @@ describe('IntegrationsTest', () =>
             let slack = new Integrations.Slack();            
             slack.text(`Today is ${new Date()} and we're testing SlackJS`)
                 .then(response => expect(response).to.be.true)
+                .catch(err => console.log(err))
                 .then(() => done());
         });
 
@@ -34,6 +35,7 @@ describe('IntegrationsTest', () =>
                     }
                 ])
                 .then(response => expect(response).to.be.true)
+                .catch(err => console.log(err))
                 .then(() => done());
         });
 
