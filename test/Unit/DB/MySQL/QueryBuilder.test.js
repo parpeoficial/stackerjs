@@ -45,11 +45,23 @@ describe('QueryBuilderTest', () =>
                 expect(DB.Factory.getQueryBuilder()
                     .select()
                     .from('table')
-                    .set(['CONCAT(table.first_name, " ", table.last_name)', 'full_name'])
+                    .set(['CONCAT(LOWER(table.first_name), " ", table.last_name)', 'full_name'])
                     .toSql())
                     .to.be.equal(
-                        'SELECT CONCAT(`table`.`first_name`," ",`table`.`last_name`) AS full_name ' +
+                        'SELECT CONCAT(LOWER(table.first_name), " ", table.last_name) AS full_name ' +
                         'FROM table;'
+                    );
+            });
+
+            it('Should test parsing functions with number parameters', () => 
+            {
+                expect(DB.Factory.getQueryBuilder()
+                    .select()
+                    .from('table')
+                    .set(['ACOS(COS(RADIANS(-23.120381)))', 'radius'])
+                    .toSql())
+                    .to.be.equal(
+                        'SELECT ACOS(COS(RADIANS(-23.120381))) AS radius FROM table;'
                     );
             });
 
