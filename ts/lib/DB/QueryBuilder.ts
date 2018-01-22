@@ -192,14 +192,9 @@ export namespace QueryBuilder
 
         protected escapeFieldsAndReservedWords(field)
         {
-            let regexDetectSQLFunction = /\(([^)]+)\)/;
+            let regexDetectSQLFunction = /\([a-zA-Z0-9\-\.\_]+\)/;
             if (regexDetectSQLFunction.test(field))
-                return field.replace(
-                    regexDetectSQLFunction,
-                    `(${this.escapeFieldsAndReservedWords(
-                        regexDetectSQLFunction.exec(field)[1]
-                    )})`
-                );
+                return field
             
             if (field.indexOf(',') >= 0)
                 return field.split(',')
