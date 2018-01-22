@@ -195,21 +195,13 @@ export namespace QueryBuilder
             let regexDetectSQLFunction = /\([a-zA-Z0-9\-\.\_]+\)/;
             if (regexDetectSQLFunction.test(field))
                 return field
-            
-            if (field.indexOf(',') >= 0)
-                return field.split(',')
-                    .map(f => this.escapeFieldsAndReservedWords(f.trim()))
-                    .join(',');
-
+          
             if (field.indexOf('.') >= 0)
                 return field.split('.')
                     .map(f => this.escapeFieldsAndReservedWords(f))
                     .join('.');
 
             if (field.indexOf('*') >= 0)
-                return field;
-
-            if (field === '" "' || field === "' '")
                 return field;
 
             return `\`${field}\``;
