@@ -192,12 +192,29 @@ export namespace QueryBuilder
 
         protected escapeFieldsAndReservedWords(field)
         {
+            let regexDetectSQLFunction = /\(([^)]+)\)/;
+            if (regexDetectSQLFunction.test(field))
+                return field.replace(
+                    regexDetectSQLFunction,
+                    `(${this.escapeFieldsAndReservedWords(
+                        regexDetectSQLFunction.exec(field)[1]
+                    )})`
+                );
+            
+            if (field.indexOf(',') >= 0)
+                return field.split(',')
+                    .map(f => this.escapeFieldsAndReservedWords(f.trim()))
+                    .join(',');
+
             if (field.indexOf('.') >= 0)
                 return field.split('.')
                     .map(f => this.escapeFieldsAndReservedWords(f))
                     .join('.');
 
             if (field.indexOf('*') >= 0)
+                return field;
+
+            if (field === '" "' || field === "' '")
                 return field;
 
             return `\`${field}\``;

@@ -15,7 +15,7 @@ describe('AppTest', function()
         {
             new Http.MakeRequest()
                 .setPort(3000)
-                .delete('/person/9')
+                .delete('http://localhost:3000/person/9?some=1')
                 .then((httpResponse) => {
                     expect(httpResponse.getStatusCode())
                         .to.be.equal(Http.Response.HTTP_NOT_FOUND);
@@ -59,10 +59,26 @@ describe('AppTest', function()
                     .then(() => done());
         });
 
-        it('Should return 500 when throwing AnyException', (done) => 
+        it('Should return 500 when throwing AnyException', done => 
         {
             new Http.MakeRequest()
                 .setPort(3000)
+                .delete('/person/100')
+                .then((httpResponse) => {
+                    let content = httpResponse.getContent();
+                    expect(content.status).to.be.false;
+                    expect(content.data).to.have.property('detailed');
+                    expect(httpResponse.getStatusCode())
+                        .to.be.equal(Http.Response.HTTP_INTERNAL_SERVER_ERROR);
+                })
+                    .then(() => done());
+        });
+
+        it('Should return 500 with html explanation', done => 
+        {
+            new Http.MakeRequest()
+                .setPort(3000)
+                .setHeader('Content-Type', 'plain/text')
                 .delete('/person/100')
                 .then((httpResponse) => {
                     expect(httpResponse.getStatusCode())

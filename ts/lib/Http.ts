@@ -1,4 +1,5 @@
 import * as request from 'request';
+import { parse as urlparser } from 'url';
 
 
 export namespace Http
@@ -40,13 +41,51 @@ export namespace Http
 
         public get(url:string, params:any={}):Promise<Response>
         {
-            return new Promise((resolve:Function, reject:Function) => {
-                request({
-                    'method': 'GET',
-                    'url': this.treatUrl(url, params),
-                    'timeout': this.timeout,
-                    'headers': this.headers
-                }, (err:Error, response, body):void => {
+            return this.treatRequest({
+                'method': 'GET',
+                'url': this.treatUrl(url, params),
+                'timeout': this.timeout,
+                'headers': this.headers
+            });
+        }
+
+        public post(url:string, params:any={}, body:any={}):Promise<Response>
+        {
+            return this.treatRequest({
+                'method': 'POST',
+                'url': this.treatUrl(url, params),
+                'timeout': this.timeout,
+                'headers': this.headers,
+                'body': JSON.stringify(body)
+            });
+        }
+
+        public put(url:string, params:any={}, body:any={}):Promise<Response>
+        {
+            return this.treatRequest({
+                'method': 'PUT',
+                'url': this.treatUrl(url, params),
+                'timeout': this.timeout,
+                'headers': this.headers,
+                'body': JSON.stringify(body)
+            });
+        }
+
+        public delete(url:string, params:any={}):Promise<Response>
+        {
+            return this.treatRequest({
+                'method': 'DELETE',
+                'url': this.treatUrl(url, params),
+                'timeout': this.timeout,
+                'headers': this.headers
+            });
+        }
+
+        private treatRequest(configurations:any):Promise<Response>
+        {
+            return new Promise((resolve:Function, reject:Function) => 
+            {
+                request(configurations, (err:Error, response, body) => {
                     if (err)
                         return reject(err);
 
@@ -59,75 +98,36 @@ export namespace Http
             });
         }
 
-        public post(url:string, params:any={}, body:any={}):Promise<Response>
-        {
-            return this.treatRequest(
-                request.post(this.treatUrl(url, params), {
-                    'headers': this.headers,
-                    'timeout': this.timeout,
-                    'body': JSON.stringify(body)
-                })
-            );
-        }
-
-        public put(url:string, params:any={}, body:any={}):Promise<Response>
-        {
-            return this.treatRequest(
-                request.put(this.treatUrl(url, params), {
-                    'body': JSON.stringify(body),
-                    'timeout': this.timeout,
-                    'headers': this.headers
-                })
-            );
-        }
-
-        public delete(url:string, params:any={}):Promise<Response>
-        {
-            return this.treatRequest(
-                request.delete(this.treatUrl(url, params), {
-                    'headers': this.headers,
-                    'timeout': this.timeout
-                })
-            );
-        }
-
-        private treatRequest(request):Promise<Response>
-        {
-            let httpResponse:Http.Response = new Http.Response();
-            
-            return new Promise((resolve:Function, reject:Function):void => {
-                request
-                    .on('error', (err:Error):void => reject(err))
-                    .on('response', (response):void => {
-                        httpResponse.setStatusCode(response.statusCode);
-                        httpResponse.setHeaders(response.headers);
-                    })
-                    .on('data', (data:Buffer) => httpResponse.setContent(data))
-                    .on('end', () => resolve(httpResponse));
-            });
-        }
-
         private treatUrl(url:string, params:any={}):string
         {
-            let uri:string = `${this.host}`;
-            if (this.port !== 80)
-                uri += `:${this.port}`;
-
-            uri += url;
-            if (uri.substr(0, 7) !== 'http://' && uri.substr(0, 7) !== 'https:/')
-                uri = `http://${uri}`
-            
+            let urlInfo = urlparser(url);
             params = Object.keys(params)
                 .map((key:string) => {
                     if (Array.isArray(params[key]) || typeof params[key] === 'object')
                         return `${key}=${JSON.stringify(params[key])}`;
 
                     return `${key}=${params[key]}`;
-                })
-                .join('&');
+                });
+            if (urlInfo.query)
+                urlInfo.query.toString().split('&').map(query => params.push(query));
+            
+            if (urlInfo.host) {
+                url = `${urlInfo.protocol}//${urlInfo.host}${urlInfo.pathname}`;
+                url += params.length > 0 ? `?${params.join('&')}` : "";
+
+                return url;
+            }
+            
+            let uri:string = `${this.host}`;
+            if (this.port !== 80)
+                uri += `:${this.port}`;
+
+            uri += url;
+            if (uri.substr(0, 7) !== 'http://' && uri.substr(0, 7) !== 'https:/')
+                uri = `http://${uri}`;
                 
             if (params.length > 0)
-                uri += `?${params}`;
+                uri += `?${params.join('&')}`;
             
             return uri;
         }
@@ -244,7 +244,15 @@ export namespace Http
 
         public setHeaders(headers:any):Response
         {
-            this.headers = headers;
+            Object.keys(headers).forEach(key => this.setHeader(key, headers[key]));
+
+            return this;
+        }
+
+        public setHeader(key:string, value:any):Response
+        {
+            this.headers[key.toLowerCase()] = value;
+
             return this;
         }
 

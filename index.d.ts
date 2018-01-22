@@ -169,6 +169,14 @@ declare module "stackerjs"
              * @param headers Object with headers key value to be set
              */
             public setHeaders(headers:any):Response;
+
+            /**
+             * Sets a single header value
+             * 
+             * @param key Header key
+             * @param value Header value
+             */
+            public setHeader(key:string, value:any):Response;
             
             /**
              * Returns HTTP response headers
@@ -275,6 +283,79 @@ declare module "stackerjs"
         {
     
             do(request?:Http.Request):any;
+    
+        }
+
+    }
+
+    export namespace Integrations
+    {
+
+        export class Slack
+        {
+
+            /**
+             * Sends a message on configured Channel into Slack.
+             * 
+             * @param text Message to be sent
+             */
+            public text(text:string):Promise<boolean>;
+
+            /**
+             * Sends a message with attachment on configured Channel into Slack.
+             * 
+             * @param text Message to be sent
+             * @param attachments Array of attachments
+             */
+            public attach(text:string, attachments:Array<SlackMessageAttachment>):Promise<boolean>;
+
+            /**
+             * Sends message to Slack according to defined configurations on message object.
+             * 
+             * @param message Message to be sent to Slack
+             */
+            public send(message:SlackMessage):Promise<boolean>;
+
+        }
+
+        interface SlackMessage
+        {
+    
+            icon_url:string;
+    
+            username:string;
+    
+            channel:string;
+    
+            text:string;
+    
+            attachments?:Array<SlackMessageAttachment>;
+    
+        }
+    
+        interface SlackMessageAttachment
+        {
+    
+            fallback?:string;
+    
+            pretext?:string;
+    
+            text?:string;
+    
+            color:string;
+    
+            fields:Array<SlackMessageAttachmentField>;
+    
+        }
+    
+        interface SlackMessageAttachmentField
+        {
+    
+            title:string;
+    
+            value:string;
+    
+            short?:boolean;
     
         }
 

@@ -4,9 +4,11 @@
     "keywords": [
         "framework",
         "stack",
-        "orm"
+        "orm",
+        "http",
+        "lib"
     ],
-    "version": "1.0.24",
+    "version": "1.0.25",
     "main": "lib/index.js",
     "types": "index.d.ts",
     "license": "MIT",
@@ -14,19 +16,21 @@
         "type": "git",
         "url": "https://github.com/parpeoficial/stackerjs"
     },
-    "bin": {},
+    
     "dependencies": {
         "@types/node": "^8.5.8",
         "body-parser": "^1.18.2",
         "express": "^4.16.2",
         "mysql": "^2.15.0",
-        "request": "^2.83.0"
+        "request": "^2.83.0",
+        "stacktrace-js": "^2.0.0"
     },
     "devDependencies": {
         "chai": "^4.1.2",
         "mocha": "^4.1.0",
         "remap-istanbul": "^0.9.5"
     },
+    
     "scripts": {
         "build": "tsc",
         "postinstall": "npm run build",

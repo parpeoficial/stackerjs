@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as express from 'express';
 import { Router } from 'express';
 import { json } from 'body-parser';
+import * as StackTrace from 'stacktrace-js';
 
 
 export { Http } from './Http';
@@ -12,6 +13,9 @@ import { MVC } from './MVC';
 
 export { DB } from './DB';
 import { DB } from './DB';
+import { Integrations } from './Integrations';
+
+export { Integrations } from './Integrations';
 
 export { ORM } from './ORM';
 
@@ -36,6 +40,11 @@ export class Config
             return this.config[key];
 
         return defaultValue;
+    }
+
+    public static delete(key:string)
+    {
+        delete this.config[key];
     }
 
     private static loadEnvFile()
@@ -207,10 +216,11 @@ export class MicroService
         let answered:boolean = false;
         this.route.use((request, response, next):void => 
         {
+            let treatedRequest:Http.Request = new Http.Request(request);
             Promise.resolve(this.requestStarted())
                 .then(() => {
                     try {
-                        return middleware.do(new Http.Request(request));
+                        return middleware.do(treatedRequest);
                     } catch (err) {
                         throw err;
                     }
@@ -223,7 +233,7 @@ export class MicroService
                 })
                 .catch((err:Error) => {
                     answered = true;
-                    return this.requestCatch(err, response)
+                    return this.requestCatch(err, treatedRequest, response)
                 })
                 .then(() => {
                     if (!answered) 
@@ -245,10 +255,11 @@ export class MicroService
             route, 
             callbacks.map((callback:Function) => (request, response, next:Function) => 
             {
+                let treatedRequest:Http.Request = new Http.Request(request);
                 Promise.resolve(this.requestStarted())
                     .then(() => {
                         try {
-                            return callback(new Http.Request(request));
+                            return callback(treatedRequest);
                         } catch (err) {
                             throw err;
                         }
@@ -261,7 +272,7 @@ export class MicroService
                     })
                     .catch((err:Error) => {
                         answered = true;
-                        return this.requestCatch(err, response);
+                        return this.requestCatch(err, treatedRequest, response);
                     })
                     .then(() => {
                         if (!answered) 
@@ -319,21 +330,52 @@ export class MicroService
         response.status(200).send(callbackResponse);
     }
 
-    private requestCatch(err:Error, response:any):void
+    private requestCatch(err:Error, request:Http.Request, response:any):void
     {
-        if (err instanceof Http.Exception.HttpError) {
-            if (typeof err.message === 'object')
-                return response
-                    .status(err.getCode())
-                    .json(err.message);
+        StackTrace.fromError(err)
+            .then(stacktrace => {
+                if (err instanceof Http.Exception.HttpError)
+                    return stacktrace;
+                
+                return new Integrations.Slack()
+                    .attach(err.message, [
+                        {
+                            'color': "#D00000",
+                            'fields': stacktrace.map(trace => {
+                                return {
+                                    'title': trace.fileName,
+                                    'value': trace.source,
+                                    'short': false
+                                }
+                            })
+                        }
+                    ])
+                    .then(() => stacktrace);
+            })
+            .then(stacktrace => {
+                if (err instanceof Http.Exception.HttpError) {
+                    if (typeof err.message === 'object')
+                        return response
+                            .status(err.getCode())
+                            .json(err.message);
 
-            return response.status(err.getCode())
-                .send(err.message);
-        }
+                    return response.status(err.getCode())
+                        .send(err.message);
+                }
 
-        response
-            .status(500)
-            .send(`Error 500. <br /><br />Message: ${err.message}.`);
+                if (request.getHeaders()['content-type'] === 'application/json')
+                    return response.status(500).json({
+                        'status': false,
+                        'data': {
+                            'messages': [ err.message ],
+                            'detailed': stacktrace
+                        }
+                    });
+
+                response
+                    .status(500)
+                    .send(`Error 500. <br /><br />Message: ${err.message}.`);
+            });
     }
 
     private requestStarted()

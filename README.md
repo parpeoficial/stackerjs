@@ -2,7 +2,8 @@
 [![Codecov](https://codecov.io/gh/parpeoficial/stackerjs/branch/master/graph/badge.svg)](https://codecov.io/gh/parpeoficial/stackerjs)
 [![npm](https://img.shields.io/npm/dt/stackerjs.svg)](https://www.npmjs.com/package/stackerjs)
 
-# StackerJS
+![StackerJS](https://s3-sa-east-1.amazonaws.com/parpe.prod/StackerJS-logo.png)
+
 A Stack built in NodeJS using ExpressJS, for building NodeJS microservices.
 
 ## Table of Contents
@@ -27,6 +28,14 @@ For DB Connection until now **only MySQL** driver is implemented.
 * DB_NAME=database - Defines database name
 * DB_USER=root - Defines database user
 * DB_PASS=p455w0rd - Defines database access password
+
+#### Slack Integration
+For Slack integration, you must integrate you workspace with [incoming-message]() App and add service hook to .env
+* SLACK_HOOK=https://hoook.slacker.com/service/ADSMDFIADNFSD/ADJIJAO - Defines Webhook url
+* SLACK_ICON=http://image-to-icon/you/want.png - Defines an icon to Slack messages (Default is StackerJS logo).
+* SLACK_CHANNEL=my-channel - Defines the channel where messages should be sent to (Default is "general").
+
+PS.: When Slack configuration is setted, error 500 messages are sent to Slack Channel configured.
 
 ### Http
 StackerJS implements Http request and response classes based on ExpressJS.
