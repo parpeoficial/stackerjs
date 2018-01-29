@@ -8,7 +8,7 @@
         "http",
         "lib"
     ],
-    "version": "1.0.27",
+    "version": "1.0.28",
     "main": "lib/index.js",
     "types": "index.d.ts",
     "license": "MIT",
@@ -25,6 +25,7 @@
         "stacktrace-js": "^2.0.0"
     },
     "devDependencies": {
+        "@types/mocha": "^2.2.47",
         "chai": "^4.1.2",
         "mocha": "^4.1.0",
         "remap-istanbul": "^0.9.6"
