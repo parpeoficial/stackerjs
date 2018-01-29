@@ -18,6 +18,14 @@ microService.setRoute('put', '/person/:id', (request) => new Http.Response()
         'parameter': request.get('id')
     }
 }));
+microService.setRoute('patch', '/person/:id', (request) => new Http.Response()
+    .setStatusCode(Http.Response.HTTP_OK)
+    .setContent(request.get('id') > 5 ? "OK" : {
+    'status': true,
+    'url': {
+        'parameter': request.get('id')
+    }
+}));
 microService.setRoute('post', '/person', (request) => {
     return {
         'status': true,
