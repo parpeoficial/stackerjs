@@ -71,6 +71,17 @@ export namespace Http
             });
         }
 
+        public patch(url:string, params:any={}, body:any={}):Promise<Response>
+        {
+            return this.treatRequest({
+                'method': 'PATCH',
+                'url': this.treatUrl(url, params),
+                'timeout': this.timeout,
+                'headers': this.headers,
+                'body': JSON.stringify(body)
+            });
+        }
+
         public delete(url:string, params:any={}):Promise<Response>
         {
             return this.treatRequest({

@@ -181,6 +181,47 @@ describe('AppTest', function()
         });
     });
 
+    describe('Making PATCH requests', () => 
+    {
+        it('Should make a PATCH request without trouble', (done) => 
+        {
+            new Http.MakeRequest()
+                .setHost('http://localhost').setPort(3000)
+                .setTimeout(4000).setHeader('Auth', 'Basic 123kn21lk3m12')
+                .patch('/person/4', {}, {
+                'client': {
+                    'name': 'Client Name',
+                    'is_active': true
+                }
+            })
+                .then((httpResponse) => {
+                    expect(httpResponse.getStatusCode()).to.be.equal(Http.Response.HTTP_OK);
+                    let content = httpResponse.getContent();
+                    expect(content.status).to.be.true;
+                    expect(content.url.parameter).to.be.equal('4');
+                })
+                    .then(() => done());
+        });
+
+        it('Should make a PATCH request without trouble too', (done) => 
+        {
+            new Http.MakeRequest()
+                .setHost('localhost').setPort(3000)
+                .setTimeout(4000).setHeader('Auth', 'Basic 123kn21lk3m12')
+                .patch('/person/100', {}, {
+                'client': {
+                    'name': 'Client Name',
+                    'is_active': true
+                }
+            })
+                .then((httpResponse) => {
+                    expect(httpResponse.getStatusCode())
+                        .to.be.equal(Http.Response.HTTP_OK);
+                })
+                    .then(() => done());
+        });
+    });
+
     describe('Making DELETE requests', () => 
     {
         it('Should make a DELETE request without trouble', (done) => 
