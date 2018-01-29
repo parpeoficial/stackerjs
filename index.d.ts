@@ -63,6 +63,15 @@ declare module "stackerjs"
              * @param body Request's body
              */
             public put(url:string, params?:any, body?:any):Promise<Response>;
+
+            /**
+             * Makes a HTTP PATCH request
+             * 
+             * @param url Request's url
+             * @param params Request's url params
+             * @param body Request's body
+             */
+            public patch(url:string, params?:any, body?:any):Promise<Response>;
             
             /**
              * Makes a HTTP DELETE request
