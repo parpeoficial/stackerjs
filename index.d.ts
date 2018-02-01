@@ -764,8 +764,9 @@ declare module "stackerjs"
          * 
          * @param fileName File name to be defined
          * @param fileContent File content to be cached
+         * @param {Date} expiresAt defines a date when cache should expire. Default is 2 hours
          */
-        public static set(fileName:string, fileContent:string):void;
+        public static set(fileName:string, fileContent:string, expiresAt?:Date):void;
 
         /**
          * Verifies if there's a cache file with that name
@@ -792,7 +793,7 @@ declare module "stackerjs"
         /**
          * Registers a microservice that will be used in application
          * 
-         * @param microservice MicroService class with routes and callbacks configured
+         * @param {MicroService} microservice MicroService class with routes and callbacks configured
          * @param prefix Prefix of MicroService routes
          */
         public registerMicroService(microservice:MicroService, prefix?:string):void;
@@ -822,7 +823,7 @@ declare module "stackerjs"
         /**
          * Sets a middleware to the microservice routes
          * 
-         * @param middleware Middleware class
+         * @param {MVC.IMiddleware} middleware Middleware class
          */
         public setMiddleware(middleware:MVC.IMiddleware):void
 
@@ -838,7 +839,7 @@ declare module "stackerjs"
         /**
          * Register a controller to be used as routes and callbacks (actions) bucket.
          * 
-         * @param controller Controller with routes and actions that will be loaded
+         * @param {MVC.IController} controller Controller with routes and actions that will be loaded
          */
         public registerController(controller:MVC.IController):void
 
