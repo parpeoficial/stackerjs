@@ -16,6 +16,9 @@ install:
 
 before_script:
   - mysql -e 'CREATE SCHEMA pipelines;'
+  - echo "# App information" >> .env
+  - echo APP_SECRET = I4mY0urP455Phr4s3 >> .env
+  - echo APP_INFO_ROUTE = /app/info >> .env
   - echo "# DB AUTH" >> .env
   - echo DB_DRIVER=mysql >> .env
   - echo DB_HOST=127.0.0.1 >> .env

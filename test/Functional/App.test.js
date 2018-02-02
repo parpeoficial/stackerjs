@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 const { app } = require("./../DataProvider/App");
-const { Http } = require("./../../lib");
+const { Config, Http } = require("./../../lib/index");
 
 
 describe('AppTest', function() 
@@ -260,6 +260,37 @@ describe('AppTest', function()
                     expect(httpResponse.getContent()).to.be.equal('Executed multiple')
                 })
                     .then(() => done());
+        });
+    });
+
+    describe('Should Access MicroServices information', () => 
+    {
+        it('Should get information without trouble', done => 
+        {
+            new Http.MakeRequest()
+                .setPort(3000)
+                .setHeader('StackerAuth', Config.get('app.secret'))
+                .get('/app/info')
+                .then(httpResponse => {
+                    let content = httpResponse.getContent();
+                    expect(content.status).to.be.true;
+                    expect(httpResponse.getStatusCode()).to.be.equal(200);
+                })
+                .then(() => done());
+        });
+
+        it('Should present error when header is invalid', done => 
+        {
+            new Http.MakeRequest()
+                .setPort(3000)
+                .setHeader('StackerAuth', '123l12nl3k12')
+                .get('/app/info')
+                .then(httpResponse => {
+                    let content = httpResponse.getContent();
+                    expect(content.status).to.be.false;
+                    expect(httpResponse.getStatusCode()).to.be.equal(403);
+                })
+                .then(() => done());
         });
     });
 
