@@ -172,6 +172,7 @@ export class App
 {
 
     private app:express;
+    private appRoutes:Array<any> = [];
 
     public constructor(name:string='StackerJS')
     {
@@ -185,11 +186,33 @@ export class App
         this.app.use(json({
             'limit': Config.get('upload.limit', '10mb')
         }));
+
+        this.app.get(Config.get('app.info.route', '/app/info'), (request, response):void => {
+            let { stackerauth } = request.headers;
+            if (!stackerauth || stackerauth !== Config.get('app.secret'))
+                return response.status(403).json({
+                    'status': false,
+                    'message': [ 'Must pass correct stackerauth authentication' ]
+                });
+
+            response.json({
+                'status': true,
+                'data': {
+                    'routes': this.appRoutes
+                }
+            })
+        });
     }
 
     public registerMicroService(microservice:MicroService, prefix:string='/'):void
     {
-        this.app.use(prefix, microservice.getRoutes());   
+        this.app.use(prefix, microservice.getRoute());   
+
+        microservice.getRoutes()
+            .map(route => Object.assign(route, {
+                'route': prefix + (route.route[0] === '/' ? route.route.substr(1) : route.route)
+            }))
+            .forEach(route => this.appRoutes.push(route));
     }
 
     public run(port:number=3000)
@@ -204,6 +227,7 @@ export class MicroService
 
     private name:string;
     private route:Router;
+    private routes:Array<any> = [];
 
     public constructor(microServiceName:string='Micro StackerJS')
     {
@@ -249,6 +273,10 @@ export class MicroService
     {
         if (!Array.isArray(callbacks))
             callbacks = [callbacks];
+
+        this.routes.push({
+            method, route
+        });
 
         let answered:boolean = false;
         this.route[method](
@@ -305,9 +333,14 @@ export class MicroService
         });
     }
 
-    public getRoutes():Router
+    public getRoute():Router
     {
         return this.route;
+    }
+
+    public getRoutes():Array<any>
+    {
+        return this.routes;
     }
 
     private requestThen(callbackResponse:string|Http.Response, response:any):void
