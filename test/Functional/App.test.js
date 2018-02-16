@@ -6,16 +6,18 @@ const { Config, Http } = require("./../../lib/index");
 describe('AppTest', function() 
 {
 
+    const PORT = 3001;
+
     this.timeout(3000)
-    before(function () { this.server = app.run(3000) });
+    before(function () { this.server = app.run(PORT); });
     
     describe('Testing HttpExceptions', () => 
     {
-        it('Should return 404 when throwing NotFoundException', (done) => 
+        it('Should return 404 when throwing NotFoundException', done => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
-                .delete('http://localhost:3000/person/9?some=1')
+                .setPort(PORT)
+                .delete(`http://localhost:${PORT}/person/9?some=thing`)
                 .then((httpResponse) => {
                     expect(httpResponse.getStatusCode())
                         .to.be.equal(Http.Response.HTTP_NOT_FOUND);
@@ -26,7 +28,7 @@ describe('AppTest', function()
         it('Should return 403 when throwing ForbiddenException', (done) => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .delete('/person/14')
                 .then((httpResponse) => {
                     expect(httpResponse.getStatusCode())
@@ -38,7 +40,7 @@ describe('AppTest', function()
         it('Should return 401 when throwing UnauthorizedException', (done) => 
         {
             new Http.MakeRequest()
-                .setPort(3000)    
+                .setPort(PORT)    
                 .delete('/person/19')
                 .then((httpResponse) => {
                     expect(httpResponse.getStatusCode())
@@ -50,7 +52,7 @@ describe('AppTest', function()
         it('Should return 400 when throwing BadRequestException', (done) => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .delete('/person/24')
                 .then((httpResponse) => {
                     expect(httpResponse.getStatusCode())
@@ -62,7 +64,7 @@ describe('AppTest', function()
         it('Should return 500 when throwing AnyException', done => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .delete('/person/100')
                 .then((httpResponse) => {
                     let content = httpResponse.getContent();
@@ -77,7 +79,7 @@ describe('AppTest', function()
         it('Should return 500 with html explanation', done => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .setHeader('Content-Type', 'plain/text')
                 .delete('/person/100')
                 .then((httpResponse) => {
@@ -93,7 +95,7 @@ describe('AppTest', function()
         it('Should make a GET request without trouble', (done) => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .get('/', { 'active': 1 })
                 .then((httpResponse) => {
                     expect(httpResponse.getStatusCode()).to.be.equal(Http.Response.HTTP_OK);
@@ -104,7 +106,7 @@ describe('AppTest', function()
 
         it('Should make a GET request and receive a promise without trouble', (done) => {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .get('/hi-promise', { 'active': 1 })
                 .then((httpResponse) => {
                     expect(httpResponse.getStatusCode()).to.be.equal(Http.Response.HTTP_OK);
@@ -119,7 +121,7 @@ describe('AppTest', function()
         it('Should make a POST request without trouble', (done) => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .post('/person', {
                     'active': true,
                     'what': [ 'should', 'I', 'do' ]
@@ -145,7 +147,7 @@ describe('AppTest', function()
         it('Should make a PUT request without trouble', (done) => 
         {
             new Http.MakeRequest()
-                .setHost('http://localhost').setPort(3000)
+                .setHost('http://localhost').setPort(PORT)
                 .setTimeout(4000).setHeader('Auth', 'Basic 123kn21lk3m12')
                 .put('/person/4', {}, {
                 'client': {
@@ -165,7 +167,7 @@ describe('AppTest', function()
         it('Should make a PUT request without trouble too', (done) => 
         {
             new Http.MakeRequest()
-                .setHost('localhost').setPort(3000)
+                .setHost('localhost').setPort(PORT)
                 .setTimeout(4000).setHeader('Auth', 'Basic 123kn21lk3m12')
                 .put('/person/100', {}, {
                 'client': {
@@ -186,7 +188,7 @@ describe('AppTest', function()
         it('Should make a PATCH request without trouble', (done) => 
         {
             new Http.MakeRequest()
-                .setHost('http://localhost').setPort(3000)
+                .setHost('http://localhost').setPort(PORT)
                 .setTimeout(4000).setHeader('Auth', 'Basic 123kn21lk3m12')
                 .patch('/person/4', {}, {
                 'client': {
@@ -206,7 +208,7 @@ describe('AppTest', function()
         it('Should make a PATCH request without trouble too', (done) => 
         {
             new Http.MakeRequest()
-                .setHost('localhost').setPort(3000)
+                .setHost('localhost').setPort(PORT)
                 .setTimeout(4000).setHeader('Auth', 'Basic 123kn21lk3m12')
                 .patch('/person/100', {}, {
                 'client': {
@@ -227,7 +229,7 @@ describe('AppTest', function()
         it('Should make a DELETE request without trouble', (done) => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .delete('/person/1')
                 .then((httpResponse) => {
                     expect(httpResponse.getContent()).to.be.null;
@@ -242,7 +244,7 @@ describe('AppTest', function()
         it('Should GET SiteController@indexAction', (done) => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .get('/home')
                 .then((httpResponse) => {
                     expect(httpResponse.getContent())
@@ -254,7 +256,7 @@ describe('AppTest', function()
         it('Should work okay with multiple actions', (done) => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .get('/multiple')
                 .then((httpResponse) => {
                     expect(httpResponse.getContent()).to.be.equal('Executed multiple')
@@ -268,7 +270,7 @@ describe('AppTest', function()
         it('Should get information without trouble', done => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .setHeader('StackerAuth', Config.get('app.secret'))
                 .get('/app/info')
                 .then(httpResponse => {
@@ -282,7 +284,7 @@ describe('AppTest', function()
         it('Should present error when header is invalid', done => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .setHeader('StackerAuth', '123l12nl3k12')
                 .get('/app/info')
                 .then(httpResponse => {
@@ -299,7 +301,7 @@ describe('AppTest', function()
         it('Should run through a middleware without trouble', done => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .get('/auth/route')
                 .then((httpResponse) => expect(httpResponse.getContent()).to.be.equal('/auth/route'))
                 .then(() => done());
@@ -308,7 +310,7 @@ describe('AppTest', function()
         it('Should present problem from middleware and make a response', done => 
         {
             new Http.MakeRequest()
-                .setPort(3000)
+                .setPort(PORT)
                 .post('/auth/route', {}, { 'crash': true })
                 .then((httpResponse) => expect(httpResponse.getContent()).to.be.equal('Error'))
                 .then(() => done());   

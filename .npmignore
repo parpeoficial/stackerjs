@@ -1,0 +1,15 @@
+# App files and folders
+/.env
+/.env.default
+/.travis.yml
+/coverage
+/node_modules
+/src
+/storage
+/test
+/tsconfig.json
+
+# OS and IDE files and folders
+/.idea
+/.vscode
+/nbproject

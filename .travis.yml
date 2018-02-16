@@ -40,5 +40,6 @@ deploy:
   provider: npm
   email: "admin@parpe.com"
   api_key: $NPM_TOKEN
+  skip_cleanup: true
   on:
     branch: master
