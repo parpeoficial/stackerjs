@@ -39,6 +39,6 @@ after_success:
 deploy:
   provider: npm
   email: "admin@parpe.com"
-  api_key: "c6853a9c-b15c-4811-8861-c1a070ecd68c"
+  api_key: $NPM_TOKEN
   on:
     branch: master
