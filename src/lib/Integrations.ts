@@ -43,6 +43,7 @@ export namespace Integrations
                 return false;
             
             return new Http.MakeRequest()
+                .setTimeout(4000)
                 .post(Config.get('slack.hook'), {}, message)
                 .then(httpResponse => httpResponse.getContent() === 'ok');
         }

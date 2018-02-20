@@ -2,8 +2,10 @@ const { expect } = require('chai');
 const { Config, Integrations } = require('./../../lib');
 
 
-describe('IntegrationsTest', () => 
+describe('IntegrationsTest', function() 
 {
+
+    this.timeout(5000);
 
     describe('SlackTest', () => 
     {
@@ -16,7 +18,7 @@ describe('IntegrationsTest', () =>
                 .then(() => done());
         });
 
-        it('Should send attachments withoutr trouble', done => 
+        it('Should send attachments without trouble', done => 
         {
             new Integrations.Slack()
                 .attach('Brand new error tested', [
