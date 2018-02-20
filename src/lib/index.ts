@@ -367,7 +367,7 @@ export class MicroService
     {
         StackTrace.fromError(err)
             .then(stacktrace => {
-                if (err instanceof Http.Exception.HttpError || err.hasOwnProperty('getMessage'))
+                if (err instanceof Http.Exception.HttpError || Object.keys(err).indexOf('getMessage') >= 1)
                     return stacktrace;
                 
                 return new Integrations.Slack()
@@ -386,7 +386,7 @@ export class MicroService
                     .then(() => stacktrace);
             })
             .then(stacktrace => {
-                if (err instanceof Http.Exception.HttpError || err.hasOwnProperty('getMessage')) {
+                if (err instanceof Http.Exception.HttpError || Object.keys(err).indexOf('getMessage') >= 1) {
                     if (typeof err.getMessage() === 'object')
                         return response
                             .status(err.getCode())

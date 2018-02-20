@@ -9,7 +9,7 @@ describe('AppTest', function()
     const PORT = 3001;
 
     this.timeout(3000)
-    before(function () { this.server = app.run(PORT); });
+    beforeEach(function () { this.server = app.run(PORT); });
     
     describe('Testing HttpExceptions', () => 
     {
@@ -80,7 +80,7 @@ describe('AppTest', function()
         {
             new Http.MakeRequest()
                 .setPort(PORT)
-                .setHeader('Content-Type', 'plain/text')
+                .setHeader('Content-Type', 'text/html')
                 .delete('/person/100')
                 .then((httpResponse) => {
                     expect(httpResponse.getStatusCode())
@@ -317,5 +317,5 @@ describe('AppTest', function()
         });
     });
 
-    after(function () { this.server.close() });
+    afterEach(function () { this.server.close(); });
 });
