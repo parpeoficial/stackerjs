@@ -4,7 +4,6 @@ import { Router } from 'express';
 import { json } from 'body-parser';
 import * as StackTrace from 'stacktrace-js';
 
-
 export { Http } from 'stackerjs-http';
 import { Http } from 'stackerjs-http';
 

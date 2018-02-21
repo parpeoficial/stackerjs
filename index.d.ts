@@ -5,8 +5,7 @@ import { Http } from 'stackerjs-http';
 declare module "stackerjs" 
 {
 
-    export * from 'stackerjs-http';
-
+    export * from 'stackerjs-http'
 
     export namespace MVC
     {
