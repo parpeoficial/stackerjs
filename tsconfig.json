@@ -3,7 +3,7 @@
         "module": "commonjs",
         "target": "es2016",
         "rootDir": "src",
-        "outDir": "",
+        "outDir": "lib",
         "sourceMap": true
     }
 }
