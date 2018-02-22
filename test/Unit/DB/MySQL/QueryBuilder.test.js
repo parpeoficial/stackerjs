@@ -53,6 +53,20 @@ describe('QueryBuilderTest', () =>
                     );
             });
 
+            it('Should filter by where with function', () => 
+            {
+                expect(DB.Factory.getQueryBuilder()
+                    .select()
+                    .set('*')
+                    .from('table')
+                    .where({
+                        'UPPER(name)': [ 'like', 'UPPER("%stackerjs%")' ]
+                    }).toSql())
+                    .to.be.equal(
+                        'SELECT * FROM table WHERE UPPER(name) LIKE UPPER("%stackerjs%");'
+                    );
+            });
+
             it('Should test parsing functions with number parameters', () => 
             {
                 expect(DB.Factory.getQueryBuilder()
