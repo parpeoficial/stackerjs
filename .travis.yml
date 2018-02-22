@@ -32,8 +32,6 @@ script:
   - npm run test
 
 after_success:
-  - ./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/coverage.json
-  - istanbul report
   - codecov
 
 deploy:
