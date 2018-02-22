@@ -32,13 +32,12 @@ script:
   - npm run test
 
 after_success:
-  - ./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/coverage.json
-  - istanbul report
   - codecov
 
 deploy:
   provider: npm
   email: "admin@parpe.com"
-  api_key: "c6853a9c-b15c-4811-8861-c1a070ecd68c"
+  api_key: $NPM_TOKEN
+  skip_cleanup: true
   on:
     branch: master

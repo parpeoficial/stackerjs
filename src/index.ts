@@ -4,17 +4,16 @@ import { Router } from 'express';
 import { json } from 'body-parser';
 import * as StackTrace from 'stacktrace-js';
 
-
-export { Http } from './Http';
-import { Http } from './Http';
+export { Http } from 'stackerjs-http';
+import { Http } from 'stackerjs-http';
 
 export { MVC } from './MVC';
 import { MVC } from './MVC';
 
 export { DB } from './DB';
 import { DB } from './DB';
-import { Integrations } from './Integrations';
 
+import { Integrations } from './Integrations';
 export { Integrations } from './Integrations';
 
 export { ORM } from './ORM';
@@ -363,11 +362,11 @@ export class MicroService
         response.status(200).send(callbackResponse);
     }
 
-    private requestCatch(err:Error, request:Http.Request, response:any):void
+    private requestCatch(err:any, request:Http.Request, response:any):void
     {
         StackTrace.fromError(err)
             .then(stacktrace => {
-                if (err instanceof Http.Exception.HttpError)
+                if (err instanceof Http.Exception.HttpError || Object.keys(err).indexOf('getMessage') >= 1)
                     return stacktrace;
                 
                 return new Integrations.Slack()
@@ -386,14 +385,14 @@ export class MicroService
                     .then(() => stacktrace);
             })
             .then(stacktrace => {
-                if (err instanceof Http.Exception.HttpError) {
-                    if (typeof err.message === 'object')
+                if (err instanceof Http.Exception.HttpError || Object.keys(err).indexOf('getMessage') >= 1) {
+                    if (typeof err.getMessage() === 'object')
                         return response
                             .status(err.getCode())
-                            .json(err.message);
+                            .json(err.getMessage());
 
                     return response.status(err.getCode())
-                        .send(err.message);
+                        .send(err.getMessage());
                 }
 
                 if (request.getHeaders()['content-type'] === 'application/json')

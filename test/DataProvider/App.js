@@ -54,6 +54,7 @@ microService.setRoute('delete', '/person/:id', (request) => {
         throw new Http.Exception.UnauthorizedError("Please you must login");
     if (request.get('id') < 25)
         throw new Http.Exception.BadRequestError('DAMN');
+        
     throw new Error('Bad Idea');
 });
 microService.registerController(new SiteController());

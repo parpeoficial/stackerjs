@@ -9,7 +9,7 @@ export namespace QueryBuilder
 
         public like(field:string, value:string):string
         {
-            value = QueryBuilderQueries.SQLTreatValue(`%${value}%`);
+            value = QueryBuilderQueries.SQLTreatValue(value.indexOf('%') >= 0 ? value : `%${value}%`);
             return `${field} LIKE ${value}`;   
         }
 
@@ -113,6 +113,10 @@ export namespace QueryBuilder
                 return JSON.stringify(value);
 
             if (value === '?' || !treatString)
+                return value;
+
+            let regexIsFunction = /[a-zA-Z\_]+\((.*?)\)/
+            if (regexIsFunction.test(value))
                 return value;
 
             return `"${value}"`;
