@@ -85,7 +85,7 @@ export namespace ORM
                 .where(expr.eq(relation.field, entity['_attributes']['id']));
 
             return ():Promise<Array<IEntity>> => DB.Factory.getConnection()
-                .query(queryBuilder.toSql())
+                .query(queryBuilder.parse())
                 .then((results:Array<any>):Promise<Array<IEntity>> => Promise.all(
                     results.map((result:any):Promise<IEntity> => this
                         .makeEntity(relation.referencedEntity, result))
@@ -103,7 +103,7 @@ export namespace ORM
                 .limit(1);
 
             return ():Promise<IEntity> => DB.Factory.getConnection()
-                .query(queryBuilder.toSql())
+                .query(queryBuilder.parse())
                 .then((results:Array<any>):Promise<IEntity> => {
                     if (results.length <= 0)
                         return Promise.resolve(null);
@@ -122,7 +122,7 @@ export namespace ORM
                 .where(expr.eq(relation.referencedField, entity['_attributes'][relation.field]));
 
             return ():Promise<Array<IEntity>> => DB.Factory.getConnection()
-                .query(queryBuilder.toSql())
+                .query(queryBuilder.parse())
                 .then((results:Array<any>):Promise<Array<IEntity>> => Promise.all(
                         results.map((result:any):Promise<IEntity> => this
                             .makeEntity(relation.referencedEntity, result))
@@ -259,7 +259,7 @@ export namespace ORM
                 .limit(1);
             
             return DB.Factory.getConnection()
-                .query(queryBuilder.toSql())
+                .query(queryBuilder.parse())
                 .then(async (results:Array<any>):Promise<IEntity> => {
                     if (results.length <= 0)
                         return null;
@@ -282,7 +282,7 @@ export namespace ORM
                 queryBuilder.order(order);
 
             return DB.Factory.getConnection()
-                .query(queryBuilder.toSql())
+                .query(queryBuilder.parse())
                 .then((results:Array<any>):Promise<Array<IEntity>> => {
                     return Promise.all(
                         results.map((result):Promise<IEntity> => {
@@ -302,7 +302,7 @@ export namespace ORM
                 .limit(1);
 
             return DB.Factory.getConnection()
-                .query(queryBuilder.toSql())
+                .query(queryBuilder.parse())
                 .then(([ result ]:Array<any>):Promise<IEntity> => {
                     if (!result)
                         return null;
@@ -322,7 +322,7 @@ export namespace ORM
                 queryBuilder.where(filters);
 
             return DB.Factory.getConnection()
-                .query(queryBuilder.toSql())
+                .query(queryBuilder.parse())
                 .then((results:Array<any>):number => results[0].total);
         }
 
@@ -335,7 +335,7 @@ export namespace ORM
                 .where(expr.eq(this.getFieldByType('pk'), entity[this.getFieldByType('pk')]));
 
             return DB.Factory.getConnection()
-                .query(queryBuilder.toSql())
+                .query(queryBuilder.parse())
                 .then(():boolean => true)
                 .catch((err:Error):boolean => {
                     this.addError(err.message);
@@ -363,7 +363,7 @@ export namespace ORM
             });
 
             return DB.Factory.getConnection()
-                .query(queryBuilder.toSql(), parameters)
+                .query(queryBuilder.parse(), parameters)
                 .then((response:StackerJS.DB.QueryResults):boolean => {
                     this.setEntityId(entity, response.lastInsertedId);
                     return true;
@@ -406,7 +406,7 @@ export namespace ORM
                 return Promise.resolve(true);
 
             return DB.Factory.getConnection()
-                .query(queryBuilder.toSql(), parameters)
+                .query(queryBuilder.parse(), parameters)
                 .then((response:StackerJS.DB.QueryResults):boolean => true)
                 .catch((err:Error):boolean => {
                     this.addError(err.message);
