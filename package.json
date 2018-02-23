@@ -8,7 +8,7 @@
         "http",
         "lib"
     ],
-    "version": "1.0.33",
+    "version": "1.0.34",
     "main": "lib/index.js",
     "types": "index.d.ts",
     "license": "MIT",
@@ -23,7 +23,7 @@
         "express": "^4.16.2",
         "mysql": "^2.15.0",
         "stackerjs-http": "^1.0.3",
-        "stackerjs-types": "^1.0.0",
+        "stackerjs-types": "^1.0.1",
         "stacktrace-js": "^2.0.0"
     },
     "devDependencies": {

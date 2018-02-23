@@ -86,7 +86,7 @@ export namespace QueryBuilder
         protected fields:any = {};
         protected _where:string;
 
-        abstract toSql():string;
+        abstract parse():string;
 
         public static SQLTreatValue(value:any, treatString:boolean=true):any
         {
@@ -245,7 +245,7 @@ export namespace QueryBuilder
         class MySQLQueryBuilderInsert extends QueryBuilderQueries
         {
 
-            public toSql():string
+            public parse():string
             {
                 return `INSERT INTO ${this.tableName} (` +
                     Object.keys(this.fields).map(field => field).join(', ') +
@@ -260,7 +260,7 @@ export namespace QueryBuilder
         class MySQLQueryBuilderUpdate extends QueryBuilderQueries
         {
 
-            public toSql():string
+            public parse():string
             {
                 return `UPDATE ${this.tableName} SET ` +
                     Object.keys(this.fields)
@@ -275,7 +275,7 @@ export namespace QueryBuilder
         class MySQLQueryBuilderDelete extends QueryBuilderQueries
         {
 
-            public toSql():string
+            public parse():string
             {
                 return `DELETE FROM ${this.tableName}` +
                     (this._where ? ` WHERE ${this._where}` : '') +
@@ -370,7 +370,7 @@ export namespace QueryBuilder
                 return this;
             }
 
-            public toSql():string
+            public parse():string
             {
                 return `SELECT ${this.fields.join(', ')}` + 
                     ` FROM ${this.tableName}` +
