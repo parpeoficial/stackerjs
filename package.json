@@ -23,7 +23,8 @@
         "express": "^4.16.2",
         "mysql": "^2.15.0",
         "stackerjs-http": "^1.0.3",
-        "stackerjs-types": "^1.0.1",
+        "stackerjs-types": "^1.0.2",
+        "stackerjs-utils": "^1.0.2",
         "stacktrace-js": "^2.0.0"
     },
     "devDependencies": {
