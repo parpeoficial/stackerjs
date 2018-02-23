@@ -1,3 +1,4 @@
+import { StackerJS } from 'stackerjs-types';
 import { Config } from './';
 import { DB } from './DB';
 
@@ -363,7 +364,7 @@ export namespace ORM
 
             return DB.Factory.getConnection()
                 .query(queryBuilder.toSql(), parameters)
-                .then((response:DB.QueryResults):boolean => {
+                .then((response:StackerJS.DB.QueryResults):boolean => {
                     this.setEntityId(entity, response.lastInsertedId);
                     return true;
                 })
@@ -406,7 +407,7 @@ export namespace ORM
 
             return DB.Factory.getConnection()
                 .query(queryBuilder.toSql(), parameters)
-                .then((response:DB.QueryResults):boolean => true)
+                .then((response:StackerJS.DB.QueryResults):boolean => true)
                 .catch((err:Error):boolean => {
                     this.addError(err.message);
                     return false;

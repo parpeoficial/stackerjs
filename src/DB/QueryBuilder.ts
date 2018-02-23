@@ -1,10 +1,11 @@
-import { DB } from './../';
+import { StackerJS } from 'stackerjs-types';
+import { DB } from './';
 
 
 export namespace QueryBuilder
 {
 
-    export class SQLCriteria implements DB.QueryCriteria
+    export class SQLCriteria implements StackerJS.DB.QueryCriteria
     {
 
         public like(field:string, value:string):string
@@ -65,20 +66,20 @@ export namespace QueryBuilder
 
     }
 
-    abstract class QueryBuilder implements DB.QueryBuilder
+    abstract class QueryBuilder implements StackerJS.DB.QueryBuilder
     {
 
-        abstract insert():DB.QueryBuilderInsert;
+        abstract insert():StackerJS.DB.QueryBuilderInsert;
 
-        abstract update():DB.QueryBuilderUpdate;
+        abstract update():StackerJS.DB.QueryBuilderUpdate;
 
-        abstract delete():DB.QueryBuilderDelete;
+        abstract delete():StackerJS.DB.QueryBuilderDelete;
 
-        abstract select():DB.QueryBuilderSelect;
+        abstract select():StackerJS.DB.QueryBuilderSelect;
 
     }
 
-    abstract class QueryBuilderQueries implements DB.QueryBuilderQueries
+    abstract class QueryBuilderQueries implements StackerJS.DB.QueryBuilderQueries
     {
 
         protected tableName:string;
@@ -132,18 +133,18 @@ export namespace QueryBuilder
             return text;
         }
 
-        public into(tableName:string):DB.QueryBuilderQueries
+        public into(tableName:string):StackerJS.DB.QueryBuilderQueries
         {
             this.tableName = tableName;
             return this;
         }
 
-        public from(tableName:string):DB.QueryBuilderQueries
+        public from(tableName:string):StackerJS.DB.QueryBuilderQueries
         {
             return this.into(tableName);
         }
 
-        public set(fields:string|any, value:string|number|Date|boolean=null):DB.QueryBuilderQueries
+        public set(fields:string|any, value:string|number|Date|boolean=null):StackerJS.DB.QueryBuilderQueries
         {
             if (typeof fields === 'object')
                 Object.keys(fields)
@@ -155,7 +156,7 @@ export namespace QueryBuilder
             return this;
         }
 
-        public where(where:string|any):DB.QueryBuilderQueries
+        public where(where:string|any):StackerJS.DB.QueryBuilderQueries
         {
             this._where = this.parseFilters(where);
             return this;
@@ -177,7 +178,7 @@ export namespace QueryBuilder
         private parseFilters(filter:string|any):string
         {
             if (typeof filter === 'object') {
-                let expr:DB.QueryCriteria = DB.Factory.getQueryCriteria();
+                let expr:StackerJS.DB.QueryCriteria = DB.Factory.getQueryCriteria();
                 return Object.keys(filter).map((field:string):string => {
                     if (Array.isArray(filter[field])) {
                         let [ comp, value ] = filter[field];
@@ -224,17 +225,17 @@ export namespace QueryBuilder
                 return new MySQLQueryBuilderInsert();
             }
 
-            public update():DB.QueryBuilderUpdate
+            public update():StackerJS.DB.QueryBuilderUpdate
             {
                 return new MySQLQueryBuilderUpdate();
             }
 
-            public delete():DB.QueryBuilderDelete
+            public delete():StackerJS.DB.QueryBuilderDelete
             {
                 return new MySQLQueryBuilderDelete();
             }
 
-            public select():DB.QueryBuilderSelect
+            public select():StackerJS.DB.QueryBuilderSelect
             {
                 return new MySQLQueryBuilderSelect();
             }
