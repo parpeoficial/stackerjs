@@ -9,6 +9,7 @@
         "lib"
     ],
     "version": "1.0.34",
+    "bin": "bin/forklift.js",
     "main": "lib/index.js",
     "types": "index.d.ts",
     "license": "MIT",
@@ -16,7 +17,6 @@
         "type": "git",
         "url": "https://github.com/parpeoficial/stackerjs"
     },
-
     "dependencies": {
         "@types/node": "^8.9.4",
         "body-parser": "^1.18.2",
@@ -33,7 +33,6 @@
         "mocha": "^4.1.0",
         "remap-istanbul": "^0.9.6"
     },
-    
     "scripts": {
         "build": "tsc",
         "test": "istanbul cover ./node_modules/mocha/bin/_mocha test && ./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/coverage.json && istanbul report"

@@ -18,7 +18,6 @@ export { Integrations } from './Integrations';
 
 export { ORM } from './ORM';
 
-
 import { Config, Cache } from 'stackerjs-utils';
 export { Config, Cache } from 'stackerjs-utils';
 
