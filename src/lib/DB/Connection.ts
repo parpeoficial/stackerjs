@@ -1,12 +1,12 @@
 import { createPool, createConnection } from 'mysql';
 import { Config } from './../';
-import { DB } from './../';
+import { StackerJS } from 'stackerjs-types';
 
 
 export namespace Connection
 {
 
-    abstract class Connection implements DB.Connection
+    abstract class Connection implements StackerJS.DB.Connection
     {
 
         protected host:string;
@@ -22,7 +22,7 @@ export namespace Connection
 
         abstract makeConnection():any;
 
-        abstract query(query:Array<string>|string, params:any):Promise<DB.QueryResults|Array<any>>;
+        abstract query(query:Array<string>|string, params:any):Promise<StackerJS.DB.QueryResults|Array<any>>;
 
         public constructor()
         {
@@ -80,7 +80,7 @@ export namespace Connection
                             err ? reject(err) : resolve(result)
                     );
                 })
-                    .then((result:any):DB.QueryResults|Array<any> => {
+                    .then((result:any):StackerJS.DB.QueryResults|Array<any> => {
                         if (this.getQueryType(query) === 'READ')
                             return result;
 

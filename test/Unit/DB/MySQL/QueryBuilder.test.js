@@ -18,7 +18,7 @@ describe('QueryBuilderTest', () =>
                         'birth_year': 1992,
                         'status': true
                     })
-                    .toSql()).to.be.equal(
+                    .parse()).to.be.equal(
                         'INSERT INTO table_name (`name`, `birth_year`, `status`) ' +
                         'VALUES ("person name", 1992, 1);'
                     );
@@ -31,7 +31,7 @@ describe('QueryBuilderTest', () =>
                     .set('user_id', 1)
                     .set('message', 'Inserted something on database')
                     .set('when', new Date('2017-10-20 16:50:00'))
-                    .toSql()).to.be.equal(
+                    .parse()).to.be.equal(
                         'INSERT INTO logs (`user_id`, `message`, `when`) ' +
                         'VALUES (1, "Inserted something on database", "2017-10-20 16:50:00");'
                     );
@@ -46,7 +46,7 @@ describe('QueryBuilderTest', () =>
                     .select()
                     .from('table')
                     .set(['CONCAT(LOWER(table.first_name), " ", table.last_name)', 'full_name'])
-                    .toSql())
+                    .parse())
                     .to.be.equal(
                         'SELECT CONCAT(LOWER(table.first_name), " ", table.last_name) AS full_name ' +
                         'FROM table;'
@@ -61,7 +61,7 @@ describe('QueryBuilderTest', () =>
                     .from('table')
                     .where({
                         'UPPER(name)': [ 'like', 'UPPER("%stackerjs%")' ]
-                    }).toSql())
+                    }).parse())
                     .to.be.equal(
                         'SELECT * FROM table WHERE UPPER(name) LIKE UPPER("%stackerjs%");'
                     );
@@ -73,7 +73,7 @@ describe('QueryBuilderTest', () =>
                     .select()
                     .from('table')
                     .set(['ACOS(COS(RADIANS(-23.120381)))', 'radius'])
-                    .toSql())
+                    .parse())
                     .to.be.equal(
                         'SELECT ACOS(COS(RADIANS(-23.120381))) AS radius FROM table;'
                     );
@@ -85,7 +85,7 @@ describe('QueryBuilderTest', () =>
                     .select()
                     .from('table_name')
                     .set('id', 'name', 'table_name.active')
-                    .toSql()).to.be.equal(
+                    .parse()).to.be.equal(
                         'SELECT `table_name`.`id`, `table_name`.`name`, `table_name`.`active` ' +
                         'FROM table_name;'
                     );
@@ -98,7 +98,7 @@ describe('QueryBuilderTest', () =>
                     .from('table_name')
                     .set('table_name.*')
                     .join('LEFT', 'other_table', 'table_name.id = other_table.fk_id')
-                    .toSql()).to.be.equal(
+                    .parse()).to.be.equal(
                         'SELECT `table_name`.* FROM table_name ' +
                         'LEFT JOIN other_table ON table_name.id = other_table.fk_id;'
                     );
@@ -111,7 +111,7 @@ describe('QueryBuilderTest', () =>
                     .from('table_name')
                     .set('*')
                     .group('table_name.average')
-                    .toSql()).to.be.equal(
+                    .parse()).to.be.equal(
                         'SELECT `table_name`.* FROM table_name ' +
                         'GROUP BY table_name.average;'
                     );
@@ -125,7 +125,7 @@ describe('QueryBuilderTest', () =>
                     .set('id', ['first_name', 'name'])
                     .limit(10)
                     .offset(20)
-                    .toSql()).to.be.equal(
+                    .parse()).to.be.equal(
                         'SELECT `table_name`.`id`, `table_name`.`first_name` AS name ' +
                         'FROM table_name LIMIT 10 OFFSET 20;'
                     );
@@ -138,7 +138,7 @@ describe('QueryBuilderTest', () =>
                     .from('table_name')
                     .set('*')
                     .where('active = 1')
-                    .toSql()).to.be.equal(
+                    .parse()).to.be.equal(
                         'SELECT `table_name`.* FROM table_name WHERE active = 1;'
                     );
             });
@@ -153,7 +153,7 @@ describe('QueryBuilderTest', () =>
                     .where(
                         criteria.andX(criteria.eq('active', 1), 
                         criteria.gt('value', 100), criteria.lt('value', 1000))
-                    ).toSql()).to.be.equal(
+                    ).parse()).to.be.equal(
                         'SELECT `table_name`.* FROM table_name ' +
                         'WHERE (active = 1 AND value > 100 AND value < 1000);'
                     );
@@ -170,7 +170,7 @@ describe('QueryBuilderTest', () =>
                         .having(
                             criteria.eq('active', false)
                         )
-                        .toSql()
+                        .parse()
                 ).to.be.equal(
                     'SELECT * FROM table_name ' +
                     'HAVING active = 0;' 
@@ -185,7 +185,7 @@ describe('QueryBuilderTest', () =>
                         .set('*')
                         .from('table_name')
                         .order(['name DESC'])
-                        .toSql()
+                        .parse()
                 ).to.be.equal('SELECT * FROM table_name ORDER BY name DESC;');
             });
         });
@@ -199,7 +199,7 @@ describe('QueryBuilderTest', () =>
                     .into('table_name')
                     .set('name', 'other person')
                     .set('status', false)
-                    .toSql()).to.be.equal(
+                    .parse()).to.be.equal(
                         'UPDATE table_name SET `name` = "other person", `status` = 0;'
                     );
             });
@@ -212,7 +212,7 @@ describe('QueryBuilderTest', () =>
                     .into('table_name')
                     .set('active', false)
                     .where(criteria.orX(criteria.neq('active', false), criteria.lte('birth_date', new Date('1992-12-30 08:25:01'))))
-                    .toSql()).to.be.equal(
+                    .parse()).to.be.equal(
                         'UPDATE table_name SET `active` = 0 ' +
                         'WHERE (active <> 0 OR birth_date <= "1992-12-30 08:25:01");'
                     );
@@ -226,7 +226,7 @@ describe('QueryBuilderTest', () =>
                 expect(DB.Factory.getQueryBuilder()
                     .delete()
                     .from('table_name')
-                    .toSql()).to.be.equal('DELETE FROM table_name;');
+                    .parse()).to.be.equal('DELETE FROM table_name;');
             });
 
             it('Should create a delete filtered query', () => 
@@ -236,7 +236,7 @@ describe('QueryBuilderTest', () =>
                     .delete()
                     .from('table_name')
                     .where(criteria.gte('id', 3))
-                    .toSql()).to.be.equal('DELETE FROM table_name WHERE id >= 3;');
+                    .parse()).to.be.equal('DELETE FROM table_name WHERE id >= 3;');
             });
         });
     });
