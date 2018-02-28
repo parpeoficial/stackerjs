@@ -8,8 +8,7 @@
         "http",
         "lib"
     ],
-    "version": "1.0.35",
-    "bin": "bin/forklift.js",
+    "version": "1.0.36",
     "main": "lib/index.js",
     "types": "index.d.ts",
     "license": "MIT",
@@ -35,7 +34,7 @@
         "mocha": "^4.1.0",
         "remap-istanbul": "^0.9.6"
     },
-    
+
     "scripts": {
         "build": "tsc",
         "test": "istanbul cover ./node_modules/mocha/bin/_mocha test && ./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/coverage.json && istanbul report"
