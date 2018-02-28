@@ -1,7 +1,6 @@
-import { Config } from './../';
-import { QueryBuilder } from './QueryBuilder';
-import { Connection } from './Connection';
 import { StackerJS } from 'stackerjs-types';
+import { Config } from 'stackerjs-utils';
+import { Connection } from './Connection';
 
 
 export namespace DB
@@ -13,14 +12,16 @@ export namespace DB
 
         public static getQueryBuilder():StackerJS.DB.QueryBuilder
         {
-            if (this.getDriver() === 'mysql')
-                return new QueryBuilder.MySQL.MySQLQueryBuilder();
+            const { QueryBuilder } = require('stackerjs-db-mysql-adapter');
+
+            return new QueryBuilder();
         }
 
         public static getQueryCriteria():StackerJS.DB.QueryCriteria
         {
-            if (this.getDriver() === 'mysql')
-                return new QueryBuilder.SQLCriteria();
+            const { QueryCriteria } = require('stackerjs-db-mysql-adapter');
+
+            return new QueryCriteria();
         }
 
         public static getConnection():StackerJS.DB.Connection
@@ -28,7 +29,7 @@ export namespace DB
             if (this.dbConnection)
                 return this.dbConnection;
 
-            if (this.getDriver() === 'mysql')
+            if (this.getDriver() === 'mysql' || this.getDriver() === 'stackerjs-db-mysql-adapter')
                 return this.dbConnection = new Connection.MySQL.MySQLConnection();
         }
 

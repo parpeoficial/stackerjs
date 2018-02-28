@@ -1,5 +1,7 @@
 [![Travis](https://img.shields.io/travis/parpeoficial/stackerjs.svg)](https://travis-ci.org/parpeoficial/stackerjs)
-[![Codecov](https://codecov.io/gh/parpeoficial/stackerjs/branch/master/graph/badge.svg)](https://codecov.io/gh/parpeoficial/stackerjs)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/f419329afe392badee4c/test_coverage)](https://codeclimate.com/github/parpeoficial/stackerjs/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/f419329afe392badee4c/maintainability)](https://codeclimate.com/github/parpeoficial/stackerjs/maintainability)
+[![Dependencies](https://img.shields.io/david/parpeoficial/stackerjs.svg)](https://david-dm.org/parpeoficial/stackerjs)
 [![npm](https://img.shields.io/npm/dt/stackerjs.svg)](https://www.npmjs.com/package/stackerjs)
 
 [![NPM](https://nodei.co/npm/stackerjs.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/stackerjs/)
