@@ -190,7 +190,7 @@ describe('ORMTest', function ()
                     .then(() => done());
             });
 
-            it('Should filter through entities by object', (done) => 
+            it('Should filter through entities by object', done => 
             {
                 new ContactRepository()
                     .find({
@@ -199,7 +199,7 @@ describe('ORMTest', function ()
                             'like': 'San'
                         }
                     })
-                    .then((entities) => {
+                    .then(entities => {
                         expect(entities).to.be.instanceOf(Array);
                         expect(entities.length).to.be.equal(1);
                     })

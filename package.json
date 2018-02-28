@@ -22,8 +22,9 @@
         "body-parser": "^1.18.2",
         "express": "^4.16.2",
         "mysql": "^2.15.0",
+        "stackerjs-db-mysql-adapter": "^0.9.9",
         "stackerjs-http": "^1.0.3",
-        "stackerjs-types": "^1.0.2",
+        "stackerjs-types": "^1.0.5",
         "stackerjs-utils": "^1.0.2",
         "stacktrace-js": "^2.0.0"
     },
