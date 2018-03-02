@@ -10,54 +10,73 @@ describe('ORMTest', function ()
     this.timeout(6000);
     before(function (done) 
     {
-        let conn = DB.Factory.getConnection();
-        conn.query([
-            "CREATE TABLE IF NOT EXISTS contacts ( \
-                id         INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
-                first_name VARCHAR(100)                       NOT NULL, \
-                last_name  VARCHAR(100)                       NOT NULL, \
-                status     TINYINT(1)                         DEFAULT 1, \
-                life_years TINYINT(3)                         DEFAULT 18, \
-                extra      TEXT                               NOT NULL, \
-                created_at INTEGER                            NULL, \
-                updated_at INTEGER                            NULL \
-            );",
-            "CREATE TABLE IF NOT EXISTS contact_addresses ( \
-                id         INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
-                contact_id INTEGER                            NOT NULL, \
-                extra      TEXT                               NOT NULL \
-            );",
-            "CREATE TABLE IF NOT EXISTS contact_phones ( \
-                id           INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
-                contact_id   INTEGER                            NOT NULL, \
-                phone_number VARCHAR(20)                        NOT NULL, \
-                active       BOOLEAN                            DEFAULT TRUE \
-            );",
-            "INSERT INTO contact_phones (contact_id, phone_number) VALUES (1, '123');",
-            "INSERT INTO contact_phones (contact_id, phone_number) VALUES (1, '456');",
-            "INSERT INTO contact_phones (contact_id, phone_number) VALUES (1, '789');",
-            "CREATE TABLE IF NOT EXISTS contacts_schedules ( \
-            id          INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
-            contact_id  INTEGER                            NOT NULL, \
-            schedule_id INTEGER                            NOT NULL \
-            );",
-            "INSERT INTO contacts_schedules (contact_id, schedule_id) VALUES (1, 1);",
-            "INSERT INTO contacts_schedules (contact_id, schedule_id) VALUES (1, 2);",
-            "INSERT INTO contacts_schedules (contact_id, schedule_id) VALUES (1, 3);",
-            "CREATE TABLE IF NOT EXISTS schedules ( \
-                id         INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL, \
-                start_time DATETIME                           NOT NULL, \
-                end_time   DATETIME                           NOT NULL, \
-                extra      TEXT                               NULL,\
-                active     BOOLEAN DEFAULT TRUE \
-            );",
-            "INSERT INTO schedules (start_time, end_time, extra) \
-            VALUES ('2017-10-02 17:00:00', '2017-10-02 17:30:00', '_');",
-            "INSERT INTO schedules (start_time, end_time, extra) \
-            VALUES ('2017-10-03 17:00:00', '2017-10-03 17:30:00', '_');",
-            "INSERT INTO schedules (start_time, end_time, extra) \
-            VALUES ('2017-10-04 17:00:00', '2017-10-04 17:30:00', '_');",
-        ]).then(() => done());
+        let qb = DB.Factory.getQueryBuilder();
+        Promise.all(
+            [
+                qb.table().create('contacts').set({
+                    'id': { 'type': 'pk', 'required': true },
+                    'first_name': { 'type': 'varchar', 'size': 100, 'required': true },
+                    'last_name': { 'type': 'varchar', 'size': 100, 'required': true },
+                    'status': { 'type': 'tinyint', 'size': 1, 'defaultValue': 1 },
+                    'life_years': { 'type': 'tinyint', 'size': 1, 'defaultValue': 18 },
+                    'extra': { 'type': 'text', 'required': true },
+                    'created_at': { 'type': 'integer' },
+                    'updated_at': { 'type': 'integer' }
+                }).execute(),
+
+                qb.table().create('contacts_schedules').set({
+                    'id': { 'type': 'pk', 'required': true },
+                    'contact_id': { 'type': 'int', 'required': true },
+                    'schedule_id': { 'type': 'int', 'required': true }
+                }).execute().then(() => Promise.all([
+                    qb.insert().into('contacts_schedules')
+                        .set({ 'contact_id': 1, 'schedule_id': 1 })
+                        .execute(),
+                    qb.insert().into('contacts_schedules')
+                        .set({ 'contact_id': 1, 'schedule_id': 2 })
+                        .execute(),
+                    qb.insert().into('contacts_schedules')
+                        .set({ 'contact_id': 1, 'schedule_id': 3 })
+                        .execute()
+                ])),
+
+                qb.table().create('schedules').set({
+                    'id': { 'type': 'pk', 'required': true },
+                    'start_time': { 'type': 'datetime', 'required': true },
+                    'end_time': { 'type': 'datetime', 'required': true },
+                    'extra': { 'type': 'text' },
+                    'active': { 'type': 'boolean', 'defaultValue': true }
+                }).execute().then(() => Promise.all([
+                    qb.insert().into('schedules')
+                        .set({ 'start_time': '2017-10-02 17:00:00', 'end_time': '2017-10-02 17:30:00', 'extra': '_' })
+                        .execute(),
+                    qb.insert().into('schedules')
+                        .set({ 'start_time': '2017-10-03 17:00:00', 'end_time': '2017-10-03 17:30:00', 'extra': '_' })
+                        .execute(),
+                    qb.insert().into('schedules')
+                        .set({ 'start_time': '2017-10-04 17:00:00', 'end_time': '2017-10-04 17:30:00', 'extra': '_' })
+                        .execute()
+                ])),
+
+                qb.table().create('contact_addresses').set({
+                    'id': { 'type': 'pk', 'required': true },
+                    'contact_id': { 'type': 'int', 'required': true },
+                    'extra': { 'type': 'text' }
+                }).execute(),
+
+                qb.table().create('contact_phones').set({
+                    'id': { 'type': 'pk', 'required': true },
+                    'contact_id': { 'type': 'int', 'required': true },
+                    'phone_number': { 'type': 'varchar', 'size': 20, 'required': true },
+                    'active': { 'type': 'boolean', 'defaultValue': true }
+                }).execute().then(() => Promise.all([
+                    qb.insert().into('contact_phones').set({ 'id': 1, 'contact_id': 1, 'phone_number': '123' }).execute(),
+                    qb.insert().into('contact_phones').set({ 'id': 2, 'contact_id': 1, 'phone_number': '456' }).execute(),
+                    qb.insert().into('contact_phones').set({ 'id': 3, 'contact_id': 1, 'phone_number': '789' }).execute()
+                ]))
+            ]
+        )
+        .then(() => done());
     });
 
     describe('EntityTest', () => 
@@ -445,15 +464,15 @@ describe('ORMTest', function ()
 
     after(function (done) 
     {
-        let connection = DB.Factory.getConnection();
-        connection.query([
-            'DROP TABLE contacts_schedules;',
-            'DROP TABLE contact_phones;',
-            'DROP TABLE contacts;',
-            'DROP TABLE schedules;'
+        let qb = DB.Factory.getQueryBuilder();
+        Promise.all([
+            qb.table().drop('contacts').execute(),
+            qb.table().drop('contacts_schedules').execute(),
+            qb.table().drop('schedules').execute(),
+            qb.table().drop('contact_addresses').execute(),
+            qb.table().drop('contact_phones').execute(),
         ])
-            .then(() => connection.close())
-            .then(() => done());
+        .then(() => done())
     });
 
 });

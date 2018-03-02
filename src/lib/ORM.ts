@@ -1,6 +1,6 @@
 import { StackerJS } from 'stackerjs-types';
 import { Config } from './';
-import { DB } from './DB';
+import { DB } from 'stackerjs-db';
 
 
 export namespace ORM
@@ -84,8 +84,7 @@ export namespace ORM
                 )
                 .where(expr.eq(relation.field, entity['_attributes']['id']));
 
-            return ():Promise<Array<IEntity>> => DB.Factory.getConnection()
-                .query(queryBuilder.parse())
+            return ():Promise<Array<IEntity>> => queryBuilder.execute()
                 .then((results:Array<any>):Promise<Array<IEntity>> => Promise.all(
                     results.map((result:any):Promise<IEntity> => this
                         .makeEntity(relation.referencedEntity, result))
@@ -102,8 +101,7 @@ export namespace ORM
                 .where(expr.eq(relation.referencedField, entity['_attributes'][relation.field]))
                 .limit(1);
 
-            return ():Promise<IEntity> => DB.Factory.getConnection()
-                .query(queryBuilder.parse())
+            return ():Promise<IEntity> => queryBuilder.execute()
                 .then((results:Array<any>):Promise<IEntity> => {
                     if (results.length <= 0)
                         return Promise.resolve(null);
@@ -121,8 +119,7 @@ export namespace ORM
                 .set('*')
                 .where(expr.eq(relation.referencedField, entity['_attributes'][relation.field]));
 
-            return ():Promise<Array<IEntity>> => DB.Factory.getConnection()
-                .query(queryBuilder.parse())
+            return ():Promise<Array<IEntity>> => queryBuilder.execute()
                 .then((results:Array<any>):Promise<Array<IEntity>> => Promise.all(
                         results.map((result:any):Promise<IEntity> => this
                             .makeEntity(relation.referencedEntity, result))
@@ -258,8 +255,7 @@ export namespace ORM
                 .where(expr.eq(this.getFieldByType('pk'), id))
                 .limit(1);
             
-            return DB.Factory.getConnection()
-                .query(queryBuilder.parse())
+            return queryBuilder.execute()
                 .then(async (results:Array<any>):Promise<IEntity> => {
                     if (results.length <= 0)
                         return null;
@@ -268,7 +264,7 @@ export namespace ORM
                 });
         }
 
-        public find(filter:string|any, limit:number=100, offset:number=0, order?:string|Array<string>):Promise<Array<IEntity>>
+        public find(filter:string|any, limit:number=100, offset:number=0, order?:Array<string>):Promise<Array<IEntity>>
         {
             let queryBuilder = DB.Factory.getQueryBuilder()
                 .select()
@@ -279,10 +275,9 @@ export namespace ORM
                 .offset(offset);
 
             if (order)
-                queryBuilder.order(order);
+                queryBuilder.order(...order);
 
-            return DB.Factory.getConnection()
-                .query(queryBuilder.parse())
+            return queryBuilder.execute()
                 .then((results:Array<any>):Promise<Array<IEntity>> => {
                     return Promise.all(
                         results.map((result):Promise<IEntity> => {
@@ -301,8 +296,7 @@ export namespace ORM
                 .where(filter)
                 .limit(1);
 
-            return DB.Factory.getConnection()
-                .query(queryBuilder.parse())
+            return queryBuilder.execute()
                 .then(([ result ]:Array<any>):Promise<IEntity> => {
                     if (!result)
                         return null;
@@ -321,8 +315,7 @@ export namespace ORM
             if (filters)
                 queryBuilder.where(filters);
 
-            return DB.Factory.getConnection()
-                .query(queryBuilder.parse())
+            return queryBuilder.execute()
                 .then((results:Array<any>):number => results[0].total);
         }
 
@@ -334,8 +327,7 @@ export namespace ORM
                 .from(this.entity.metadata().table)
                 .where(expr.eq(this.getFieldByType('pk'), entity[this.getFieldByType('pk')]));
 
-            return DB.Factory.getConnection()
-                .query(queryBuilder.parse())
+            return queryBuilder.execute()
                 .then(():boolean => true)
                 .catch((err:Error):boolean => {
                     this.addError(err.message);
@@ -356,27 +348,27 @@ export namespace ORM
 
             this.entity.metadata().fields.forEach((field):void => 
             {
-                if (field.type !== 'pk' && entity[field.alias ? field.alias : field.name] !== null) {
-                    queryBuilder.set(field.name, '?');
-                    parameters.push(queryBuilder.treatValue(entity[field.alias ? field.alias : field.name], false));
-                }
+                if (field.type !== 'pk' && 
+                    entity[field.alias ? field.alias : field.name] !== null &&
+                    typeof entity[field.alias ? field.alias : field.name] !== 'undefined')
+                    queryBuilder.set(field.name, queryBuilder.treatValue(entity[field.alias ? field.alias : field.name], false));
             });
 
-            return DB.Factory.getConnection()
-                .query(queryBuilder.parse(), parameters)
+            return queryBuilder.execute()
                 .then((response:StackerJS.DB.QueryResults):boolean => {
                     this.setEntityId(entity, response.lastInsertedId);
                     return true;
                 })
                 .catch((err:Error):boolean => {
                     this.addError(err.message);
-                    return false
+                    console.log(this.errors);
+                    return false;
                 });
         }
 
         protected update(entity:IEntity):Promise<boolean>
         {
-            let parameters:Array<any> = [];
+            let parameters:number = 1;
             let expr = DB.Factory.getQueryCriteria();
             let queryBuilder = DB.Factory.getQueryBuilder()
                 .update()
@@ -385,7 +377,7 @@ export namespace ORM
             let updatedAt:string = this.getFieldByType('updated_at');
             if (updatedAt)
                 entity[updatedAt] = parseInt(new Date().getTime().toString().slice(0, -3));
-
+            
             this.entity.metadata().fields.forEach((field):void => 
             {
                 let fieldName:string = field.alias ? field.alias : field.name;
@@ -393,20 +385,20 @@ export namespace ORM
                     if (field.type !== 'created_at' && 
                     queryBuilder.treatValue(entity[fieldName]) !== 
                     queryBuilder.treatValue(entity['_attributes'][field.name])) {
-                        queryBuilder.set(field.name, '?');
-                        parameters.push(queryBuilder.treatValue(entity[fieldName], false));
+                        parameters++;
+                        queryBuilder.set(field.name, queryBuilder.treatValue(entity[fieldName], false));
                     }
                 }
             });
-            
-            queryBuilder.where(expr.eq(this.getFieldByType('pk'), "?"));
-            parameters.push(entity['_attributes'][this.getFieldByType('pk')]);
-
-            if (parameters.length <= 1)
+            if (parameters <= 1)
                 return Promise.resolve(true);
+            
+            queryBuilder.where(expr.eq(
+                this.getFieldByType('pk'), 
+                entity['_attributes'][this.getFieldByType('pk')]
+            ));
 
-            return DB.Factory.getConnection()
-                .query(queryBuilder.parse(), parameters)
+            return queryBuilder.execute()
                 .then((response:StackerJS.DB.QueryResults):boolean => true)
                 .catch((err:Error):boolean => {
                     this.addError(err.message);

@@ -16,14 +16,12 @@
     "type": "git",
     "url": "https://github.com/parpeoficial/stackerjs"
   },
-
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "mysql": "^2.15.0",
-    "stackerjs-db-mysql-adapter": "^0.9.9",
+    "stackerjs-db": "^1.0.1",
     "stackerjs-http": "^1.0.3",
-    "stackerjs-types": "^1.0.5",
+    "stackerjs-types": "^1.0.8",
     "stackerjs-utils": "^1.0.2",
     "stacktrace-js": "^2.0.0"
   },
@@ -32,9 +30,9 @@
     "@types/node": "^9.4.6",
     "chai": "^4.1.2",
     "mocha": "^4.1.0",
-    "remap-istanbul": "^0.9.6"
+    "remap-istanbul": "^0.9.6",
+    "stackerjs-db-mysql-adapter": "^1.0.0"
   },
-  
   "scripts": {
     "build": "tsc",
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha test && ./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/coverage.json && istanbul report"

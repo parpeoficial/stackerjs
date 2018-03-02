@@ -10,8 +10,8 @@ import { Http } from 'stackerjs-http';
 export { MVC } from './MVC';
 import { MVC } from './MVC';
 
-export { DB } from './DB';
-import { DB } from './DB';
+export { DB } from 'stackerjs-db';
+import { DB } from 'stackerjs-db';
 
 import { Integrations } from './Integrations';
 export { Integrations } from './Integrations';
