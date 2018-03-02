@@ -361,7 +361,6 @@ export namespace ORM
                 })
                 .catch((err:Error):boolean => {
                     this.addError(err.message);
-                    console.log(this.errors);
                     return false;
                 });
         }
