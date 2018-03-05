@@ -16,7 +16,7 @@ import { DB } from 'stackerjs-db';
 import { Integrations } from './Integrations';
 export { Integrations } from './Integrations';
 
-export { ORM } from './ORM';
+export { ORM } from 'stackerjs-orm';
 
 import { Config, Cache } from 'stackerjs-utils';
 export { Config, Cache } from 'stackerjs-utils';

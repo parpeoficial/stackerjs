@@ -70,4 +70,10 @@ describe('ORMErrorsTest', () =>
         });
     });
 
+    after(() => {
+        let conn = DB.Factory.getConnection();
+        if (conn.isConnected())
+            conn.close();
+    });
+
 });
