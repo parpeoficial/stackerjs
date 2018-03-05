@@ -9,7 +9,7 @@ describe('AppTest', function()
     const PORT = 3001;
 
     this.timeout(3000)
-    beforeEach(function () { this.server = app.run(PORT); });
+    before(function () { this.server = app.run(PORT); });
     
     describe('Testing HttpExceptions', () => 
     {
@@ -253,15 +253,15 @@ describe('AppTest', function()
                     .then(() => done());
         });
 
-        it('Should work okay with multiple actions', (done) => 
+        it('Should work okay with multiple actions', done => 
         {
             new Http.MakeRequest()
                 .setPort(PORT)
                 .get('/multiple')
                 .then((httpResponse) => {
-                    expect(httpResponse.getContent()).to.be.equal('Executed multiple')
+                    expect(httpResponse.getContent()).to.be.equal('Executed multiple');
                 })
-                    .then(() => done());
+                .then(() => done());
         });
     });
 
@@ -317,5 +317,6 @@ describe('AppTest', function()
         });
     });
 
-    afterEach(function () { this.server.close(); });
+    after(function () { this.server.close(); });
+
 });

@@ -12,7 +12,7 @@ class SiteController extends MVC.Controller
                 '/home': 'indexAction',
                 '/about-us': 'aboutUsAction',
                 '/app-version': 'appVersionAction',
-                '/multiple': [
+                'multiple': [
                     'multi', 'ple'
                 ]
             }
@@ -38,9 +38,11 @@ class SiteController extends MVC.Controller
 
     ple()
     {
-        return new ContactRepository()
-            .find()
-            .catch(() => "Executed multiple");
+        try {
+            return new ContactRepository().find();
+        } catch (err) {
+            return "Executed multiple";
+        }
     }
 
 }

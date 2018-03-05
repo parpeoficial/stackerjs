@@ -23,7 +23,7 @@ before_script:
   - echo APP_SECRET = I4mY0urP455Phr4s3 >> .env
   - echo APP_INFO_ROUTE = /app/info >> .env
   - echo "# DB AUTH" >> .env
-  - echo DB_DRIVER=mysql >> .env
+  - echo DB_DRIVER=stackerjs-db-mysql-adapter >> .env
   - echo DB_HOST=127.0.0.1 >> .env
   - echo DB_USER=root >> .env
   - echo DB_PASS= >> .env

@@ -10,13 +10,13 @@ import { Http } from 'stackerjs-http';
 export { MVC } from './MVC';
 import { MVC } from './MVC';
 
-export { DB } from './DB';
-import { DB } from './DB';
+export { DB } from 'stackerjs-db';
+import { DB } from 'stackerjs-db';
 
 import { Integrations } from './Integrations';
 export { Integrations } from './Integrations';
 
-export { ORM } from './ORM';
+export { ORM } from 'stackerjs-orm';
 
 import { Config, Cache } from 'stackerjs-utils';
 export { Config, Cache } from 'stackerjs-utils';
@@ -64,7 +64,7 @@ export class App
 
         microservice.getRoutes()
             .map(route => Object.assign(route, {
-                'route': prefix + (route.route[0] === '/' ? route.route.substr(1) : route.route)
+                'route': prefix + route.route.substr(1)
             }))
             .forEach(route => this.appRoutes.push(route));
     }
@@ -127,6 +127,9 @@ export class MicroService
     {
         if (!Array.isArray(callbacks))
             callbacks = [callbacks];
+
+        if (route.substr(0, 1) !== '/')
+            route = `/${route}`;
 
         this.routes.push({
             method, route
