@@ -64,7 +64,7 @@ export class App
 
         microservice.getRoutes()
             .map(route => Object.assign(route, {
-                'route': prefix + (route.route[0] === '/' ? route.route.substr(1) : route.route)
+                'route': prefix + route.route.substr(1)
             }))
             .forEach(route => this.appRoutes.push(route));
     }
@@ -127,6 +127,9 @@ export class MicroService
     {
         if (!Array.isArray(callbacks))
             callbacks = [callbacks];
+
+        if (route.substr(0, 1) !== '/')
+            route = `/${route}`;
 
         this.routes.push({
             method, route
