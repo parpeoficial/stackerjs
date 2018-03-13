@@ -21,7 +21,7 @@
     "express": "^4.16.2",
     "stackerjs-http": "^1.0.3",
     "stackerjs-orm": "^1.0.3",
-    "stackerjs-types": "^1.0.8",
+    "stackerjs-types": "^1.0.11",
     "stackerjs-utils": "^1.0.2",
     "stacktrace-js": "^2.0.0"
   },
