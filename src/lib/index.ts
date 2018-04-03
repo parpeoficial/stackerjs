@@ -77,6 +77,7 @@ export class MicroService {
     private name: string;
     private route: Router;
     private routes: Array<any> = [];
+    private answered: boolean = false;
 
     public constructor(microServiceName: string = 'Micro StackerJS') {
         this.name = microServiceName;
@@ -84,35 +85,8 @@ export class MicroService {
     }
 
     public setMiddleware(middleware: MVC.IMiddleware): void {
-        let answered: boolean = false;
-        this.route.use((request, response, next): void => {
-            let treatedRequest: Http.Request = new Http.Request(request);
-            Promise.resolve(this.requestStarted())
-                .then(() => {
-                    try {
-                        return middleware.do(treatedRequest);
-                    } catch (err) {
-                        throw err;
-                    }
-                })
-                .then((callbackResponse: string | Http.Response) => {
-                    if (typeof callbackResponse !== 'undefined')
-                        answered = true;
-
-                    return this.requestThen(callbackResponse, response)
-                })
-                .catch((err: Error) => {
-                    answered = true;
-                    return this.requestCatch(err, treatedRequest, response)
-                })
-                .then(() => {
-                    if (!answered)
-                        return next();
-
-                    answered = false;
-                    return this.requestEnded()
-                });
-        });
+        this.route.use((request, response, next): void =>
+            this.executeHttp(middleware.do, request, response, next));
     }
 
     public setRoute(method: string, route: string, callbacks: Array<Function> | Function): void {
@@ -126,37 +100,10 @@ export class MicroService {
             method, route
         });
 
-        let answered: boolean = false;
         this.route[method](
             route,
-            callbacks.map((callback: Function) => (request, response, next: Function) => {
-                let treatedRequest: Http.Request = new Http.Request(request);
-                Promise.resolve(this.requestStarted())
-                    .then(() => {
-                        try {
-                            return callback(treatedRequest);
-                        } catch (err) {
-                            throw err;
-                        }
-                    })
-                    .then((callbackResponse: string | Http.Response) => {
-                        if (typeof callbackResponse !== 'undefined')
-                            answered = true;
-
-                        return this.requestThen(callbackResponse, response)
-                    })
-                    .catch((err: Error) => {
-                        answered = true;
-                        return this.requestCatch(err, treatedRequest, response);
-                    })
-                    .then(() => {
-                        if (!answered)
-                            return next();
-
-                        answered = false;
-                        return this.requestEnded()
-                    });
-            })
+            callbacks.map((callback: Function) =>
+                (request, response, next) => this.executeHttp(callback, request, response, next))
         );
     }
 
@@ -185,6 +132,35 @@ export class MicroService {
 
     public getRoutes(): Array<any> {
         return this.routes;
+    }
+
+    private executeHttp(callback, request, response, next) {
+        let treatedRequest: Http.Request = new Http.Request(request);
+        Promise.resolve(this.requestStarted())
+            .then(() => {
+                try {
+                    return callback(treatedRequest);
+                } catch (err) {
+                    throw err;
+                }
+            })
+            .then((callbackResponse: string | Http.Response) => {
+                if (typeof callbackResponse !== 'undefined')
+                    this.answered = true;
+
+                return this.requestThen(callbackResponse, response)
+            })
+            .catch((err: Error) => {
+                this.answered = true;
+                return this.requestCatch(err, treatedRequest, response);
+            })
+            .then(() => {
+                if (!this.answered)
+                    return next();
+
+                this.answered = false;
+                return this.requestEnded()
+            });
     }
 
     private requestThen(callbackResponse: string | Http.Response, response: any): void {
