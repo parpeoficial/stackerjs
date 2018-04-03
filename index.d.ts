@@ -1,4 +1,3 @@
-import { StackerJS } from 'stackerjs-types';
-
+import { StackerJS } from "stackerjs-types";
 
 export = StackerJS;
