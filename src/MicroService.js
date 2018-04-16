@@ -74,18 +74,7 @@ export class MicroService
     executeHttp(callback, request, response, next) 
     {
         const treatedRequest = new Http.Request(request);
-        Promise.resolve(this.requestStarted())
-            .then(() => 
-            {
-                try 
-                {
-                    return callback(treatedRequest);
-                }
-                catch (err) 
-                {
-                    throw err;
-                }
-            })
+        this.requestStarted(callback, treatedRequest)
             .then(callbackResponse => 
             {
                 if (typeof callbackResponse !== "undefined")
@@ -98,13 +87,7 @@ export class MicroService
                 this.answered = true;
                 return this.requestCatch(err, treatedRequest, response);
             })
-            .then(() => 
-            {
-                if (!this.answered) return next();
-
-                this.answered = false;
-                return this.requestEnded();
-            });
+            .then(() => this.requestEnded(next));
     }
 
     requestThen(callbackResponse, response) 
@@ -190,11 +173,23 @@ export class MicroService
         });
     }
 
-    requestStarted() 
-    {}
-
-    requestEnded() 
+    async requestStarted(callback, treatedRequest) 
     {
+        try 
+        {
+            return callback(treatedRequest);
+        }
+        catch (err) 
+        {
+            throw err;
+        }
+    }
+
+    requestEnded(next) 
+    {
+        if (!this.answered) return next();
+
+        this.answered = false;
         Config.clear();
     }
 }
