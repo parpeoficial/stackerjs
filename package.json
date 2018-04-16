@@ -1,14 +1,8 @@
 {
   "name": "stackerjs",
   "description": "Stack for building Microservices",
-  "keywords": [
-    "framework",
-    "stack",
-    "orm",
-    "http",
-    "lib"
-  ],
-  "version": "1.1.14",
+  "keywords": ["framework", "stack", "orm", "http", "lib"],
+  "version": "1.1.15",
   "main": "lib/index.js",
   "types": "index.d.ts",
   "license": "MIT",
@@ -22,7 +16,7 @@
     "stackerjs-http": "^1.0.3",
     "stackerjs-orm": "^1.0.10",
     "stackerjs-types": "^1.0.13",
-    "stackerjs-utils": "^1.0.8",
+    "stackerjs-utils": "^1.0.9",
     "stacktrace-js": "^2.0.0"
   },
   "devDependencies": {
@@ -34,6 +28,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha test && ./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/coverage.json && istanbul report"
+    "test":
+      "istanbul cover ./node_modules/mocha/bin/_mocha test && ./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/coverage.json && istanbul report"
   }
 }
