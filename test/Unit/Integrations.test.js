@@ -1,37 +1,36 @@
-const { expect } = require('chai');
-const { Config, Integrations } = require('./../../lib');
+const { expect } = require("chai");
+const { Config, Integrations } = require("./../../index");
 
-
-describe('IntegrationsTest', function() 
+describe("IntegrationsTest", function() 
 {
-
     this.timeout(5000);
 
-    describe('SlackTest', () => 
+    describe("SlackTest", () => 
     {
-        it('Should send text without trouble', done => 
+        it("Should send text without trouble", done => 
         {
-            let slack = new Integrations.Slack();            
-            slack.text(`Today is ${new Date()} and we're testing SlackJS`)
+            let slack = new Integrations.Slack();
+            slack
+                .text(`Today is ${new Date()} and we're testing SlackJS`)
                 .then(response => expect(response).to.be.true)
                 .catch(err => console.log(err))
                 .then(() => done());
         });
 
-        it('Should send attachments without trouble', done => 
+        it("Should send attachments without trouble", done => 
         {
             new Integrations.Slack()
-                .attach('Brand new error tested', [
+                .attach("Brand new error tested", [
                     {
-                        'fallback': 'Some error here',
-                        'pretext': 'Some error',
-                        'text': 'Error got even further',
-                        'color': "#D00000",
-                        'fields': [
+                        fallback: "Some error here",
+                        pretext: "Some error",
+                        text: "Error got even further",
+                        color: "#D00000",
+                        fields: [
                             {
-                                'title': 'Error title',
-                                'value': 'Error on line 9999',
-                                'short': true
+                                title: "Error title",
+                                value: "Error on line 9999",
+                                short: true
                             }
                         ]
                     }
@@ -41,17 +40,17 @@ describe('IntegrationsTest', function()
                 .then(() => done());
         });
 
-        it('Should present error when slack information is invalid', done => 
+        it("Should present error when slack information is invalid", done => 
         {
-            let slackHooked = Config.get('slack.hook'),
+            let slackHooked = Config.get("slack.hook"),
                 slack = new Integrations.Slack();
 
-            Config.delete('slack.hook');
-            slack.text("It's time... for an error")
+            Config.delete("slack.hook");
+            slack
+                .text("It's time... for an error")
                 .then(response => expect(response).to.be.false)
-                .then(() => Config.set('slack.hook', slackHooked))
+                .then(() => Config.set("slack.hook", slackHooked))
                 .then(() => done());
         });
     });
-
 });
