@@ -11,14 +11,43 @@ export class App
         this.app = express();
         Config.set("app.name", name);
 
+        this.prepareMiddlewares();
+        this.prepareAllRoutesInformation();
+    }
+
+    registerMicroService(microservice, prefix = "/") 
+    {
+        this.app.use(prefix, microservice.getRoute());
+
+        microservice
+            .getRoutes()
+            .map(route =>
+                Object.assign(route, {
+                    route: prefix + route.route.substr(1)
+                }))
+            .forEach(route => this.appRoutes.push(route));
+    }
+
+    run(port = 3000) 
+    {
+        return this.app.listen(port, () =>
+            console.log(`App is running at port ${port}`));
+    }
+
+    prepareMiddlewares() 
+    {
         this.app.use(
             Config.get("static.url.prefix", "/static"),
             express.static(Config.get("static.folder", "public"))
         );
+
         this.app.use(json({
             limit: Config.get("upload.limit", "10mb")
         }));
+    }
 
+    prepareAllRoutesInformation() 
+    {
         this.app.get(
             Config.get("app.info.route", "/app/info"),
             (request, response) => 
@@ -40,24 +69,5 @@ export class App
                 });
             }
         );
-    }
-
-    registerMicroService(microservice, prefix = "/") 
-    {
-        this.app.use(prefix, microservice.getRoute());
-
-        microservice
-            .getRoutes()
-            .map(route =>
-                Object.assign(route, {
-                    route: prefix + route.route.substr(1)
-                }))
-            .forEach(route => this.appRoutes.push(route));
-    }
-
-    run(port = 3000) 
-    {
-        return this.app.listen(port, () =>
-            console.log(`App is running at port ${port}`));
     }
 }
