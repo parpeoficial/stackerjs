@@ -22,7 +22,7 @@
     "stackerjs-http": "^1.0.3",
     "stackerjs-orm": "^1.0.10",
     "stackerjs-types": "^1.0.13",
-    "stackerjs-utils": "^1.0.6",
+    "stackerjs-utils": "^1.0.8",
     "stacktrace-js": "^2.0.0"
   },
   "devDependencies": {
