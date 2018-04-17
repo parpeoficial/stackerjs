@@ -1,34 +1,57 @@
 {
-  "name": "stackerjs",
-  "description": "Stack for building Microservices",
-  "keywords": ["framework", "stack", "orm", "http", "lib"],
-  "version": "1.1.14",
-  "main": "lib/index.js",
-  "types": "index.d.ts",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/parpeoficial/stackerjs"
-  },
-  "dependencies": {
-    "body-parser": "^1.18.2",
-    "express": "^4.16.3",
-    "stackerjs-http": "^1.0.3",
-    "stackerjs-orm": "^1.0.7",
-    "stackerjs-types": "^1.0.13",
-    "stackerjs-utils": "^1.0.5",
-    "stacktrace-js": "^2.0.0"
-  },
-  "devDependencies": {
-    "@types/mocha": "^2.2.48",
-    "@types/node": "^9.6.2",
-    "chai": "^4.1.2",
-    "mocha": "^4.1.0",
-    "remap-istanbul": "^0.9.6"
-  },
-  "scripts": {
-    "build": "tsc",
-    "test":
-      "istanbul cover ./node_modules/mocha/bin/_mocha test && ./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/coverage.json && istanbul report"
-  }
+    "name": "stackerjs",
+    "description": "Stack for building Microservices",
+    "keywords": [
+        "framework",
+        "stack",
+        "orm",
+        "http",
+        "lib"
+    ],
+    "version": "1.1.15",
+    "main": "lib/index.js",
+    "types": "index.d.ts",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/parpeoficial/stackerjs"
+    },
+    "dependencies": {
+        "body-parser": "^1.18.2",
+        "express": "^4.16.3",
+        "stackerjs-http": "^1.0.3",
+        "stackerjs-orm": "^1.0.11",
+        "stackerjs-types": "^1.0.13",
+        "stackerjs-utils": "^1.0.11",
+        "stacktrace-js": "^2.0.0"
+    },
+    "devDependencies": {
+        "@types/mocha": "^2.2.48",
+        "babel-cli": "^6.26.0",
+        "babel-core": "^6.26.0",
+        "babel-preset-env": "^1.6.1",
+        "babel-register": "^6.26.0",
+        "chai": "^4.1.2",
+        "mocha": "^4.1.0",
+        "nyc": "^11.7.0"
+    },
+    "nyc": {
+        "exclude": [
+            "lib",
+            "test",
+            "index.js"
+        ],
+        "require": [
+            "babel-register",
+            "babel-polyfill"
+        ],
+        "reporter": [
+            "lcov",
+            "text"
+        ]
+    },
+    "scripts": {
+        "build": "./node_modules/.bin/babel src -d lib",
+        "test": "NODE_ENV=dev ./node_modules/.bin/nyc ./node_modules/mocha/bin/_mocha"
+    }
 }
