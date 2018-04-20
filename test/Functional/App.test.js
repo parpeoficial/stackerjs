@@ -308,7 +308,7 @@ describe("AppTest", function()
         {
             new Http.MakeRequest()
                 .setPort(PORT)
-                .setHeader("StackerAuth", Config.get("app.secret"))
+                .setHeader("StackerAuth", Config.env("app.secret"))
                 .get("/app/info")
                 .then(httpResponse => 
                 {

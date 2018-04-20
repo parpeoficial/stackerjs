@@ -2,6 +2,7 @@
 /.env
 /.env.default
 /.travis.yml
+/config
 /coverage
 /node_modules
 /src
