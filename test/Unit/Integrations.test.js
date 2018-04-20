@@ -45,7 +45,7 @@ describe("IntegrationsTest", function()
             let slackHooked = Config.get("slack.hook"),
                 slack = new Integrations.Slack();
 
-            Config.delete("slack.hook");
+            Config.delete("integrations.slack.hook");
             slack
                 .text("It's time... for an error")
                 .then(response => expect(response).to.be.false)

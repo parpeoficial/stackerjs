@@ -7,11 +7,11 @@ class Slack
     {
         return this.send({
             icon_url: Config.get(
-                "slack.icon",
+                "integrations.slack.icon",
                 "https://s3-sa-east-1.amazonaws.com/parpe.prod/StackerJS-icon.png"
             ),
-            username: Config.get("slack.username", "StackerJS"),
-            channel: Config.get("slack.channel", "general"),
+            username: Config.get("integrations.slack.username", "StackerJS"),
+            channel: Config.get("integrations.slack.channel", "general"),
             text
         });
     }
@@ -20,11 +20,11 @@ class Slack
     {
         return this.send({
             icon_url: Config.get(
-                "slack.icon",
+                "integrations.slack.icon",
                 "https://s3-sa-east-1.amazonaws.com/parpe.prod/StackerJS-icon.png"
             ),
-            username: Config.get("slack.username", "StackerJS"),
-            channel: Config.get("slack.channel", "general"),
+            username: Config.get("integrations.slack.username", "StackerJS"),
+            channel: Config.get("integrations.slack.channel", "general"),
             text,
             attachments: attachments.map(attachment => 
             {
@@ -43,13 +43,13 @@ class Slack
 
         return new Http.MakeRequest()
             .setTimeout(4000)
-            .post(Config.get("slack.hook"), {}, message)
+            .post(Config.get("integrations.slack.hook"), {}, message)
             .then(httpResponse => httpResponse.getContent() === "ok");
     }
 
     isAbleToDoIt() 
     {
-        return Config.get("slack.hook", false);
+        return Config.get("integrations.slack.hook", false);
     }
 }
 

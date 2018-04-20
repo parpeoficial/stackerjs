@@ -53,7 +53,7 @@ export class App
             (request, response) => 
             {
                 const { stackerauth } = request.headers;
-                if (!stackerauth || stackerauth !== Config.get("app.secret"))
+                if (!stackerauth || stackerauth !== Config.env("app.secret"))
                     return response.status(403).json({
                         message: [
                             "Must pass correct stackerauth authentication"
