@@ -13,18 +13,18 @@ class ContactRepository extends ORM.BaseRepository
 
     beforeValidate(entity)
     {
-        if (!entity['test_before_validate'])
+        if (!entity["test_before_validate"])
             return super.beforeValidate(entity);
 
-        if (entity['test_before_validate_insert_error'])
-            this.addError(new Error('any message'));
+        if (entity["test_before_validate_insert_error"])
+            this.addError(new Error("any message"));
 
         return false;
     }
 
     afterValidate(entity)
     {
-        if (entity['test_after_validate_error'])
+        if (entity["test_after_validate_error"])
             return false;
 
         return true;
@@ -32,11 +32,11 @@ class ContactRepository extends ORM.BaseRepository
 
     beforeSave(entity)
     {
-        if (!entity['test_before_save'])
+        if (!entity["test_before_save"])
             return super.beforeSave(entity);
 
-        if (entity['test_before_save_insert_error'])
-            this.addError(new Error('any message'));
+        if (entity["test_before_save_insert_error"])
+            this.addError(new Error("any message"));
 
         return false;
     }

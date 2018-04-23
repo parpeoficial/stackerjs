@@ -1,24 +1,28 @@
 import { Router } from "express";
-import { DB } from 'stackerjs-db';
+import { DB } from "stackerjs-db";
 import { Http } from "stackerjs-http";
 import { Config } from "stackerjs-utils";
 import * as StackTrace from "stacktrace-js";
 import { Integrations } from "./Integrations";
 
-export class MicroService {
-    constructor(microServiceName = "Micro StackerJS") {
+export class MicroService 
+{
+    constructor(microServiceName = "Micro StackerJS") 
+    {
         this.name = microServiceName;
         this.route = new Router();
         this.routes = [];
         this.answered = false;
     }
 
-    setMiddleware(middleware) {
+    setMiddleware(middleware) 
+    {
         this.route.use((request, response, next) =>
             this.executeHttp(middleware.do, request, response, next));
     }
 
-    setRoute(method, route, callbacks) {
+    setRoute(method, route, callbacks) 
+    {
         if (!Array.isArray(callbacks)) callbacks = [callbacks];
 
         if (route.substr(0, 1) !== "/") route = `/${route}`;
@@ -35,10 +39,13 @@ export class MicroService {
         );
     }
 
-    registerController(controller) {
+    registerController(controller) 
+    {
         const routes = controller.routes();
-        Object.keys(routes).map(httpMethod => {
-            Object.keys(routes[httpMethod]).map(route => {
+        Object.keys(routes).map(httpMethod => 
+        {
+            Object.keys(routes[httpMethod]).map(route => 
+            {
                 let actions = routes[httpMethod][route];
                 if (!Array.isArray(actions)) actions = [actions];
 
@@ -55,34 +62,41 @@ export class MicroService {
         });
     }
 
-    getRoute() {
+    getRoute() 
+    {
         return this.route;
     }
 
-    getRoutes() {
+    getRoutes() 
+    {
         return this.routes;
     }
 
-    executeHttp(callback, request, response, next) {
+    executeHttp(callback, request, response, next) 
+    {
         const treatedRequest = new Http.Request(request);
         this.requestStarted(callback, treatedRequest)
-            .then(callbackResponse => {
+            .then(callbackResponse => 
+            {
                 if (typeof callbackResponse !== "undefined")
                     this.answered = true;
 
                 return this.requestThen(callbackResponse, response);
             })
-            .catch(err => {
+            .catch(err => 
+            {
                 this.answered = true;
                 return this.requestCatch(err, treatedRequest, response);
             })
             .then(() => this.requestEnded(next));
     }
 
-    requestThen(callbackResponse, response) {
+    requestThen(callbackResponse, response) 
+    {
         if (typeof callbackResponse === "undefined") return;
 
-        if (callbackResponse instanceof Http.Response) {
+        if (callbackResponse instanceof Http.Response) 
+        {
             response.set(callbackResponse.getHeaders());
             response.status(callbackResponse.getStatusCode());
             const responseContent = callbackResponse.getContent();
@@ -91,7 +105,8 @@ export class MicroService {
             ](callbackResponse.getContent());
         }
 
-        if (typeof callbackResponse === "object") {
+        if (typeof callbackResponse === "object") 
+        {
             return response.status(200).json(callbackResponse);
         }
 
@@ -99,12 +114,15 @@ export class MicroService {
         response.status(200).send(callbackResponse);
     }
 
-    requestCatch(err, request, response) {
-        this.logErrorInSlack(err).then(stacktrace => {
+    requestCatch(err, request, response) 
+    {
+        this.logErrorInSlack(err).then(stacktrace => 
+        {
             if (
                 err instanceof Http.Exception.HttpError ||
                 Object.keys(err).indexOf("getMessage") >= 1
-            ) {
+            ) 
+            {
                 if (typeof err.getMessage() === "object")
                     return response
                         .status(err.getCode())
@@ -128,8 +146,10 @@ export class MicroService {
         });
     }
 
-    logErrorInSlack(err) {
-        return StackTrace.fromError(err).then(stacktrace => {
+    logErrorInSlack(err) 
+    {
+        return StackTrace.fromError(err).then(stacktrace => 
+        {
             if (
                 err instanceof Http.Exception.HttpError ||
                 Object.keys(err).indexOf("getMessage") >= 1
@@ -140,7 +160,8 @@ export class MicroService {
                 .attach(err.message, [
                     {
                         color: "#D00000",
-                        fields: stacktrace.map(trace => {
+                        fields: stacktrace.map(trace => 
+                        {
                             return {
                                 title: trace.fileName,
                                 value: trace.source,
@@ -153,16 +174,20 @@ export class MicroService {
         });
     }
 
-    async requestStarted(callback, treatedRequest) {
-        try {
+    async requestStarted(callback, treatedRequest) 
+    {
+        try 
+        {
             return callback(treatedRequest);
         }
-        catch (err) {
+        catch (err) 
+        {
             throw err;
         }
     }
 
-    requestEnded(next) {
+    requestEnded(next) 
+    {
         if (!this.answered) return next();
 
         this.answered = false;
