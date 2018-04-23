@@ -2,10 +2,8 @@ import express from "express";
 import { json } from "body-parser";
 import { Config } from "stackerjs-utils";
 
-export class App 
-{
-    constructor(name = "StackerJS") 
-    {
+export class App {
+    constructor(name = "StackerJS") {
         this.appRoutes = [];
 
         this.app = express();
@@ -15,8 +13,7 @@ export class App
         this.prepareAllRoutesInformation();
     }
 
-    registerMicroService(microservice, prefix = "/") 
-    {
+    registerMicroService(microservice, prefix = "/") {
         this.app.use(prefix, microservice.getRoute());
 
         microservice
@@ -28,14 +25,12 @@ export class App
             .forEach(route => this.appRoutes.push(route));
     }
 
-    run(port = 3000) 
-    {
+    run(port = 3000) {
         return this.app.listen(port, () =>
             console.log(`App is running at port ${port}`));
     }
 
-    prepareMiddlewares() 
-    {
+    prepareMiddlewares() {
         this.app.use(
             Config.get("static.url.prefix", "/static"),
             express.static(Config.get("static.folder", "public"))
@@ -46,12 +41,10 @@ export class App
         }));
     }
 
-    prepareAllRoutesInformation() 
-    {
+    prepareAllRoutesInformation() {
         this.app.get(
             Config.get("app.info.route", "/app/info"),
-            (request, response) => 
-            {
+            (request, response) => {
                 const { stackerauth } = request.headers;
                 if (!stackerauth || stackerauth !== Config.env("app.secret"))
                     return response.status(403).json({
