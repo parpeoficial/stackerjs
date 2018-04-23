@@ -15,7 +15,7 @@ class SiteController extends MVC.Controller
         };
     }
 
-    indexAction(request) 
+    indexAction() 
     {
         return new Http.Response().setContent(new Buffer("Welcome to Homepage"));
     }
