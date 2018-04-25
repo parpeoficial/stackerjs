@@ -17,6 +17,15 @@ class HelpCommand extends Command
         let pack = this.getPackageInformation();
         this.line(`${pack.name}@${pack.version}`);
         this.line("Powered by StackerJS");
+        this.line("\n");
+
+        this.line("dump            Prepare .autoload file with commands information");
+        this.line("                so them can be executed.");
+        this.line("Options:");
+        this.line("   -v           Log off on bash step by step.\n");
+
+        this.line("list            List all commands registered from core and");
+        this.line("                customized by dev team.");
     }
 
     getPackageInformation() 
