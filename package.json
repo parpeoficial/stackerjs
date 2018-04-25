@@ -37,9 +37,16 @@
         "babel-preset-env": "^1.6.1",
         "babel-register": "^6.26.0",
         "chai": "^4.1.2",
+        "lint-staged": "^7.0.4",
         "mocha": "^4.1.0",
         "nyc": "^11.7.1",
         "stackerjs-db-mysql-adapter": "^1.1.0"
+    },
+    "lint-staged": {
+        "*.js": [
+            "npm run lint",
+            "git add ."
+        ]
     },
     "nyc": {
         "exclude": [
