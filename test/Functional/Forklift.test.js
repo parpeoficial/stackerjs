@@ -5,15 +5,14 @@ import { Forklift } from "./../../index";
 
 describe.only("Test/Functional/ForkliftTest", function () {
 
-    this.timeout(4000);
+    this.timeout(10000);
 
     describe("Dump", () => {
-        it("Should create a .autoload file by dumping commands data into it", done => {
+        it("Should create a .autoload file by dumping commands data into it", () => {
             let output = Forklift("dump -v");
             expect(output.indexOf("Fetched autoload")).to.be.equal(0);
             expect(output.indexOf("Fetched commands")).to.be.equal(1);
             expect(output.indexOf("Dumped commands")).to.be.equal(2);
-            done();
         });
 
         it("Should dump new commands into .autoloadfile", () => {
