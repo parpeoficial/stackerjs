@@ -5,7 +5,7 @@ import { Forklift } from "./../../index";
 
 describe.only("Test/Functional/ForkliftTest", function () {
 
-    this.timeout(10000);
+    this.timeout(5000);
 
     describe("Dump", () => {
         it("Should create a .autoload file by dumping commands data into it", () => {
@@ -25,6 +25,15 @@ describe.only("Test/Functional/ForkliftTest", function () {
         it("Should list commands", () => {
             let output = Forklift("list").join(" ");
             expect(output.indexOf("List all commands from application")).to.be.above(0);
+        });
+    });
+
+    describe("Help", () => {
+        it("Should show off help text for using commands", () => {
+            let output = Forklift("help");
+            console.log(output);
+
+            expect(output.indexOf("Powered by StackerJS")).to.be.equal(1);
         });
     });
 

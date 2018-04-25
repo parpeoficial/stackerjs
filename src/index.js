@@ -11,8 +11,7 @@ export { Integrations } from "./Integrations";
 export { MicroService } from "./MicroService";
 export { MVC } from "./MVC";
 
-export const Forklift = route => 
-{
+export const Forklift = route => {
     if (route.indexOf("node ./forklift.js") < 0)
         route = `node ./forklift.js ${route}`;
 
@@ -22,7 +21,7 @@ export const Forklift = route =>
 
     let message = output.filter(message => message && message !== "");
     if (message.length)
-        return message[0].split("\n").slice(0, -1);
+        message = message[0].split("\n").slice(0, -1);
 
     return message;
 };
