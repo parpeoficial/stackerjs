@@ -2,15 +2,12 @@
 
 const { existsSync, readFileSync } = require("fs");
 
-const parseRoute = () => 
-{
+const parseRoute = () => {
     let route = [], options = {};
     process.argv
         .filter((item, index) => index > 1)
-        .forEach(item => 
-        {
-            if (item.substr(0, 1) === "-") 
-            {
+        .forEach(item => {
+            if (item.substr(0, 1) === "-") {
                 let [key, value] = item.split("=");
                 options[key.replace(/-/g, "")] = value || true;
                 return;
@@ -25,30 +22,25 @@ const parseRoute = () =>
 const loadCommand = name => existsSync(`./commands/${name}.js`) ?
     require(`./commands/${name}`) : require(`./node_modules/stackerjs/commands/${name}`);
 
-const loadAutoLoad = () => existsSync(`${process.cwd()}/.autoload`) ?
-    JSON.parse(readFileSync(`${process.cwd()}/.autoload`, { encoding: "utf8" })) : null;
+const loadAutoLoad = () => existsSync(`${process.cwd()}/node_modules/.bin/.autoload`) ?
+    JSON.parse(readFileSync(`${process.cwd()}/node_modules/.bin/.autoload`, { encoding: "utf8" })) : null;
 
-const fetchCommand = route => 
-{
+const fetchCommand = route => {
     let autoload = loadAutoLoad(), currentRoute = route.split(" ");
-    if (autoload) 
-    {
+    if (autoload) {
         let command, params = {};
-        Object.keys(autoload.commands).forEach(commandRoute => 
-        {
+        Object.keys(autoload.commands).forEach(commandRoute => {
             if (command)
                 return;
 
             let splittedCommandRoute = commandRoute.split(" "),
                 mightBeParams = {};
-            for (let index in splittedCommandRoute) 
-            {
+            for (let index in splittedCommandRoute) {
                 let item = splittedCommandRoute[index];
                 if (item === currentRoute[index])
                     continue;
 
-                if (item.substr(0) === "{" && item.substr(-1) === "}") 
-                {
+                if (item.substr(0) === "{" && item.substr(-1) === "}") {
                     mightBeParams[item.slice(0, -1)] = currentRoute[index];
                     continue;
                 }
@@ -60,8 +52,7 @@ const fetchCommand = route =>
             command = autoload.commands[commandRoute];
         });
 
-        if (command) 
-        {
+        if (command) {
             command.params = params;
             return command;
         }
@@ -71,17 +62,14 @@ const fetchCommand = route =>
 };
 
 
-const main = (route, options) => 
-{
+const main = (route, options) => {
     let Command;
     if (route === "dump")
         return new (loadCommand("PrepareCommand"))({ "hi": 2 }, options);
 
-    if (!Command) 
-    {
+    if (!Command) {
         let fetchedCommand = fetchCommand(route);
-        if (fetchedCommand) 
-        {
+        if (fetchedCommand) {
             let { file, params } = fetchedCommand;
             return new (loadCommand(file))(params, options);
         }

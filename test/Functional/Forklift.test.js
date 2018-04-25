@@ -5,20 +5,29 @@ import { Forklift } from "./../../index";
 
 describe.only("Test/Functional/ForkliftTest", function () {
 
-    this.timeout(3000);
+    this.timeout(4000);
 
     describe("Dump", () => {
         it("Should create a .autoload file by dumping commands data into it", () => {
             let output = Forklift("dump -v");
-            console.log(new Set(output));
+            expect(output.indexOf("Fetched autoload")).to.be.equal(0);
+            expect(output.indexOf("Fetched commands")).to.be.equal(1);
+            expect(output.indexOf("Dumped commands")).to.be.equal(2);
         });
 
         it("Should dump new commands into .autoloadfile", () => {
-            let output = Forklift("dump -v");
-            console.log(output);
+            let output = Forklift("dump");
+            expect(output).to.be.empty;
         });
     });
 
-    after(() => unlinkSync(".autoload"));
+    describe("List", () => {
+        it("Should list commands", () => {
+            let output = Forklift("list").join(' ');
+            expect(output.indexOf("List all commands from application")).to.be.above(0);
+        });
+    });
+
+    after(() => unlinkSync("node_modules/.bin/.autoload"));
 
 });

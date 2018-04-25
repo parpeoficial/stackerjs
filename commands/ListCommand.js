@@ -3,19 +3,16 @@ const Table = require("cli-table");
 const { Command } = require("./../index");
 
 
-class ListCommand extends Command 
-{
+class ListCommand extends Command {
 
-    constructor() 
-    {
+    constructor() {
         super(...arguments);
         this.name = "List commands";
         this.description = "List all commands from application";
         this.route = "list";
     }
 
-    handle() 
-    {
+    handle() {
         let { commands } = this.getCommands();
         let table = new Table({
             head: ["Command", "Name", "Description"],
@@ -23,8 +20,7 @@ class ListCommand extends Command
         });
 
         Object.keys(commands).map(c => commands[c])
-            .forEach(command => 
-            {
+            .forEach(command => {
                 let { route, name, description } = command;
                 table.push([route, name, description]);
             });
@@ -32,10 +28,9 @@ class ListCommand extends Command
         this.line(table.toString());
     }
 
-    getCommands() 
-    {
-        return existsSync(`${process.cwd()}/.autoload`) ?
-            JSON.parse(readFileSync(`${process.cwd()}/.autoload`, { encoding: "utf8" })) : { commands: {} };
+    getCommands() {
+        return existsSync(`${process.cwd()}/node_modules/.bin/.autoload`) ?
+            JSON.parse(readFileSync(`${process.cwd()}/node_modules/.bin/.autoload`, { encoding: "utf8" })) : { commands: {} };
     }
 
 }
