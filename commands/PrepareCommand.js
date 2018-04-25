@@ -2,9 +2,11 @@ const { existsSync, readdirSync, readFileSync, writeFileSync } = require("fs");
 const { Command } = require("../index");
 
 
-class PrepareCommand extends Command {
+class PrepareCommand extends Command 
+{
 
-    constructor(params, options) {
+    constructor(params, options) 
+    {
         super(params, options);
 
         this.name = "Prepare";
@@ -13,12 +15,14 @@ class PrepareCommand extends Command {
         this.autoload = `${process.cwd()}/node_modules/.bin/.autoload`;
     }
 
-    handle() {
+    handle() 
+    {
         let autoload = this.loadAutoLoad();
         if (this.has("v"))
             this.line("Fetched autoload");
 
-        this.loadCommands().forEach(command => {
+        this.loadCommands().forEach(command => 
+        {
             if (!autoload.commands[command.route])
                 autoload.commands[command.route] = command;
         });
@@ -30,7 +34,8 @@ class PrepareCommand extends Command {
             this.line("Dumped commands");
     }
 
-    loadAutoLoad() {
+    loadAutoLoad() 
+    {
         if (existsSync(this.autoload))
             return JSON.parse(readFileSync(this.autoload, { encoding: "utf8" }));
 
@@ -39,15 +44,18 @@ class PrepareCommand extends Command {
         };
     }
 
-    persistAutoLoad(data) {
+    persistAutoLoad(data) 
+    {
         return writeFileSync(this.autoload, JSON.stringify(data, null, 4));
     }
 
-    loadCommands() {
+    loadCommands() 
+    {
         let commandsDir = `${process.cwd()}/commands`;
 
         return readdirSync(commandsDir)
-            .map(file => {
+            .map(file => 
+            {
                 let module = require(`${commandsDir}/${file}`),
                     command = new module();
 

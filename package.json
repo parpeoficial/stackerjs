@@ -64,7 +64,7 @@
         ]
     },
     "scripts": {
-        "precommit": "npm run lint",
+        "precommit": "./node_modules/.bin/lint-staged",
         "lint": "eslint commands/ src/ test/ forklift.js --fix",
         "build": "./node_modules/.bin/babel src -d lib",
         "test": "NODE_ENV=dev ./node_modules/.bin/nyc ./node_modules/mocha/bin/_mocha"
