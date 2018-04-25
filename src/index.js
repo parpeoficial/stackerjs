@@ -11,7 +11,8 @@ export { Integrations } from "./Integrations";
 export { MicroService } from "./MicroService";
 export { MVC } from "./MVC";
 
-export const Forklift = route => {
+export const Forklift = route => 
+{
     if (route.indexOf("node ./forklift.js") < 0)
         route = `node ./forklift.js ${route}`;
 

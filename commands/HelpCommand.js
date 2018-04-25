@@ -1,22 +1,26 @@
 const { readFileSync } = require("fs");
 const { Command } = require("../index");
 
-class HelpCommand extends Command {
+class HelpCommand extends Command 
+{
 
-    constructor() {
+    constructor() 
+    {
         super(...arguments);
         this.name = "Help";
         this.description = "Describe core commands";
         this.route = "help";
     }
 
-    handle() {
+    handle() 
+    {
         let pack = this.getPackageInformation();
         this.line(`${pack.name}@${pack.version}`);
         this.line("Powered by StackerJS");
     }
 
-    getPackageInformation() {
+    getPackageInformation() 
+    {
         return JSON.parse(readFileSync(`${process.cwd()}/package.json`, {
             encoding: "utf8"
         }));
