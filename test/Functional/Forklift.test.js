@@ -1,4 +1,4 @@
-import { unlinkSync } from "fs";
+import { unlinkSync, existsSync } from "fs";
 import { expect } from "chai";
 import { Forklift } from "./../../index";
 
@@ -6,7 +6,7 @@ import { Forklift } from "./../../index";
 describe.only("Test/Functional/ForkliftTest", function () 
 {
 
-    this.timeout(5000);
+    this.timeout(8000);
 
     describe("Dump", () => 
     {
@@ -45,6 +45,22 @@ describe.only("Test/Functional/ForkliftTest", function ()
         });
     });
 
-    after(() => unlinkSync("node_modules/.bin/.autoload"));
+    describe("Commands", () => 
+    {
+        describe("Create", () => 
+        {
+            it("Should create a command on commands folder", () => 
+            {
+                Forklift("command create testing_command");
+                expect(existsSync(`${process.cwd()}/commands/TestingCommand.js`)).to.be.true;
+            });
+        });
+    });
+
+    after(() => 
+    {
+        unlinkSync("node_modules/.bin/.autoload");
+        unlinkSync("commands/TestingCommand.js");
+    });
 
 });

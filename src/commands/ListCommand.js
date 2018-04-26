@@ -1,9 +1,8 @@
-const { existsSync, readFileSync } = require("fs");
-const Table = require("cli-table");
-const { Command } = require("./../index");
+import Table from "cli-table";
+import { Command } from "./../lib";
 
 
-class ListCommand extends Command 
+export class ListCommand extends Command 
 {
 
     constructor() 
@@ -16,7 +15,7 @@ class ListCommand extends Command
 
     handle() 
     {
-        let { commands } = this.getCommands();
+        let { commands } = this.getAutoLoad();
         let table = new Table({
             head: ["Command", "Name", "Description"],
             colWidths: [30, 30, 55]
@@ -32,11 +31,4 @@ class ListCommand extends Command
         this.line(table.toString());
     }
 
-    getCommands() 
-    {
-        return existsSync(`${process.cwd()}/node_modules/.bin/.autoload`) ?
-            JSON.parse(readFileSync(`${process.cwd()}/node_modules/.bin/.autoload`, { encoding: "utf8" })) : { commands: {} };
-    }
-
 }
-module.exports = ListCommand;

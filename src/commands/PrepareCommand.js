@@ -1,8 +1,8 @@
-const { existsSync, readdirSync, readFileSync, writeFileSync } = require("fs");
-const { Command } = require("../index");
+import { readdirSync } from "fs";
+import { Command } from "../lib";
 
 
-class PrepareCommand extends Command 
+export class PrepareCommand extends Command 
 {
 
     constructor(params, options) 
@@ -12,12 +12,11 @@ class PrepareCommand extends Command
         this.name = "Prepare";
         this.description = "Dump all commands informations";
         this.route = "dump";
-        this.autoload = `${process.cwd()}/node_modules/.bin/.autoload`;
     }
 
     handle() 
     {
-        let autoload = this.loadAutoLoad();
+        let autoload = this.getAutoLoad();
         if (this.has("v"))
             this.line("Fetched autoload");
 
@@ -29,34 +28,17 @@ class PrepareCommand extends Command
         if (this.has("v"))
             this.line("Fetched commands");
 
-        this.persistAutoLoad(autoload);
+        this.saveAutoLoad(autoload);
         if (this.has("v"))
             this.line("Dumped commands");
     }
 
-    loadAutoLoad() 
-    {
-        if (existsSync(this.autoload))
-            return JSON.parse(readFileSync(this.autoload, { encoding: "utf8" }));
-
-        return {
-            "commands": {}
-        };
-    }
-
-    persistAutoLoad(data) 
-    {
-        return writeFileSync(this.autoload, JSON.stringify(data, null, 4));
-    }
-
     loadCommands() 
     {
-        let commandsDir = `${process.cwd()}/commands`;
-
-        return readdirSync(commandsDir)
+        return readdirSync(this.getCommandsPath())
             .map(file => 
             {
-                let module = require(`${commandsDir}/${file}`),
+                let module = require(`${this.getCommandsPath()}/${file}`)[file.slice(0, -3)],
                     command = new module();
 
                 let { name, description, route } = command;
@@ -68,4 +50,3 @@ class PrepareCommand extends Command
     }
 
 }
-module.exports = PrepareCommand;

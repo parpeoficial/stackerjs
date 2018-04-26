@@ -60,8 +60,8 @@
     },
     "scripts": {
         "precommit": "./node_modules/.bin/lint-staged",
-        "lint": "eslint commands/ src/ test/ forklift.js --fix",
-        "build": "./node_modules/.bin/babel src -d lib",
+        "lint": "eslint src/ test/ --fix",
+        "build": "./node_modules/.bin/babel src -d ./",
         "test": "NODE_ENV=dev ./node_modules/.bin/nyc ./node_modules/mocha/bin/_mocha"
     }
 }

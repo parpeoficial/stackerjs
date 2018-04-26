@@ -1,7 +1,8 @@
-const { readFileSync } = require("fs");
-const { Command } = require("../index");
+import { readFileSync } from "fs";
+import { Command } from "../lib/Command";
 
-class HelpCommand extends Command 
+
+export class HelpCommand extends Command 
 {
 
     constructor() 
@@ -36,4 +37,3 @@ class HelpCommand extends Command
     }
 
 }
-module.exports = HelpCommand;

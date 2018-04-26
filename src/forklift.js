@@ -1,6 +1,6 @@
 #! /usr/bin/node
 
-const { existsSync, readFileSync } = require("fs");
+import { existsSync, readFileSync } from "fs";
 
 const parseRoute = () => 
 {
@@ -23,7 +23,7 @@ const parseRoute = () =>
 };
 
 const loadCommand = name => existsSync(`./commands/${name}.js`) ?
-    require(`./commands/${name}`) : require(`./node_modules/stackerjs/commands/${name}`);
+    require(`./commands/${name}`)[name] : require(`./node_modules/stackerjs/commands/${name}`)[name];
 
 const loadAutoLoad = () => existsSync(`${process.cwd()}/node_modules/.bin/.autoload`) ?
     JSON.parse(readFileSync(`${process.cwd()}/node_modules/.bin/.autoload`, { encoding: "utf8" })) : null;
@@ -47,9 +47,9 @@ const fetchCommand = route =>
                 if (item === currentRoute[index])
                     continue;
 
-                if (item.substr(0) === "{" && item.substr(-1) === "}") 
+                if (item.slice(0, 1) === "{" && item.slice(-1) === "}") 
                 {
-                    mightBeParams[item.slice(0, -1)] = currentRoute[index];
+                    mightBeParams[item.slice(1, -1)] = currentRoute[index];
                     continue;
                 }
 
@@ -73,9 +73,8 @@ const fetchCommand = route =>
 
 const main = (route, options) => 
 {
-    let Command;
     if (route === "dump")
-        return new (loadCommand("PrepareCommand"))({ "hi": 2 }, options);
+        return new (loadCommand("PrepareCommand"))({}, options);
 
     if (!Command) 
     {
@@ -93,6 +92,6 @@ const main = (route, options) =>
 
 let Command = main(...parseRoute());
 if (Command)
-    Command.handle.call(Command);
+    Command.handle();
 else
     console.log("Command not found");
