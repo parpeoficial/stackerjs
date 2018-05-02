@@ -25,8 +25,11 @@ export class Command
         return writeFileSync(this.autoloadPath, JSON.stringify(autoload, null, 4));
     }
 
-    getCommandsPath() 
+    getCommandsPath(core = false) 
     {
+        if (core)
+            return resolve(process.cwd(), "node_modules", "stackerjs", "commands");
+
         return resolve(process.cwd(), Config.get("path.commands", "commands"));
     }
 
