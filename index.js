@@ -5,7 +5,7 @@ if (process.env.NODE_ENV === "dev")
         presets: ["env"]
     });
 
-    module.exports = require("./src");
+    module.exports = require("./src/lib/index");
 }
 else 
 {
