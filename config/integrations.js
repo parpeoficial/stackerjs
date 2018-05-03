@@ -1,4 +1,4 @@
-import { Config } from "stackerjs-utils";
+const { Config } = require("stackerjs-utils");
 
 module.exports = {
     slack: {
