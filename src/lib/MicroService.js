@@ -134,10 +134,8 @@ export class MicroService
             if (request.getHeaders()["content-type"] === "application/json")
                 return response.status(500).json({
                     status: false,
-                    data: {
-                        messages: [err.message],
-                        detailed: stacktrace
-                    }
+                    message: err.message,
+                    errors: stacktrace
                 });
 
             response

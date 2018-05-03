@@ -3,7 +3,7 @@ import { expect } from "chai";
 import { Forklift } from "./../../index";
 
 
-describe.only("Test/Functional/ForkliftTest", function () 
+describe("Test/Functional/ForkliftTest", function () 
 {
 
     this.timeout(8000);

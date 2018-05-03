@@ -27,7 +27,7 @@ Most of stackerjs configuration can be declared on .env file in project root.
 
 #### Connection
 For DB Connection until now **only MySQL** driver is implemented.
-* DB_DRIVER=mysql - Defines database driver
+* DB_DRIVER=stackerjs-db-mysql-adapter - Defines database driver
 * DB_HOST=127.0.0.1 - Defines database host
 * DB_NAME=database - Defines database name
 * DB_USER=root - Defines database user
