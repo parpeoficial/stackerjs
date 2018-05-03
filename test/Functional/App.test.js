@@ -71,7 +71,8 @@ describe("Test/Functional/AppTest", function ()
                 {
                     let content = httpResponse.getContent();
                     expect(content.status).to.be.false;
-                    expect(content.data).to.have.property("detailed");
+                    expect(content).to.have.property("message");
+                    expect(content).to.have.property("errors");
                     expect(httpResponse.getStatusCode()).to.be.equal(Http.Response.HTTP_INTERNAL_SERVER_ERROR);
                 })
                 .then(() => done());
