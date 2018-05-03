@@ -2,12 +2,12 @@ const { expect } = require("chai");
 const { app } = require("./../DataProvider/App");
 const { Config, Http } = require("./../../index");
 
-describe("AppTest", function() 
+describe("Test/Functional/AppTest", function () 
 {
     const PORT = 3001;
 
     this.timeout(3000);
-    before(function() 
+    before(function () 
     {
         this.server = app.run(PORT);
     });
@@ -358,7 +358,7 @@ describe("AppTest", function()
         });
     });
 
-    after(function() 
+    after(function () 
     {
         this.server.close();
     });
