@@ -1,9 +1,7 @@
-import { Command } from "stackerjs";
-
+const { Command } = require("stackerjs");
 
 export class __COMMAND_NAME__ extends Command 
 {
-
     constructor() 
     {
         super(...arguments);
@@ -17,5 +15,4 @@ export class __COMMAND_NAME__ extends Command
     {
         // Write your code here
     }
-
 }

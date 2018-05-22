@@ -37,12 +37,12 @@ export class App
     prepareMiddlewares() 
     {
         this.app.use(
-            Config.get("static.url.prefix", "/static"),
-            express.static(Config.get("static.folder", "public"))
+            Config.get("app.static.url_prefix", "/static"),
+            express.static(Config.get("app.static.folder", "public"))
         );
 
         this.app.use(json({
-            limit: Config.get("upload.limit", "10mb")
+            limit: Config.get("app.upload.limit", "10mb")
         }));
     }
 
