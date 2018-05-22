@@ -1,6 +1,7 @@
 # App files and folders
 /.env
 /.env.default
+/.eslint.json
 /.nyc_output
 /.travis.yml
 /cc_test_reporter
@@ -10,4 +11,3 @@
 /src
 /storage
 /test
-/tsconfig.json
