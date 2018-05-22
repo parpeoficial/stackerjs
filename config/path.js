@@ -1,7 +1,3 @@
-
-
 module.exports = {
-
-    commands: "commands/"
-
+    commands: "src/commands/"
 };

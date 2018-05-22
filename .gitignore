@@ -1,14 +1,13 @@
 # App files and folders
 /.env
 /.nyc_output
-/bin
 /commands
 /coverage
 /forklift.js
 /lib
 /node_modules
 /storage
-/test/pandora/**/*.js
+/yarn-error.log
 
 # OS and IDE files and folders
 /.idea

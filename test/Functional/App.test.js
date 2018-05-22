@@ -1,13 +1,13 @@
-const { expect } = require("chai");
-const { app } = require("./../DataProvider/App");
-const { Config, Http } = require("./../../index");
+import { expect } from "chai";
+import { app } from "./../DataProvider/App";
+import { Config, Http } from "./../../src/lib";
 
-describe("Test/Functional/AppTest", function () 
+describe("Test/Functional/AppTest", function() 
 {
     const PORT = 3001;
 
     this.timeout(3000);
-    before(function () 
+    before(function() 
     {
         this.server = app.run(PORT);
     });
@@ -269,7 +269,7 @@ describe("Test/Functional/AppTest", function ()
                 .delete("/person/1")
                 .then(httpResponse => 
                 {
-                    expect(httpResponse.getContent()).to.be.null;
+                    expect(httpResponse.getContent()).to.be.equal(null);
                     expect(httpResponse.getStatusCode()).to.be.equal(Http.Response.HTTP_OK);
                 })
                 .then(() => done());
@@ -359,7 +359,7 @@ describe("Test/Functional/AppTest", function ()
         });
     });
 
-    after(function () 
+    after(function() 
     {
         this.server.close();
     });

@@ -1,7 +1,7 @@
 const { expect } = require("chai");
-const { Config, Integrations } = require("./../../index");
+const { Config, Integrations } = require("./../../src/lib");
 
-describe("Test/Unit/IntegrationsTest", function () 
+describe("Test/Unit/IntegrationsTest", function() 
 {
     this.timeout(5000);
 
