@@ -1,10 +1,8 @@
 import { readdirSync, existsSync } from "fs";
 import { Command } from "../lib";
 
-
 export class PrepareCommand extends Command 
 {
-
     constructor(params, options) 
     {
         super(params, options);
@@ -17,27 +15,26 @@ export class PrepareCommand extends Command
     handle() 
     {
         let autoload = this.getAutoLoad();
-        if (this.has("v"))
-            this.line("Fetched autoload");
+        if (this.has("v")) this.line("Fetched autoload");
 
         this.loadCommands().forEach(command => 
         {
             if (!autoload.commands[command.route])
                 autoload.commands[command.route] = command;
         });
-        if (this.has("v"))
-            this.line("Fetched commands");
+        if (this.has("v")) this.line("Fetched commands");
 
         this.saveAutoLoad(autoload);
-        if (this.has("v"))
-            this.line("Dumped commands");
+        if (this.has("v")) this.line("Dumped commands");
     }
 
     loadCommands() 
     {
         return [
             ...readdirSync(this.getCommandsPath()),
-            ...(existsSync(this.getCommandsPath(true)) ? readdirSync(this.getCommandsPath(true)) : [])
+            ...(existsSync(this.getCommandsPath(true))
+                ? readdirSync(this.getCommandsPath(true))
+                : [])
         ]
             .map(file => 
             {
@@ -46,7 +43,9 @@ export class PrepareCommand extends Command
                     commandFile = require(`${this.getCommandsPath(true)}/${file}`)[file.slice(0, -3)];
 
                 if (!commandFile)
-                    commandFile = require(`${this.getCommandsPath()}/${file}`)[file.slice(0, -3)];
+                    commandFile = require(`${this.getCommandsPath()}/${file}`)[
+                        file.slice(0, -3)
+                    ];
 
                 return { command: new commandFile(), file };
             })
@@ -56,5 +55,4 @@ export class PrepareCommand extends Command
                 return { file: file.slice(0, -3), name, description, route };
             });
     }
-
 }

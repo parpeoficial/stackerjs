@@ -1,4 +1,4 @@
-const { MicroService, App, Http } = require("./../../index");
+const { MicroService, App, Http } = require("./../../src/lib");
 const { SiteController } = require("./Controller/SiteController");
 const { AuthMiddleware } = require("./Middleware/AuthMiddleware");
 
@@ -42,7 +42,7 @@ microService.setRoute("post", "/person", request =>
 });
 microService.setRoute("delete", "/person/:id", request => 
 {
-    if (request.get("id") < 5) return null;
+    if (request.get("id") < 5) return "do nothing";
     if (request.get("id") < 10)
         throw new Http.Exception.NotFoundError({
             status: false,

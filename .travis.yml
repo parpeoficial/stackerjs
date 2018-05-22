@@ -1,11 +1,20 @@
 language: node_js
+cache:
+  directories:
+    - ~/.npm
+
+
+
+language: node_js
 node_js:
-  - "7"
+  - "9"
+  - "8"
 
 services:
   - mysql
 
 notifications:
+  email: false
   slack: parpe:ypxSy7CvUXYAShDK7C3supzV
 
 before_install:
@@ -38,10 +47,9 @@ after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
   - rm -rf ./cc-test-reporter
 
-deploy:
-  provider: npm
-  email: "admin@parpe.com"
-  api_key: $NPM_TOKEN
-  skip_cleanup: true
-  on:
-    branch: master
+after_success:
+  - npm run travis-deploy-once "npm run semantic-release"
+
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/

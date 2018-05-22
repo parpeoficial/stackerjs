@@ -1,4 +1,4 @@
-const { MVC, Http } = require("./../../../index");
+const { MVC, Http } = require("./../../../src/lib");
 const { ContactRepository } = require("./../ORM/Repositories");
 
 class SiteController extends MVC.Controller 

@@ -1,67 +1,71 @@
 {
-    "name": "stackerjs",
-    "description": "Stack for building Microservices",
-    "keywords": [
-        "framework",
-        "stack",
-        "orm",
-        "http",
-        "lib"
+  "name": "stackerjs",
+  "description": "Stack for building Microservices",
+  "keywords": [
+    "framework",
+    "stack",
+    "orm",
+    "http",
+    "lib"
+  ],
+  "version": "0.0.0-development",
+  "main": "lib/index.js",
+  "bin": {
+    "forklift": "forklift.js"
+  },
+  "types": "index.d.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/parpeoficial/stackerjs"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cli-table": "^0.3.1",
+    "express": "^4.16.3",
+    "stackerjs-db": "^1.1.2",
+    "stackerjs-http": "^1.1.0",
+    "stackerjs-orm": "^1.1.7",
+    "stackerjs-types": "^1.1.2",
+    "stackerjs-utils": "^1.1.3",
+    "stacktrace-js": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.48",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.5",
+    "mocha": "^4.1.0",
+    "nyc": "^11.7.1",
+    "stackerjs-db-mysql-adapter": "^1.1.3",
+    "travis-deploy-once": "^5.0.0",
+    "semantic-release": "^15.5.0"
+  },
+  "nyc": {
+    "exclude": [
+      "lib",
+      "test",
+      "index.js"
     ],
-    "version": "1.1.22",
-    "main": "lib/index.js",
-    "bin": {
-        "forklift": "forklift.js"
-    },
-    "types": "index.d.ts",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/parpeoficial/stackerjs"
-    },
-    "dependencies": {
-        "body-parser": "^1.18.2",
-        "cli-table": "^0.3.1",
-        "express": "^4.16.3",
-        "stackerjs-db": "^1.1.2",
-        "stackerjs-http": "^1.1.0",
-        "stackerjs-orm": "^1.1.7",
-        "stackerjs-types": "^1.1.2",
-        "stackerjs-utils": "^1.1.3",
-        "stacktrace-js": "^2.0.0"
-    },
-    "devDependencies": {
-        "@types/mocha": "^2.2.48",
-        "babel-cli": "^6.26.0",
-        "babel-core": "^6.26.3",
-        "babel-preset-env": "^1.6.1",
-        "babel-register": "^6.26.0",
-        "chai": "^4.1.2",
-        "husky": "^0.14.3",
-        "lint-staged": "^7.0.5",
-        "mocha": "^4.1.0",
-        "nyc": "^11.7.1",
-        "stackerjs-db-mysql-adapter": "^1.1.3"
-    },
-    "nyc": {
-        "exclude": [
-            "lib",
-            "test",
-            "index.js"
-        ],
-        "require": [
-            "babel-register",
-            "babel-polyfill"
-        ],
-        "reporter": [
-            "lcov",
-            "text"
-        ]
-    },
-    "scripts": {
-        "precommit": "./node_modules/.bin/lint-staged",
-        "lint": "eslint src/ test/ --fix",
-        "build": "./node_modules/.bin/babel src -d ./",
-        "test": "NODE_ENV=dev ./node_modules/.bin/nyc ./node_modules/mocha/bin/_mocha"
-    }
+    "require": [
+      "babel-register",
+      "babel-polyfill"
+    ],
+    "reporter": [
+      "lcov",
+      "text"
+    ]
+  },
+  "scripts": {
+    "precommit": "./node_modules/.bin/lint-staged",
+    "lint": "eslint src/ test/ --fix",
+    "build": "./node_modules/.bin/babel src -d ./",
+    "test": "NODE_ENV=dev ./node_modules/.bin/nyc ./node_modules/mocha/bin/_mocha",
+    "travis-deploy-once": "travis-deploy-once",
+    "semantic-release": "semantic-release"
+  }
 }

@@ -1,4 +1,4 @@
-const { Http } = require("./../../../index");
+const { Http } = require("./../../../src/lib");
 
 class AuthMiddleware 
 {
