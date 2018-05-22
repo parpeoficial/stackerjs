@@ -269,7 +269,7 @@ describe("Test/Functional/AppTest", function()
                 .delete("/person/1")
                 .then(httpResponse => 
                 {
-                    expect(httpResponse.getContent()).to.be.equal(null);
+                    expect(httpResponse.getContent()).to.be.equal("do nothing");
                     expect(httpResponse.getStatusCode()).to.be.equal(Http.Response.HTTP_OK);
                 })
                 .then(() => done());

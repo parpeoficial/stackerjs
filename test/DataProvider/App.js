@@ -42,7 +42,7 @@ microService.setRoute("post", "/person", request =>
 });
 microService.setRoute("delete", "/person/:id", request => 
 {
-    if (request.get("id") < 5) return "123";
+    if (request.get("id") < 5) return "do nothing";
     if (request.get("id") < 10)
         throw new Http.Exception.NotFoundError({
             status: false,
