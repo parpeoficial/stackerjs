@@ -24,9 +24,9 @@
     "cli-table": "^0.3.1",
     "express": "^4.16.3",
     "stackerjs-db": "^1.1.2",
-    "stackerjs-http": "^1.1.0",
+    "stackerjs-http": "^1.2.1",
     "stackerjs-orm": "^1.1.7",
-    "stackerjs-types": "^1.1.2",
+    "stackerjs-types": "^1.1.4",
     "stackerjs-utils": "^1.1.3",
     "stacktrace-js": "^2.0.0"
   },
