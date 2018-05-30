@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { DB } from "stackerjs-db";
 import { Http } from "stackerjs-http";
 import { Config } from "stackerjs-utils";
 import * as StackTrace from "stacktrace-js";
@@ -190,8 +189,5 @@ export class MicroService
 
         this.answered = false;
         Config.clear();
-
-        let conn = DB.Factory.getConnection();
-        if (conn) conn.disconnect();
     }
 }
