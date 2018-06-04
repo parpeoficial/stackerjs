@@ -15,17 +15,20 @@
   },
   "types": "index.d.ts",
   "license": "MIT",
+  "engines": {
+    "node": ">=7.10"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/parpeoficial/stackerjs"
   },
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.18.3",
     "cli-table": "^0.3.1",
     "express": "^4.16.3",
     "stackerjs-db": "^1.1.2",
     "stackerjs-http": "^1.2.1",
-    "stackerjs-orm": "^1.1.7",
+    "stackerjs-orm": "^1.1.10",
     "stackerjs-types": "^1.1.4",
     "stackerjs-utils": "^1.1.3",
     "stacktrace-js": "^2.0.0"
@@ -34,22 +37,23 @@
     "@types/mocha": "^2.2.48",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.6.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
     "chai": "^4.1.2",
     "husky": "^0.14.3",
-    "lint-staged": "^7.0.5",
+    "lint-staged": "^7.1.3",
     "mocha": "^4.1.0",
-    "nyc": "^11.7.1",
+    "nyc": "^11.9.0",
+    "semantic-release": "^15.5.0",
     "stackerjs-db-mysql-adapter": "^1.1.3",
-    "travis-deploy-once": "^5.0.0",
-    "semantic-release": "^15.5.0"
+    "travis-deploy-once": "^5.0.0"
   },
   "nyc": {
     "exclude": [
+      "config",
       "lib",
-      "test",
-      "index.js"
+      "test"
     ],
     "require": [
       "babel-register",
