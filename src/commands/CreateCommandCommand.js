@@ -21,7 +21,7 @@ export class CreateCommandCommand extends Command
         if (command.slice(-7) !== "Command")
             command += "Command";
 
-        if (existsSync(`${process.cwd()}/commands/${command}.js`))
+        if (existsSync(`${this.getCommandsPath()}/${command}.js`))
             return this.warn(`${command} already exists. Try create one with other name.`);
 
         let data = this.loadSample("command.js")

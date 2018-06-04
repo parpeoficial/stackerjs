@@ -1,7 +1,7 @@
 import { unlinkSync } from "fs";
 import { Forklift } from "./../../src/lib";
 
-describe("Test/Functional/ForkliftTest", function() 
+describe("Test/Functional/ForkliftTest", function () 
 {
     this.timeout(8000);
 
@@ -42,6 +42,16 @@ describe("Test/Functional/ForkliftTest", function()
             {
                 new Forklift().handle("command create testing_command");
             });
+
+            it("Should create a command adding Command in the end of the name", () => 
+            {
+                new Forklift().handle("command create another_testing");
+            });
+
+            it("Should present errors when trying to create a command that already exists", () => 
+            {
+                new Forklift().handle("command create testing");
+            });
         });
     });
 
@@ -49,5 +59,6 @@ describe("Test/Functional/ForkliftTest", function()
     {
         unlinkSync("node_modules/.bin/.autoload");
         unlinkSync("src/commands/TestingCommand.js");
+        unlinkSync("src/commands/AnotherTestingCommand.js");
     });
 });
