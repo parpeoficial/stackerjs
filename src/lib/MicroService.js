@@ -186,15 +186,13 @@ export class MicroService
 
     requestEnded(next) 
     {
+        if (!this.answered) return next();
+
+        this.answered = false;
+        Config.clear();
+
         let conn = DB.Factory.getConnection();
-        if (!conn) conn = { disconnect: () => Promise.resolve(null) };
-
-        return conn.disconnect().then(() => 
-        {
-            if (!this.answered) return next();
-
-            this.answered = false;
-            Config.clear();
-        });
+        if (conn)
+            return conn.disconnect();
     }
 }
