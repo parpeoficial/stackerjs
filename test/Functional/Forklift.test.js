@@ -55,6 +55,14 @@ describe("Test/Functional/ForkliftTest", function ()
         });
     });
 
+    describe("Errors", () => 
+    {
+        it("Should return error when trying to execute a non existent command", () => 
+        {
+            new Forklift().handle("dont exist this command");
+        });
+    });
+
     after(() => 
     {
         unlinkSync("node_modules/.bin/.autoload");

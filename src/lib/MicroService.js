@@ -192,7 +192,6 @@ export class MicroService
         Config.clear();
 
         let conn = DB.Factory.getConnection();
-        if (conn)
-            return conn.disconnect();
+        if (conn) return conn.disconnect();
     }
 }
