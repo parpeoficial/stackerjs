@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { DB } from "stackerjs-db";
 import { Http } from "stackerjs-http";
 import { Config } from "stackerjs-utils";
 import * as StackTrace from "stacktrace-js";
@@ -185,9 +186,15 @@ export class MicroService
 
     requestEnded(next) 
     {
-        if (!this.answered) return next();
+        let conn = DB.Factory.getConnection();
+        if (!conn) conn = { disconnect: () => Promise.resolve(null) };
 
-        this.answered = false;
-        Config.clear();
+        return conn.disconnect().then(() => 
+        {
+            if (!this.answered) return next();
+
+            this.answered = false;
+            Config.clear();
+        });
     }
 }
