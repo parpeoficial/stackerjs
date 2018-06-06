@@ -8,4 +8,4 @@ export { Command } from "./Command";
 export { Integrations } from "./Integrations";
 export { MicroService } from "./MicroService";
 export { MVC } from "./MVC";
-export { Forklift } from "./Forklft";
+export { Forklift } from "./Forklift";
