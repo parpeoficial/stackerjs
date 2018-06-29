@@ -14,8 +14,8 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.0.tgz#50c1e2260ac0ed9439a181de3725a0168d59c48a"
 
 "@octokit/rest@^15.2.0":
-  version "15.9.2"
-  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-15.9.2.tgz#148b80676c26253c793d707779004ce9009f235f"
+  version "15.9.3"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-15.9.3.tgz#1177ccdfad29f7073756c98afc0890347e21788f"
   dependencies:
     before-after-hook "^1.1.0"
     btoa-lite "^1.0.0"
@@ -47,8 +47,8 @@
   resolved "https://registry.yarnpkg.com/@semantic-release/error/-/error-2.2.0.tgz#ee9d5a09c9969eade1ec864776aeda5c5cddbbf0"
 
 "@semantic-release/github@^4.1.0":
-  version "4.2.17"
-  resolved "https://registry.yarnpkg.com/@semantic-release/github/-/github-4.2.17.tgz#1d3f465b4bdbc57ecfcb55aefdc554804a8cbc76"
+  version "4.2.18"
+  resolved "https://registry.yarnpkg.com/@semantic-release/github/-/github-4.2.18.tgz#d0298aad116c97d1d3bb3ba2954f3d8b83dbbd12"
   dependencies:
     "@octokit/rest" "^15.2.0"
     "@semantic-release/error" "^2.2.0"
@@ -66,8 +66,8 @@
     url-join "^4.0.0"
 
 "@semantic-release/npm@^3.2.0":
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/@semantic-release/npm/-/npm-3.3.2.tgz#a47634b4df4074a420d763dc2f341063da71ddd8"
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/@semantic-release/npm/-/npm-3.3.4.tgz#5a282877d55106e211d8a9a1d289103b67b4f2dc"
   dependencies:
     "@semantic-release/error" "^2.2.0"
     aggregate-error "^1.0.0"
@@ -911,8 +911,8 @@ camelcase@^4.0.0, camelcase@^4.1.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
 
 caniuse-lite@^1.0.30000844:
-  version "1.0.30000859"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000859.tgz#da974adc5348fffe94724877a7ef8cb5d6d3d777"
+  version "1.0.30000860"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000860.tgz#c902e3df3cc4303f631abc7a1579a3ce0a6153a3"
 
 capture-stack-trace@^1.0.0:
   version "1.0.0"
@@ -2144,10 +2144,6 @@ is-number@^3.0.0:
   dependencies:
     kind-of "^3.0.2"
 
-is-number@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/is-number/-/is-number-4.0.0.tgz#0026e37f5454d73e356dfe6564699867c6a7f0ff"
-
 is-obj@^1.0.0, is-obj@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/is-obj/-/is-obj-1.0.1.tgz#3e4729ac1f5fde025cd7d83a896dab9f4f67db0f"
@@ -2161,12 +2157,6 @@ is-observable@^1.1.0:
   resolved "https://registry.yarnpkg.com/is-observable/-/is-observable-1.1.0.tgz#b3e986c8f44de950867cab5403f5a3465005975e"
   dependencies:
     symbol-observable "^1.1.0"
-
-is-odd@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/is-odd/-/is-odd-2.0.0.tgz#7646624671fd7ea558ccd9a2795182f2958f1b24"
-  dependencies:
-    is-number "^4.0.0"
 
 is-path-inside@^1.0.0:
   version "1.0.1"
@@ -2819,15 +2809,14 @@ named-placeholders@1.1.1:
     lru-cache "2.5.0"
 
 nanomatch@^1.2.9:
-  version "1.2.9"
-  resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.9.tgz#879f7150cb2dab7a471259066c104eee6e0fa7c2"
+  version "1.2.13"
+  resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.13.tgz#b87a8aa4fc0de8fe6be88895b38983ff265bd119"
   dependencies:
     arr-diff "^4.0.0"
     array-unique "^0.3.2"
     define-property "^2.0.2"
     extend-shallow "^3.0.2"
     fragment-cache "^0.2.1"
-    is-odd "^2.0.0"
     is-windows "^1.0.2"
     kind-of "^6.0.2"
     object.pick "^1.3.0"
@@ -3853,9 +3842,9 @@ stackerjs-http@^1.2.1:
     stackerjs-types "^1.1.4"
     stackerjs-utils "^1.1.3"
 
-stackerjs-orm@^1.4.0:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/stackerjs-orm/-/stackerjs-orm-1.4.1.tgz#225e30380c8978838b7a858b4977900ead3de8f1"
+stackerjs-orm@1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/stackerjs-orm/-/stackerjs-orm-1.4.2.tgz#bf5e0cb985b0527e1eab6009a91e85ae77d6d965"
   dependencies:
     babel-polyfill "^6.26.0"
     stackerjs-db "^1.1.2"
