@@ -25,12 +25,10 @@ export class Forklift extends Command
 
     fetchCommand(route) 
     {
-        let autoload = this.getAutoLoad(),
-            currentRoute = route.split(" ");
+        let autoload = this.getAutoLoad(), currentRoute = route.split(" ");
         if (autoload) 
         {
-            let command,
-                params = {};
+            let command, params = {};
             Object.keys(autoload.commands).forEach(commandRoute => 
             {
                 if (command) return;
